@@ -75,7 +75,10 @@ byte stateR = 0;
 int PWM_FREQUENCYR = 50000;
 int PWM_CHANNELR = 0;
 int PWM_RESOUTIONR = 8;
-short SoCR;
+unsigned short SoHR;
+unsigned short remainingCapacityR;
+unsigned short totalCapacityR;
+double SoCR;
 char msgR[200];
 char serialNumberR[16] = "";
 byte cmd_sendSlotR = 0;
@@ -86,7 +89,10 @@ byte stateL = 0;
 int PWM_FREQUENCYL = 50000;
 int PWM_CHANNELL = 0;
 int PWM_RESOUTIONL = 8;
-short SoCL;
+unsigned short SoHL;
+unsigned short remainingCapacityL;
+unsigned short totalCapacityL;
+double SoCL;
 char msgL[200];
 char serialNumberL[16] = "";
 byte cmd_sendSlotL = 0;
@@ -430,6 +436,39 @@ void stateRetrieveSerialL()
     // Untuk troubleshooting
     Serial.println(serialNumberL);
 
+    // Mengirim request serial number. request dikirimkan dua kali karena ada delay respon dari BMS sebesar satu request
+    Serial.write("LBatt_Info");
+
+    // Pada titik ini, biasanya respon yang dikirimkan dari BMS bukan respon dari request di atas, melainkan request sebelumnya lagi
+    // Jadi, ini untuk menghilangkan respon dari request sebelumnya yang sebenarnya tidak dibutuhkan lagi
+    while (Serial.available())
+    {
+        Serial.read();
+    }
+
+    vTaskDelay(800 / portTICK_PERIOD_MS);
+
+    // Mengirimkan request lagi
+    Serial.write("LBatt_Info");
+    Serial.flush();
+
+    // Membaca respon dari request
+    while (Serial.available() > 0)
+    {
+        msgL[readIdx] = Serial.read();
+        readIdx++;
+    }
+
+    SoHL = (msg[80] << 8) | (msg[81]);
+    remainingCapacityL = (msg[76] << 8) | (msg[77]);
+    totalCapacityL = (msg[78] << 8) | (msg[79]);
+    SoCL = (double) remainingCapacityL / (double) totalCapacityL;
+
+    Serial.println(SoHL);
+    Serial.println(remainingCapacityL);
+    Serial.println(totalCapacityL);
+    Serial.println(SoCL);
+
     // Transisi state
     if (battSWL == 0)
     {
@@ -658,6 +697,39 @@ void stateRetrieveSerialR()
     serialNumberR[msgIdx] = '\0';
 
     Serial.println(serialNumberR);
+
+    // Mengirim request serial number. request dikirimkan dua kali karena ada delay respon dari BMS sebesar satu request
+    Serial.write("RBatt_Info");
+
+    // Pada titik ini, biasanya respon yang dikirimkan dari BMS bukan respon dari request di atas, melainkan request sebelumnya lagi
+    // Jadi, ini untuk menghilangkan respon dari request sebelumnya yang sebenarnya tidak dibutuhkan lagi
+    while (Serial.available())
+    {
+        Serial.read();
+    }
+
+    vTaskDelay(800 / portTICK_PERIOD_MS);
+
+    // Mengirimkan request lagi
+    Serial.write("RBatt_Info");
+    Serial.flush();
+
+    // Membaca respon dari request
+    while (Serial.available() > 0)
+    {
+        msgL[readIdx] = Serial.read();
+        readIdx++;
+    }
+
+    SoHR = (msg[80] << 8) | (msg[81]);
+    remainingCapacityR = (msg[76] << 8) | (msg[77]);
+    totalCapacityR = (msg[78] << 8) | (msg[79]);
+    SoCR = (double) remainingCapacityR / (double) totalCapacityR;
+
+    Serial.println(SoHR);
+    Serial.println(remainingCapacityR);
+    Serial.println(totalCapacityR);
+    Serial.println(SoCR);
 
     if (battSWR == 0)
     {
