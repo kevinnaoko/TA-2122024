@@ -40,7 +40,7 @@ PubSubClient client(espClient);
 #define chargerSW2R 33
 #define redR 15
 #define greenR 2
-#define blueR 0
+#define blueR 14
 
 // Left Side
 #define triggerButtonL 18
@@ -60,6 +60,7 @@ PubSubClient client(espClient);
 #define txGSM 26
 #define rxGSM 27
 
+#define delayChargingState 60000
 //#define brokerIP "192.168.1.102"
 #define brokerIP "192.168.20.203"
 
@@ -459,9 +460,9 @@ void stateRetrieveSerialL()
         readIdx++;
     }
 
-    SoHL = (msg[80] << 8) | (msg[81]);
-    remainingCapacityL = (msg[76] << 8) | (msg[77]);
-    totalCapacityL = (msg[78] << 8) | (msg[79]);
+    SoHL = (msgL[80] << 8) | (msgL[81]);
+    remainingCapacityL = (msgL[76] << 8) | (msgL[77]);
+    totalCapacityL = (msgL[78] << 8) | (msgL[79]);
     SoCL = (double) remainingCapacityL / (double) totalCapacityL;
 
     Serial.println(SoHL);
@@ -573,15 +574,17 @@ void stateChargingL()
     float tegangan;
     float arus;
 
-    vTaskDelay(6000 / portTICK_PERIOD_MS); // Nanti diubah
+    vTaskDelay(delayChargingState / portTICK_PERIOD_MS); // Nanti diubah
 
     if (battSWL == 0)
     {
         stateL = 4;
+        cmd_sendSlotL = 1;
     }
     else
     {
         stateL = 0;
+        cmd_sendSlotL = 1;
     }
 }
 
@@ -599,6 +602,7 @@ void stateFinishChargeL()
     else if (battSWL == 1)
     {
         stateL = 0;
+        cmd_sendSlotL = 1;
     }
     vTaskDelay(50 / portTICK_PERIOD_MS);
 }
@@ -717,13 +721,13 @@ void stateRetrieveSerialR()
     // Membaca respon dari request
     while (Serial.available() > 0)
     {
-        msgL[readIdx] = Serial.read();
+        msgR[readIdx] = Serial.read();
         readIdx++;
     }
 
-    SoHR = (msg[80] << 8) | (msg[81]);
-    remainingCapacityR = (msg[76] << 8) | (msg[77]);
-    totalCapacityR = (msg[78] << 8) | (msg[79]);
+    SoHR = (msgR[80] << 8) | (msgR[81]);
+    remainingCapacityR = (msgR[76] << 8) | (msgR[77]);
+    totalCapacityR = (msgR[78] << 8) | (msgR[79]);
     SoCR = (double) remainingCapacityR / (double) totalCapacityR;
 
     Serial.println(SoHR);
@@ -826,15 +830,17 @@ void stateChargingR()
     byte battSWR = digitalRead(batteryButtonR);
     LED_1R(LOW, LOW, HIGH);
 
-    vTaskDelay(2000 / portTICK_PERIOD_MS); // Nanti dihapus
+    vTaskDelay(delayChargingState / portTICK_PERIOD_MS); // Nanti dihapus
 
     if (battSWR == 0)
     {
         stateR = 4;
+        cmd_sendSlotR = 1;
     }
     else
     {
         stateR = 0;
+        cmd_sendSlotR = 1;
     }
 }
 
@@ -852,6 +858,7 @@ void stateFinishChargeR()
     else if (battSWR == 1)
     {
         stateR = 0;
+        cmd_sendSlotR = 1;
     }
     vTaskDelay(50 / portTICK_PERIOD_MS);
 }
@@ -889,7 +896,7 @@ void callback(char *topic, byte *payload, unsigned int length)
 void buildStringBatteryInfo(int battSelect, char *holder)
 {
     char dbIndex[6][20] = {
-        "\"Status\": ", "\"Serial Number\": ", "\"Time\": ", "\"SoC\": "};
+        " \"Status\": ", "\"Serial Number\": ", "\"Time\": ", "\"SoC\": ", "\"SoH\": "};
 
     char sep[3] = ", ";
     char buildSN[18];
@@ -908,6 +915,9 @@ void buildStringBatteryInfo(int battSelect, char *holder)
         if(stateL == CHARGING){
             sprintf(stringHolder, "%d", 1);
         }
+        else if(stateL == FINISH_CHARGING){
+            sprintf(stringHolder, "%d", 2);
+        }
         else{
             sprintf(stringHolder, "%d", 0);
         }
@@ -916,6 +926,9 @@ void buildStringBatteryInfo(int battSelect, char *holder)
     {
         if(stateR == CHARGING){
             sprintf(stringHolder, "%d", 1);
+        }
+        else if(stateR == FINISH_CHARGING){
+            sprintf(stringHolder, "%d", 2);
         }
         else{
             sprintf(stringHolder, "%d", 0);
@@ -943,6 +956,7 @@ void buildStringBatteryInfo(int battSelect, char *holder)
 
     // Time
     strcat(holder, dbIndex[2]);
+    strcpy(stringHolder, "\"\"");
     getCurrentTime(stringHolder);
     strcat(holder, stringHolder);
     strcpy(stringHolder, blank);
@@ -952,14 +966,27 @@ void buildStringBatteryInfo(int battSelect, char *holder)
     strcat(holder, dbIndex[3]);
     if (battSelect == 0)
     {
-        sprintf(stringHolder, "%d", SoCL);
+        sprintf(stringHolder, "%f", SoCL);
     }
     else
     {
-        sprintf(stringHolder, "%d", SoCR);
+        sprintf(stringHolder, "%f", SoCR);
     }
     strcat(holder, stringHolder);
     strcpy(stringHolder, blank);
+
+    // // SOH
+    // strcat(holder, dbIndex[4]);
+    // if (battSelect == 0)
+    // {
+    //     sprintf(stringHolder, "%d", SoHL);
+    // }
+    // else
+    // {
+    //     sprintf(stringHolder, "%d", SoHR);
+    // }
+    // strcat(holder, stringHolder);
+    // strcpy(stringHolder, blank);
 
     // closebracket
     strncat(holder, &cb, 1);

@@ -1,0 +1,36 @@
+chrg
+	pad induktor dibesarin
+	R discharge sesuain footprint	
+	footprint induktor kebesaran
+	trace 311V ke GND kasih space lebih
+	placement IR2110 deket pinggir biar gampang dicabut
+	placement mosfet dan diode diatur biar heatsink sejajar
+	fuse housing ditaro di output charger
+	tambahin discharger untuk capacitor besar
+	probe pwm, gnd, dilabel + dijarakin
+	trace pwm "12v" jauhin sama GND
+	groundplane jangan deket sama jalur lain
+
+kontrol
+	benerin ukuran terminal block
+	benerin bolongan hilink
+	port jst untuk button override, toggle, dan deteksi baterai belum ada
+	placement label konektor JST ketutupan, pindahin
+	tambahin switch daya 5V
+
+switch
+	belum dicetak
+
+sensing
+	ACS712 tempelin kebwh??
+LED
+	jst nya jangan angled??
+
+general
+	footprint jst disesuaikan untuk angled
+	label label
+===================
+hasil perc
+
+
+duty cycle	load	volt	
