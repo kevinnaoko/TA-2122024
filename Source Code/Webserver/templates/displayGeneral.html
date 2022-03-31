@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% block title %} Home {% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block styles %}
+<style>
+    body{
+        background-color: #f7f7f7;
+    }
+    .header {  
+        padding-top: 25px;
+        font-size: 26px;
+        height:80px; 
+    }
+
+    /* .dataTable > thead > tr > th[class*="sort"]:before,
+    .dataTable > thead > tr > th[class*="sort"]:after {
+        content: "" !important;
+    } */
+
+    .device {
+        text-align: center; 
+    }  
+
+    .dataTables_length {
+        float: left;
+    }
+
+    .dataTables_info {
+        float: left;
+    }
+
+    .addBtn{
+        height:60px; 
+    }  
+
+    .container-fluid{
+        padding: 0 100px;
+    }
+
+    .modal-body{
+        text-align: left; 
+        padding-bottom: 0;
+        margin: 0;
+    }
+
+    .btn.disabled {
+        pointer-events: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="header"> Product Dashboard </div> 
+
+    <!-- add charger btn -->
+    <div class="addBtn">  
+        <!-- button trigger modal -->
+        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+            Add Charger
+        </button>
+
+        <!-- modal window untuk addcharging -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Charger</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="#" method="post">
+                        <p> insert </p>
+                        <p> <input type="text" name="addIndex" /> </p>
+                        <p> <input type="submit" name="submit_button" value="addIndexSubmit" /> </p> 
+                    </form>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- tabel list product -->
+    <div class="device">
+        <div class="table-responsive"> 
+            <table id ="generalInfo" class="table table-bordered">
+                <!-- row headers -->
+                <thead class="table-light">
+                    <tr>
+                        <th class="align-middle" scope="col">ID</th>
+                        <th class="align-middle" scope="col">S1 status</th>
+                        <th class="align-middle" scope="col">S2 soc</th>
+                        <th class="align-middle" scope="col">S2 status</th>
+                        <th class="align-middle" scope="col">S2 soc</th> 
+                        <th class="align-middle" scope="col">Last Updated</th>
+                        <th class="align-middle" scope="col">Charge Mode</th>
+                        <th class="align-middle" scope="col" >Actions</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in range (0, product_count) %}
+                    <tr>
+                        <!-- product id -->
+                        <th class="align-middle" scope="row">  
+                            {% set deviceName = latest_data[x][0].split('_')[0] %}
+                            {% set deviceId = deviceName | replace("charger", "") %} 
+                            {{ deviceId }}
+                        </th>
+
+                        <!-- slot 1 status -->
+                        <td class="align-middle"> 
+                            {% if latest_data[x][1] == 0 %} 
+                                Idle
+                            {% elif latest_data[x][1] == '-' %}
+                                N/A 
+                            {% else %}
+                                Charging
+                            {% endif %}
+                        </td>
+
+                        <!-- slot 1 soc -->
+                        <td class="align-middle">{{ latest_data[x][2] }}</td> 
+
+                        <!-- slot 2 status -->
+                        <td class="align-middle">
+                            {% if latest_data[x][3] == 0 %} 
+                                Idle
+                            {% elif latest_data[x][3] == '-' %}
+                                N/A 
+                            {% else %}
+                                Charging
+                            {% endif %}
+                        </td>
+
+                        <!-- slot 2 soc -->
+                        <td class="align-middle">{{ latest_data[x][4] }}</td>
+
+                        <!-- latest update time [slot] -->
+                        <td class="align-middle"> 
+                            {% if latest_data[x][6] == '-' %} 
+                                N/A  
+                            {% else %}
+                                {{ latest_data[x][6] }} [{{ latest_data[x][5] }}]    
+                            {% endif %}
+                        </td>
+
+                        <!-- charging mode -->
+                        <td class="align-middle">
+                            {% if latest_data[x][7] == 0 %} 
+                                Slow Charging
+                            {% elif latest_data[x][7] == 1 %} 
+                                Fast Charging
+                            {% elif latest_data[x][7] == '-' %}
+                                N/A 
+                            {% else %}
+                                Not Charging
+                            {% endif %}
+                        </td>
+
+                        <!-- button actions product details -->
+                        <td class="align-middle" style="width:220px">   
+                            {% set selection = latest_data[x][0] %}
+                            {% if latest_data[x][1] == '-' %} 
+                                
+                                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Disabled. No data has been received">
+                                    <button type="button" class="btn btn-outline-secondary" disabled>
+                                        More Details
+                                    </button>
+                                </span>
+                            {% else %} 
+                                <button type="button" class="btn btn-outline-info" onclick="window.location.href='{{ url_for( 'display' , deviceSelect=selection ) }}';">
+                                    More Details
+                                </button>
+                            {% endif %} 
+                            
+                            {% set selection = latest_data[x][0] %} 
+
+                            <!-- trigger modal -->
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteRow{{x}}">
+                                Delete
+                            </button>
+
+                            <!-- Modal window -->
+                            <div class="modal fade" id="deleteRow{{x}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">  
+                                            Remove Charger {{ selection | replace("charger", "") }}
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p> Charger {{ selection | replace("charger", "") }} will be permanently deleted </p>
+                                        <p> Continue? </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                                            Close
+                                        </button>
+                                        <button type="button" class="btn btn-danger" onclick="window.location.href='{{ url_for( 'removeDevice' , deviceSelect=selection ) }}';">
+                                            Proceed
+                                        </button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> 
+
+                        </td> 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div>
+        <p></p>
+    </div>
+
+    
+</div>
+
+{% endblock %}
+
+{% block scriptBottom %} 
+<script>
+    $(document).ready(function () {
+        $('#generalInfo').DataTable({   
+            // "dom": '<"top"i>rt<"bottom"flp><"clear">',
+            "order": [[ 0, "asc" ]],
+            lengthMenu: [5, 10, 20, 50, 100, 200],
+            bLengthChange: true, 
+            "columnDefs": [
+                { "orderable": false, "targets": [7] }
+            ]
+            
+        });
+        
+ 
+    });
+ 
+</script>
+{% endblock %}
+ 
