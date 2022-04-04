@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.6.2">
+<eagle version="9.6.1">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -22805,15 +22805,15 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <wire x1="-15.24" y1="-33.02" x2="-15.24" y2="-22.86" width="0.1524" layer="91"/>
 <wire x1="-15.24" y1="-22.86" x2="17.78" y2="-22.86" width="0.1524" layer="91"/>
 <pinref part="C4" gate="G$1" pin="+"/>
-<wire x1="17.78" y1="-22.86" x2="35.56" y2="-22.86" width="0.1524" layer="91"/>
-<wire x1="35.56" y1="-22.86" x2="45.72" y2="-22.86" width="0.1524" layer="91"/>
 <wire x1="17.78" y1="-22.86" x2="17.78" y2="-30.48" width="0.1524" layer="91"/>
-<junction x="17.78" y="-22.86"/>
 <pinref part="Q2" gate="G$1" pin="D"/>
+<wire x1="35.56" y1="-22.86" x2="45.72" y2="-22.86" width="0.1524" layer="91"/>
+<pinref part="R8" gate="G$1" pin="2"/>
 <wire x1="38.1" y1="-10.16" x2="35.56" y2="-10.16" width="0.1524" layer="91"/>
 <wire x1="35.56" y1="-10.16" x2="35.56" y2="-22.86" width="0.1524" layer="91"/>
+<wire x1="17.78" y1="-22.86" x2="35.56" y2="-22.86" width="0.1524" layer="91"/>
+<junction x="17.78" y="-22.86"/>
 <junction x="35.56" y="-22.86"/>
-<pinref part="R8" gate="G$1" pin="2"/>
 </segment>
 <segment>
 <pinref part="S1" gate="1" pin="P1"/>
