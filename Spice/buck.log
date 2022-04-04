@@ -1,0 +1,23 @@
+Circuit: * C:\Users\asus\OneDrive\Documents\GitHub\TA-2122024\Spice\buck.asc
+
+Error on line 4 : d1 0 n004 kd2997a
+	 Unable to find definition of model "kd2997a"
+Direct Newton iteration for .op point succeeded.
+
+Date: Fri Apr 01 10:12:51 2022
+Total elapsed time: 1.254 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 27623
+traniter = 27618
+tranpoints = 8746
+accept = 7041
+rejected = 1705
+matrix size = 11
+fillins = 7
+solver = Normal
+Matrix Compiler1: 902 bytes object code size  0.3/0.2/[0.1]
+Matrix Compiler2: 973 bytes object code size  0.2/0.2/[0.1]
+
