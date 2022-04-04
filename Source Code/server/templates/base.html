@@ -23,9 +23,8 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
- 
-        <a class="navbar-brand" href="#">Charger Dashboard</a>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;"> 
+        <a class="navbar-brand" href="/home">Charger Dashboard</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -36,10 +35,10 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/wip">View Devices</a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/manage-users">Manage Users</a>
                 </li>
-                <li class="nav-item dropdown">
+                <!-- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Admin Tools
@@ -50,8 +49,12 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="/wip">Something else here</a>
                     </div>
-                </li> 
-            </ul> 
+                </li>  -->
+            </ul>    
+            <span class="navbar-text">
+                <a class="nav-link" href="/logout" style="padding:0 25px">Logout</a>
+                <!-- Navbar text with an inline element -->
+            </span> 
         </div>
     </nav> 
 

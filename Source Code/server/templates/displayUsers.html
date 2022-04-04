@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+{% block title %} Home {% endblock %}
+
+{% block scripts %}
+
+
+{% endblock %}
+
+{% block styles %}
+<style>
+    body{
+        background-color: #f7f7f7;
+    }
+    .header {  
+        padding-top: 25px;
+        font-size: 26px;
+        height:80px; 
+    }
+
+    .alert {
+        position:fixed; 
+        top:  10%;
+        left: 25%;  
+        width: 50%;
+        z-index:9999; 
+        border-radius:0px
+    }
+
+    /* .dataTable > thead > tr > th[class*="sort"]:before,
+    .dataTable > thead > tr > th[class*="sort"]:after {
+        content: "" !important;
+    } */
+
+    .device {
+        text-align: center; 
+    }  
+
+    .dataTables_length {
+        float: left;
+    }
+
+    .dataTables_info {
+        float: left;
+    }
+
+    .addBtn{
+        height:60px; 
+    }  
+
+    .container-fluid{
+        width: 80%;
+    }
+
+    .modal-body{
+        text-align: left; 
+        padding-bottom: 0;
+        margin: 0;
+    }
+
+    .btn.disabled {
+        pointer-events: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- test flashing -->
+    <!-- <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %} 
+                    <p>hai</p>  
+                    {% for category, message in messages %}
+                        <p> {{category}} - {{message}}</p> 
+                    {% endfor %} 
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div> -->
+    
+    <!-- test collapsible alerts -->
+    <!-- <div class="row justify-content-center mt-5">
+        <div class="col-md-5"> -->
+            <!-- <div class="alert alert-success" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Success!</strong> You have been signed in successfully!
+            </div> -->
+        <!-- </div>
+    </div> -->
+
+    <!-- alert handler -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            {% if messages %} 
+                <div class="alert alert-{{category}}" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {{message}}
+                </div>
+            {% endif %} 
+        {% endfor %}
+    {% endwith %}
+
+
+
+    <div class="header"> Manage Users</div> 
+
+    <!-- add charger btn -->
+    <div class="addBtn">  
+        <!-- button trigger modal -->
+        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+            Add User
+        </button>
+
+        <!-- modal window untuk addcharging -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    
+                    <form action="#" method="post"> 
+                        <div class="modal-body">
+                            <!-- <form action="#" method="post">
+                                <p> insert </p>
+                                <p> <input type="text" name="addIndex" /> </p>
+                                <p> <input type="submit" name="submit_button" value="addIndexSubmit" /> </p> 
+                            </form> -->
+                            
+                            <!-- TEST FORM BOOTSTRAP -->
+                            <div class="form-group">
+                                <label for="addChargerTable">Full Name</label>
+                                <input type="text" class="form-control" id="addChargerTable" name="fname" placeholder="John Doe"> 
+                            </div> 
+                            <div class="form-group">
+                                <label for="addChargerTable">Username</label>
+                                <input type="text" class="form-control" id="addChargerTable" name="uname" placeholder="johndoe"> 
+                            </div> 
+                            <div class="form-group">
+                                <label for="addChargerTable">Password</label>
+                                <input type="text" class="form-control" id="addChargerTable" name="pword" placeholder="Password"> 
+                            </div> 
+                            <div class="form-group">
+                                <label for="addChargerTable">Confirm Password</label>
+                                <input type="text" class="form-control" id="addChargerTable" name="conf_pword" placeholder="Confirm Password"> 
+                            </div>  
+                            <p></p>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="submit_button" value="addUser">Submit</button>
+                        </div>
+                    
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- tabel list product -->
+    <div class="device">
+        <div class="table-responsive"> 
+            <table id ="generalInfo" class="table table-bordered">
+                <!-- row headers -->
+                <thead class="table-light">
+                    <tr>
+                        <th class="align-middle" scope="col">ID</th>
+                        <th class="align-middle" scope="col">Full Name</th>
+                        <th class="align-middle" scope="col">Username</th> 
+                        <th class="align-middle" scope="col" >Actions</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in range (0, user_count) %}
+                    <tr>
+                        <!-- product id -->
+                        <th class="align-middle" scope="row">   
+                            {{ x+1 }}
+                        </th>
+
+                        <!-- slot 1 status -->
+                        <td class="align-middle"> 
+                            {{user_data[0][x]}}
+                        </td>
+
+                        <!-- slot 1 soc -->
+                        <td class="align-middle">{{user_data[1][x]}}</td> 
+
+                        <!-- button actions product details -->
+                        <td class="align-middle" style="width:220px">   
+
+                            <!-- trigger modal -->
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteRow{{x}}">
+                                Delete
+                            </button>
+
+                            <!-- Modal window -->
+                            <div class="modal fade" id="deleteRow{{x}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">  
+                                            Remove User {{user_data[1][x]}}
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p> User {{user_data[1][x]}} will be permanently removed </p>
+                                        <p> Continue? </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                                            Close
+                                        </button> 
+                                        <form action="#" method="post"> 
+                                            <input type="hidden" name="deleteUser" value="{{user_data[1][x]}}"></input>
+                                            <button type="submit" class="btn btn-danger" name="submit_button" value="deleteUser">Proceed</button> 
+                                        </form>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div> 
+
+                        </td> 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div>
+        <p></p>
+    </div>
+
+    
+</div>
+
+{% endblock %}
+
+{% block scriptBottom %} 
+
+<!-- <script src="js/jquery.min.js"></script> -->
+<script>
+    $(document).ready(function () {
+        $('#generalInfo').DataTable({   
+            // "dom": '<"top"i>rt<"bottom"flp><"clear">',
+            "order": [[ 0, "asc" ]],
+            lengthMenu: [5, 10, 20, 50, 100, 200],
+            bLengthChange: true, 
+            // "columnDefs": [
+            //     { "orderable": false, "targets": [7] }
+            // ]
+            
+        });
+        
+        window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove();
+            });
+        }, 3000);
+ 
+    });
+ 
+</script>
+ 
+{% endblock %}
+ 

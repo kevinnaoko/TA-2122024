@@ -12,7 +12,7 @@ def printTable(querySelect):
     print("")
 
 # creating file path
-dbfile = 'IoT.db'
+dbfile = 'user.db'
 # Create a SQL connection to our SQLite database
 con = sqlite3.connect(dbfile)
 
@@ -24,14 +24,15 @@ cur = con.cursor()
 # # here is you table list
 # print(table_list)
 
-print("Slot 1")
-printTable("SELECT * FROM " + "charger3_s1") 
+# print("Slot 1")
+printTable("SELECT * FROM " + "userinfo") 
 
-print("Slot 2")
-printTable("SELECT * FROM " + "charger3_s2") 
+# print("Slot 2")
+# printTable("SELECT * FROM " + "charger3_s2") 
 
-print("Device")
-printTable("SELECT * FROM " + "charger3_device") 
+# print("Device")
+# printTable("SELECT * FROM " + "charger3_device") 
+ 
 
 # Be sure to close the connection
 con.close()

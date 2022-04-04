@@ -2,6 +2,8 @@
 {% block title %} Home {% endblock %}
 
 {% block scripts %}
+
+
 {% endblock %}
 
 {% block styles %}
@@ -13,6 +15,15 @@
         padding-top: 25px;
         font-size: 26px;
         height:80px; 
+    }
+
+    .alert {
+        position:fixed; 
+        top:  10%;
+        left: 25%;  
+        width: 50%;
+        z-index:9999; 
+        border-radius:0px
     }
 
     /* .dataTable > thead > tr > th[class*="sort"]:before,
@@ -54,7 +65,46 @@
 
 {% block content %}
 <div class="container-fluid">
-    <div class="header"> Product Dashboard </div> 
+
+    <!-- test flashing -->
+    <!-- <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %} 
+                    <p>hai</p>  
+                    {% for category, message in messages %}
+                        <p> {{category}} - {{message}}</p> 
+                    {% endfor %} 
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div> -->
+    
+    <!-- test collapsible alerts -->
+    <!-- <div class="row justify-content-center mt-5">
+        <div class="col-md-5"> -->
+            <!-- <div class="alert alert-success" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Success!</strong> You have been signed in successfully!
+            </div> -->
+        <!-- </div>
+    </div> -->
+
+    <!-- alert handler -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            {% if messages %} 
+                <div class="alert alert-{{category}}" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {{message}}
+                </div>
+            {% endif %} 
+        {% endfor %}
+    {% endwith %}
+
+
+
+    <div class="header"> Product Dashboard</div> 
 
     <!-- add charger btn -->
     <div class="addBtn">  
@@ -74,12 +124,22 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="#" method="post">
+                    <!-- <form action="#" method="post">
                         <p> insert </p>
                         <p> <input type="text" name="addIndex" /> </p>
                         <p> <input type="submit" name="submit_button" value="addIndexSubmit" /> </p> 
-                    </form>
+                    </form> -->
                     
+                    <!-- TEST FORM BOOTSTRAP -->
+                    <form action="#" method="post"> 
+                        <div class="form-group">
+                          <label for="addChargerTable">Product ID</label>
+                          <input type="text" class="form-control" id="addChargerTable" name="addIndex" placeholder="Enter ID here"> 
+                        </div> 
+                        <button type="submit" class="btn btn-primary" name="submit_button" value="addIndexSubmit">Submit</button>
+                        <p></p>
+                    </form>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -210,9 +270,11 @@
                                         <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
                                             Close
                                         </button>
-                                        <button type="button" class="btn btn-danger" onclick="window.location.href='{{ url_for( 'removeDevice' , deviceSelect=selection ) }}';">
-                                            Proceed
-                                        </button>
+                                        <!-- TEST FORM BOOTSTRAP -->
+                                        <form action="#" method="post"> 
+                                            <input type="hidden" name="deleteIndex" value="{{selection}}"></input>
+                                            <button type="submit" class="btn btn-danger" name="submit_button" value="deleteIndexSubmit">Proceed</button> 
+                                        </form>
                                     </div>
                                     </div>
                                 </div>
@@ -237,6 +299,8 @@
 {% endblock %}
 
 {% block scriptBottom %} 
+
+<!-- <script src="js/jquery.min.js"></script> -->
 <script>
     $(document).ready(function () {
         $('#generalInfo').DataTable({   
@@ -250,9 +314,15 @@
             
         });
         
+        window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove();
+            });
+        }, 3000);
  
     });
  
 </script>
+ 
 {% endblock %}
  
