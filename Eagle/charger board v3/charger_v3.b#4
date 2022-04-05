@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.6.1">
+<eagle version="9.6.2">
 <drawing>
 <settings>
-<setting alwaysvectorfont="yes"/>
+<setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="no" altdistance="5" altunitdist="mil" altunit="mil"/>
@@ -3578,26 +3578,26 @@ design rules under a new name.</description>
 <signal name="5V">
 <contactref element="ESP" pad="2"/>
 <contactref element="LM35" pad="3"/>
-<contactref element="R1" pad="1"/>
 <wire x1="93.98" y1="77.47" x2="93.98" y2="74.93" width="0.3048" layer="1"/>
 <wire x1="82.6008" y1="50.5968" x2="82.6008" y2="54.5592" width="0.3048" layer="16"/>
 <wire x1="89.5604" y1="43.6372" x2="82.6008" y2="50.5968" width="0.3048" layer="16"/>
 <wire x1="89.5604" y1="34.8996" x2="89.5604" y2="43.6372" width="0.3048" layer="16"/>
 <wire x1="92.71" y1="33.02" x2="91.44" y2="33.02" width="0.3048" layer="16"/>
 <wire x1="91.44" y1="33.02" x2="89.5604" y2="34.8996" width="0.3048" layer="16"/>
-<wire x1="82.6008" y1="54.5592" x2="82.55" y2="54.61" width="0.3048" layer="16"/>
 <wire x1="97.282" y1="71.5772" x2="94.0308" y2="74.8284" width="0.3048" layer="16"/>
 <wire x1="97.282" y1="60.2996" x2="97.282" y2="71.5772" width="0.3048" layer="16"/>
 <wire x1="92.7608" y1="55.7784" x2="97.282" y2="60.2996" width="0.3048" layer="16"/>
 <wire x1="83.6676" y1="55.7784" x2="92.7608" y2="55.7784" width="0.3048" layer="16"/>
 <wire x1="82.6008" y1="54.7116" x2="83.6676" y2="55.7784" width="0.3048" layer="16"/>
 <wire x1="94.0308" y1="74.8284" x2="93.98" y2="74.93" width="0.3048" layer="16"/>
-<wire x1="82.6008" y1="54.7116" x2="82.55" y2="54.61" width="0.3048" layer="16"/>
 <wire x1="85.09" y1="77.47" x2="85.09" y2="78.74" width="0.3048" layer="1"/>
 <wire x1="85.09" y1="78.74" x2="86.36" y2="80.01" width="0.3048" layer="1"/>
 <wire x1="86.36" y1="80.01" x2="91.44" y2="80.01" width="0.3048" layer="1"/>
 <wire x1="91.44" y1="80.01" x2="93.98" y2="77.47" width="0.3048" layer="1"/>
 <contactref element="IC1" pad="9"/>
+<contactref element="OK1" pad="4"/>
+<wire x1="93.98" y1="74.93" x2="88.9" y2="71.12" width="0" layer="19" extent="1-1"/>
+<wire x1="82.6008" y1="54.5592" x2="82.6008" y2="54.7116" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="VB">
 <contactref element="D1" pad="C"/>
@@ -3754,14 +3754,14 @@ design rules under a new name.</description>
 <signal name="PWM_SW1">
 <contactref element="ESP" pad="3"/>
 <contactref element="P_3V3" pad="1"/>
-<contactref element="OK1" pad="1"/>
 <wire x1="81.3816" y1="73.8124" x2="81.3816" y2="71.1708" width="0.3048" layer="16"/>
 <wire x1="82.55" y1="77.47" x2="82.55" y2="74.9808" width="0.3048" layer="16"/>
 <wire x1="82.55" y1="74.9808" x2="81.3816" y2="73.8124" width="0.3048" layer="16"/>
-<wire x1="81.3816" y1="71.1708" x2="81.28" y2="71.12" width="0.3048" layer="16"/>
 <wire x1="90.4748" y1="62.23" x2="92.71" y2="62.23" width="0.3048" layer="16"/>
 <wire x1="81.534" y1="71.1708" x2="90.4748" y2="62.23" width="0.3048" layer="16"/>
-<wire x1="81.534" y1="71.1708" x2="81.28" y2="71.12" width="0.3048" layer="16"/>
+<contactref element="R1" pad="1"/>
+<wire x1="81.534" y1="71.1708" x2="81.3816" y2="71.1708" width="0" layer="19" extent="16-16"/>
+<wire x1="82.55" y1="54.61" x2="92.71" y2="62.23" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="PWM_SW2">
 <contactref element="R5" pad="1"/>
@@ -3829,13 +3829,10 @@ design rules under a new name.</description>
 <wire x1="8.89" y1="10.16" x2="8.89" y2="15.24" width="0.6096" layer="16"/>
 <contactref element="R9" pad="2"/>
 </signal>
-<signal name="N$11">
-<contactref element="OK1" pad="4"/>
+<signal name="N$9">
+<contactref element="OK1" pad="1"/>
 <contactref element="R1" pad="2"/>
-<wire x1="82.6008" y1="62.3316" x2="82.6008" y2="66.7258" width="0.3048" layer="1"/>
-<wire x1="86.995" y1="71.12" x2="88.9" y2="71.12" width="0.3048" layer="1"/>
-<wire x1="82.6008" y1="62.3316" x2="82.55" y2="62.23" width="0.3048" layer="1"/>
-<wire x1="82.6008" y1="66.7258" x2="86.995" y2="71.12" width="0.3048" layer="1"/>
+<wire x1="82.55" y1="62.23" x2="81.28" y2="71.12" width="0" layer="19" extent="1-1"/>
 </signal>
 </signals>
 <mfgpreviewcolors>

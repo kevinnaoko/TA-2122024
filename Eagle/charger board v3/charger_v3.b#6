@@ -3,7 +3,7 @@
 <eagle version="9.6.1">
 <drawing>
 <settings>
-<setting alwaysvectorfont="yes"/>
+<setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="no" altdistance="5" altunitdist="mil" altunit="mil"/>
@@ -1330,34 +1330,6 @@ grid 10.16 mm, diameter 35 mm</description>
 <text x="-5.08" y="-7.62" size="1.778" layer="27" ratio="10">&gt;VALUE</text>
 <rectangle x1="0.3302" y1="-2.54" x2="1.6002" y2="2.54" layer="21"/>
 </package>
-<package name="0309/12" urn="urn:adsk.eagle:footprint:23074/1" library_version="11">
-<description>&lt;b&gt;RESISTOR&lt;/b&gt;&lt;p&gt;
-type 0309, grid 12.5 mm</description>
-<wire x1="6.35" y1="0" x2="5.08" y2="0" width="0.6096" layer="51"/>
-<wire x1="-6.35" y1="0" x2="-5.08" y2="0" width="0.6096" layer="51"/>
-<wire x1="-4.318" y1="1.27" x2="-4.064" y2="1.524" width="0.1524" layer="21" curve="-90"/>
-<wire x1="-4.318" y1="-1.27" x2="-4.064" y2="-1.524" width="0.1524" layer="21" curve="90"/>
-<wire x1="4.064" y1="-1.524" x2="4.318" y2="-1.27" width="0.1524" layer="21" curve="90"/>
-<wire x1="4.064" y1="1.524" x2="4.318" y2="1.27" width="0.1524" layer="21" curve="-90"/>
-<wire x1="-4.318" y1="-1.27" x2="-4.318" y2="1.27" width="0.1524" layer="21"/>
-<wire x1="-4.064" y1="1.524" x2="-3.429" y2="1.524" width="0.1524" layer="21"/>
-<wire x1="-3.302" y1="1.397" x2="-3.429" y2="1.524" width="0.1524" layer="21"/>
-<wire x1="-4.064" y1="-1.524" x2="-3.429" y2="-1.524" width="0.1524" layer="21"/>
-<wire x1="-3.302" y1="-1.397" x2="-3.429" y2="-1.524" width="0.1524" layer="21"/>
-<wire x1="3.302" y1="1.397" x2="3.429" y2="1.524" width="0.1524" layer="21"/>
-<wire x1="3.302" y1="1.397" x2="-3.302" y2="1.397" width="0.1524" layer="21"/>
-<wire x1="3.302" y1="-1.397" x2="3.429" y2="-1.524" width="0.1524" layer="21"/>
-<wire x1="3.302" y1="-1.397" x2="-3.302" y2="-1.397" width="0.1524" layer="21"/>
-<wire x1="4.064" y1="1.524" x2="3.429" y2="1.524" width="0.1524" layer="21"/>
-<wire x1="4.064" y1="-1.524" x2="3.429" y2="-1.524" width="0.1524" layer="21"/>
-<wire x1="4.318" y1="-1.27" x2="4.318" y2="1.27" width="0.1524" layer="21"/>
-<pad name="1" x="-6.35" y="0" drill="0.8128" shape="octagon"/>
-<pad name="2" x="6.35" y="0" drill="0.8128" shape="octagon"/>
-<text x="-4.191" y="1.905" size="1.27" layer="25" ratio="10">&gt;NAME</text>
-<text x="-3.175" y="-0.6858" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
-<rectangle x1="4.318" y1="-0.3048" x2="5.1816" y2="0.3048" layer="21"/>
-<rectangle x1="-5.1816" y1="-0.3048" x2="-4.318" y2="0.3048" layer="21"/>
-</package>
 <package name="0411/15" urn="urn:adsk.eagle:footprint:23077/1" library_version="11">
 <description>&lt;b&gt;RESISTOR&lt;/b&gt;&lt;p&gt;
 type 0411, grid 15 mm</description>
@@ -1421,13 +1393,6 @@ grid 7.62 mm, diameter 18 mm</description>
 grid 10.16 mm, diameter 35 mm</description>
 <packageinstances>
 <packageinstance name="EB35D"/>
-</packageinstances>
-</package3d>
-<package3d name="0309/12" urn="urn:adsk.eagle:package:23571/1" type="box" library_version="11">
-<description>RESISTOR
-type 0309, grid 12.5 mm</description>
-<packageinstances>
-<packageinstance name="0309/12"/>
 </packageinstances>
 </package3d>
 <package3d name="0411/15" urn="urn:adsk.eagle:package:23568/2" type="model" library_version="11">
@@ -3337,11 +3302,11 @@ design rules under a new name.</description>
 <attribute name="PRICE" value="None" x="73.66" y="71.12" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="70.59" y="67.97" size="1.27" layer="27"/>
 </element>
-<element name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" package="0309/12" package3d_urn="urn:adsk.eagle:package:23571/1" value="68k" x="72.4408" y="58.42" smashed="yes" rot="R270">
-<attribute name="NAME" x="73.7362" y="60.96" size="0.9906" layer="25" ratio="10" rot="R270"/>
-<attribute name="POPULARITY" value="8" x="72.4408" y="58.42" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="SPICEPREFIX" value="R" x="72.4408" y="58.42" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="VALUE" x="71.9582" y="61.3156" size="0.9906" layer="27" ratio="10" rot="R270"/>
+<element name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" package="0411/15" package3d_urn="urn:adsk.eagle:package:23568/2" value="68k" x="72.39" y="55.88" smashed="yes" rot="R270">
+<attribute name="NAME" x="73.6854" y="58.42" size="0.9906" layer="25" ratio="10" rot="R270"/>
+<attribute name="POPULARITY" value="2" x="72.39" y="55.88" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="SPICEPREFIX" value="R" x="72.39" y="55.88" size="1.778" layer="27" rot="R270" display="off"/>
+<attribute name="VALUE" x="71.9074" y="58.7756" size="0.9906" layer="27" ratio="10" rot="R270"/>
 </element>
 <element name="R5" library="rcl" library_urn="urn:adsk.eagle:library:334" package="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="2.7k" x="77.47" y="58.42" smashed="yes" rot="R90">
 <attribute name="NAME" x="76.1746" y="55.88" size="0.9906" layer="25" ratio="10" rot="R90"/>
@@ -3765,7 +3730,7 @@ design rules under a new name.</description>
 <signal name="N$3">
 <contactref element="R4" pad="1"/>
 <contactref element="Q3" pad="2"/>
-<wire x1="72.4408" y1="67.2592" x2="72.4408" y2="64.77" width="0.3048" layer="16"/>
+<wire x1="72.4408" y1="67.2592" x2="72.39" y2="63.5" width="0.3048" layer="16"/>
 <wire x1="75.8952" y1="70.7136" x2="72.4408" y2="67.2592" width="0.3048" layer="16"/>
 <wire x1="75.8952" y1="71.0184" x2="75.8952" y2="70.7136" width="0.3048" layer="16"/>
 <wire x1="75.8952" y1="71.0184" x2="75.95" y2="71.12" width="0.3048" layer="16"/>
@@ -3840,7 +3805,7 @@ design rules under a new name.</description>
 <signal name="N$4">
 <contactref element="R4" pad="2"/>
 <contactref element="D6" pad="K"/>
-<wire x1="72.4408" y1="45.72" x2="72.4408" y2="52.07" width="0.3048" layer="1"/>
+<wire x1="72.4408" y1="45.72" x2="72.39" y2="48.26" width="0.3048" layer="1"/>
 <wire x1="72.4408" y1="45.72" x2="72.39" y2="45.72" width="0.3048" layer="1"/>
 </signal>
 <signal name="N$6">
