@@ -3,7 +3,7 @@
 <eagle version="9.6.1">
 <drawing>
 <settings>
-<setting alwaysvectorfont="no"/>
+<setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="no" altdistance="5" altunitdist="mil" altunit="mil"/>
@@ -3560,9 +3560,10 @@ design rules under a new name.</description>
 <wire x1="62.23" y1="0" x2="64.77" y2="2.54" width="6.985" layer="16"/>
 <wire x1="58.039" y1="-3.81" x2="61.849" y2="0" width="5.08" layer="16"/>
 <wire x1="61.849" y1="0" x2="62.23" y2="0" width="5.08" layer="16"/>
-<wire x1="35.56" y1="53.34" x2="44.45" y2="53.34" width="6.985" layer="16"/>
+<wire x1="35.56" y1="53.34" x2="38.1" y2="55.88" width="6.985" layer="16"/>
+<wire x1="44.45" y1="55.88" x2="38.1" y2="55.88" width="6.985" layer="16"/>
 <wire x1="44.25" y1="75.35" x2="44.45" y2="75.15" width="6.985" layer="16"/>
-<wire x1="44.45" y1="75.15" x2="44.45" y2="53.34" width="6.985" layer="16"/>
+<wire x1="44.45" y1="75.15" x2="44.45" y2="55.88" width="6.985" layer="16"/>
 <contactref element="D3" pad="A1"/>
 <contactref element="IC1" pad="2"/>
 <contactref element="IC1" pad="11"/>
@@ -3595,9 +3596,9 @@ design rules under a new name.</description>
 <vertex x="-12.7" y="-15.24"/>
 <vertex x="-12.7" y="86.36"/>
 </polygon>
-<wire x1="59.69" y1="53.34" x2="62.23" y2="50.8" width="6.985" layer="16"/>
+<wire x1="57.15" y1="55.88" x2="62.23" y2="50.8" width="6.985" layer="16"/>
 <wire x1="62.23" y1="50.8" x2="62.23" y2="46.99" width="6.985" layer="16"/>
-<wire x1="44.45" y1="53.34" x2="59.69" y2="53.34" width="6.985" layer="16"/>
+<wire x1="44.45" y1="55.88" x2="57.15" y2="55.88" width="6.985" layer="16"/>
 <wire x1="64.77" y1="44.45" x2="62.23" y2="46.99" width="6.985" layer="16"/>
 <wire x1="64.77" y1="2.54" x2="64.77" y2="44.45" width="6.985" layer="16"/>
 </signal>
