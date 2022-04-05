@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.6.2">
+<eagle version="9.6.1">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -22401,6 +22401,8 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <part name="OK1" library="optocoupler" library_urn="urn:adsk.eagle:library:320" deviceset="SFH618?*" device="A" package3d_urn="urn:adsk.eagle:package:21960/1" technology="-5"/>
 <part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="180"/>
 <part name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="1k"/>
+<part name="SOURCE" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X1" device="" package3d_urn="urn:adsk.eagle:package:22485/2"/>
+<part name="DRAIN" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X1" device="" package3d_urn="urn:adsk.eagle:package:22485/2"/>
 </parts>
 <sheets>
 <sheet>
@@ -22455,9 +22457,9 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <attribute name="NAME" x="18.923" y="-32.5374" size="1.778" layer="95"/>
 <attribute name="VALUE" x="18.923" y="-37.6174" size="1.778" layer="96"/>
 </instance>
-<instance part="DC_OUT" gate="G$1" x="15.24" y="38.1" smashed="yes">
-<attribute name="NAME" x="9.66" y="43.18" size="1.778" layer="95"/>
-<attribute name="VALUE" x="10.16" y="33.02" size="1.778" layer="96"/>
+<instance part="DC_OUT" gate="G$1" x="-7.62" y="-81.28" smashed="yes">
+<attribute name="NAME" x="-13.2" y="-76.2" size="1.778" layer="95"/>
+<attribute name="VALUE" x="-12.7" y="-86.36" size="1.778" layer="96"/>
 </instance>
 <instance part="Q2" gate="G$1" x="50.8" y="-22.86" smashed="yes" rot="R90">
 <attribute name="NAME" x="46.985909375" y="-17.801390625" size="1.786059375" layer="95" rot="R180"/>
@@ -22539,19 +22541,19 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <attribute name="NAME" x="46.99" y="-63.5" size="1.778" layer="95" rot="R270"/>
 <attribute name="VALUE" x="44.45" y="-69.215" size="1.778" layer="96" rot="R270"/>
 </instance>
-<instance part="LM35" gate="-1" x="-25.4" y="5.08" smashed="yes">
-<attribute name="NAME" x="-22.86" y="4.318" size="1.524" layer="95"/>
-<attribute name="VALUE" x="-26.162" y="6.477" size="1.778" layer="96"/>
+<instance part="LM35" gate="-1" x="10.16" y="40.64" smashed="yes">
+<attribute name="NAME" x="12.7" y="39.878" size="1.524" layer="95"/>
+<attribute name="VALUE" x="9.398" y="42.037" size="1.778" layer="96"/>
 </instance>
-<instance part="LM35" gate="-2" x="-25.4" y="2.54" smashed="yes">
-<attribute name="NAME" x="-22.86" y="1.778" size="1.524" layer="95"/>
+<instance part="LM35" gate="-2" x="10.16" y="38.1" smashed="yes">
+<attribute name="NAME" x="12.7" y="37.338" size="1.524" layer="95"/>
 </instance>
-<instance part="LM35" gate="-3" x="-25.4" y="0" smashed="yes">
-<attribute name="NAME" x="-22.86" y="-0.762" size="1.524" layer="95"/>
+<instance part="LM35" gate="-3" x="10.16" y="35.56" smashed="yes">
+<attribute name="NAME" x="12.7" y="34.798" size="1.524" layer="95"/>
 </instance>
-<instance part="AC_IN" gate="G$1" x="15.24" y="-7.62" smashed="yes">
-<attribute name="NAME" x="9.66" y="-2.54" size="1.778" layer="95"/>
-<attribute name="VALUE" x="10.16" y="-12.7" size="1.778" layer="96"/>
+<instance part="AC_IN" gate="G$1" x="-7.62" y="-63.5" smashed="yes">
+<attribute name="NAME" x="-13.2" y="-58.42" size="1.778" layer="95"/>
+<attribute name="VALUE" x="-12.7" y="-68.58" size="1.778" layer="96"/>
 </instance>
 <instance part="C5" gate="G$1" x="58.42" y="-10.16" smashed="yes" rot="R90">
 <attribute name="NAME" x="57.9374" y="-9.017" size="1.778" layer="95" rot="R90"/>
@@ -22569,16 +22571,24 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <attribute name="NAME" x="92.9386" y="-26.67" size="1.778" layer="95" rot="R270"/>
 <attribute name="VALUE" x="88.138" y="-26.67" size="1.778" layer="96" rot="R270"/>
 </instance>
-<instance part="OK1" gate="G$1" x="50.8" y="17.78" smashed="yes">
-<attribute name="NAME" x="43.815" y="23.495" size="1.778" layer="95"/>
+<instance part="OK1" gate="G$1" x="40.64" y="20.32" smashed="yes">
+<attribute name="NAME" x="33.655" y="26.035" size="1.778" layer="95"/>
 </instance>
-<instance part="R1" gate="G$1" x="33.02" y="20.32" smashed="yes">
-<attribute name="NAME" x="29.21" y="21.8186" size="1.778" layer="95"/>
-<attribute name="VALUE" x="29.21" y="17.018" size="1.778" layer="96"/>
+<instance part="R1" gate="G$1" x="22.86" y="22.86" smashed="yes">
+<attribute name="NAME" x="19.05" y="24.3586" size="1.778" layer="95"/>
+<attribute name="VALUE" x="19.05" y="19.558" size="1.778" layer="96"/>
 </instance>
-<instance part="R7" gate="G$1" x="50.8" y="7.62" smashed="yes">
-<attribute name="NAME" x="46.99" y="9.1186" size="1.778" layer="95"/>
-<attribute name="VALUE" x="46.99" y="4.318" size="1.778" layer="96"/>
+<instance part="R7" gate="G$1" x="40.64" y="10.16" smashed="yes">
+<attribute name="NAME" x="36.83" y="11.6586" size="1.778" layer="95"/>
+<attribute name="VALUE" x="36.83" y="6.858" size="1.778" layer="96"/>
+</instance>
+<instance part="SOURCE" gate="G$1" x="-17.78" y="0" smashed="yes">
+<attribute name="NAME" x="-24.13" y="3.175" size="1.778" layer="95"/>
+<attribute name="VALUE" x="-24.13" y="-5.08" size="1.778" layer="96"/>
+</instance>
+<instance part="DRAIN" gate="G$1" x="-17.78" y="10.16" smashed="yes">
+<attribute name="NAME" x="-24.13" y="13.335" size="1.778" layer="95"/>
+<attribute name="VALUE" x="-24.13" y="5.08" size="1.778" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -22597,12 +22607,12 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 </segment>
 <segment>
 <pinref part="OK1" gate="G$1" pin="EMIT"/>
-<wire x1="58.42" y1="15.24" x2="63.5" y2="15.24" width="0.1524" layer="91"/>
-<label x="63.5" y="15.24" size="1.778" layer="95" xref="yes"/>
+<wire x1="48.26" y1="17.78" x2="53.34" y2="17.78" width="0.1524" layer="91"/>
+<label x="53.34" y="17.78" size="1.778" layer="95" xref="yes"/>
 <pinref part="R7" gate="G$1" pin="2"/>
-<wire x1="55.88" y1="7.62" x2="58.42" y2="7.62" width="0.1524" layer="91"/>
-<wire x1="58.42" y1="7.62" x2="58.42" y2="15.24" width="0.1524" layer="91"/>
-<junction x="58.42" y="15.24"/>
+<wire x1="45.72" y1="10.16" x2="48.26" y2="10.16" width="0.1524" layer="91"/>
+<wire x1="48.26" y1="10.16" x2="48.26" y2="17.78" width="0.1524" layer="91"/>
+<junction x="48.26" y="17.78"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -22673,22 +22683,22 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 </segment>
 <segment>
 <pinref part="LM35" gate="-1" pin="S"/>
-<wire x1="-27.94" y1="5.08" x2="-30.48" y2="5.08" width="0.1524" layer="91"/>
-<label x="-30.48" y="5.08" size="1.27" layer="95" rot="R180" xref="yes"/>
+<wire x1="7.62" y1="40.64" x2="5.08" y2="40.64" width="0.1524" layer="91"/>
+<label x="5.08" y="40.64" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
 <pinref part="OK1" gate="G$1" pin="C"/>
-<wire x1="40.64" y1="15.24" x2="35.56" y2="15.24" width="0.1524" layer="91"/>
-<label x="35.56" y="15.24" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="30.48" y1="17.78" x2="25.4" y2="17.78" width="0.1524" layer="91"/>
+<label x="25.4" y="17.78" size="1.778" layer="95" rot="R180" xref="yes"/>
 <pinref part="R7" gate="G$1" pin="1"/>
-<wire x1="45.72" y1="7.62" x2="40.64" y2="7.62" width="0.1524" layer="91"/>
-<wire x1="40.64" y1="7.62" x2="40.64" y2="15.24" width="0.1524" layer="91"/>
-<junction x="40.64" y="15.24"/>
+<wire x1="35.56" y1="10.16" x2="30.48" y2="10.16" width="0.1524" layer="91"/>
+<wire x1="30.48" y1="10.16" x2="30.48" y2="17.78" width="0.1524" layer="91"/>
+<junction x="30.48" y="17.78"/>
 </segment>
 <segment>
 <pinref part="DC_OUT" gate="G$1" pin="1"/>
-<wire x1="5.08" y1="40.64" x2="2.54" y2="40.64" width="0.1524" layer="91"/>
-<label x="2.54" y="40.64" size="1.27" layer="95" rot="R180" xref="yes"/>
+<wire x1="-17.78" y1="-78.74" x2="-20.32" y2="-78.74" width="0.1524" layer="91"/>
+<label x="-20.32" y="-78.74" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="5V" class="0">
@@ -22704,13 +22714,13 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 </segment>
 <segment>
 <pinref part="LM35" gate="-3" pin="S"/>
-<wire x1="-27.94" y1="0" x2="-30.48" y2="0" width="0.1524" layer="91"/>
-<label x="-30.48" y="0" size="1.27" layer="95" rot="R180" xref="yes"/>
+<wire x1="7.62" y1="35.56" x2="5.08" y2="35.56" width="0.1524" layer="91"/>
+<label x="5.08" y="35.56" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
 <pinref part="OK1" gate="G$1" pin="COL"/>
-<wire x1="58.42" y1="20.32" x2="60.96" y2="20.32" width="0.1524" layer="91"/>
-<label x="60.96" y="20.32" size="1.778" layer="95" xref="yes"/>
+<wire x1="48.26" y1="22.86" x2="50.8" y2="22.86" width="0.1524" layer="91"/>
+<label x="50.8" y="22.86" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
 <net name="VB" class="0">
@@ -22770,6 +22780,14 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <wire x1="91.44" y1="-25.4" x2="91.44" y2="-22.86" width="0.1524" layer="91"/>
 <junction x="91.44" y="-22.86"/>
 <pinref part="R9" gate="G$1" pin="1"/>
+<label x="68.58" y="-10.16" size="1.27" layer="95" xref="yes"/>
+<wire x1="68.58" y1="-10.16" x2="66.04" y2="-10.16" width="0.1524" layer="91"/>
+<junction x="66.04" y="-10.16"/>
+</segment>
+<segment>
+<pinref part="SOURCE" gate="G$1" pin="1"/>
+<wire x1="-20.32" y1="0" x2="-30.48" y2="0" width="0.1524" layer="91"/>
+<label x="-30.48" y="0" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="PWM_12V" class="2">
@@ -22814,6 +22832,8 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <wire x1="17.78" y1="-22.86" x2="35.56" y2="-22.86" width="0.1524" layer="91"/>
 <junction x="17.78" y="-22.86"/>
 <junction x="35.56" y="-22.86"/>
+<label x="17.78" y="-17.78" size="1.27" layer="95" rot="R180" xref="yes"/>
+<wire x1="17.78" y1="-17.78" x2="17.78" y2="-22.86" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <label x="48.26" y="-78.74" size="1.27" layer="95" xref="yes"/>
@@ -22821,6 +22841,11 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <wire x1="40.64" y1="-78.74" x2="38.1" y2="-76.2" width="0.1524" layer="91"/>
 <pinref part="S1" gate="1" pin="S1"/>
 <wire x1="38.1" y1="-76.2" x2="38.1" y2="-71.12" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="DRAIN" gate="G$1" pin="1"/>
+<wire x1="-20.32" y1="10.16" x2="-30.48" y2="10.16" width="0.1524" layer="91"/>
+<label x="-30.48" y="10.16" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="12V" class="0">
@@ -22865,8 +22890,8 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 </segment>
 <segment>
 <pinref part="AC_IN" gate="G$1" pin="1"/>
-<wire x1="5.08" y1="-5.08" x2="2.54" y2="-5.08" width="0.1524" layer="91"/>
-<label x="2.54" y="-5.08" size="1.27" layer="95" rot="R180" xref="yes"/>
+<wire x1="-17.78" y1="-60.96" x2="-20.32" y2="-60.96" width="0.1524" layer="91"/>
+<label x="-20.32" y="-60.96" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="AC_2" class="1">
@@ -22878,8 +22903,8 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 </segment>
 <segment>
 <pinref part="AC_IN" gate="G$1" pin="2"/>
-<wire x1="5.08" y1="-7.62" x2="2.54" y2="-7.62" width="0.1524" layer="91"/>
-<label x="2.54" y="-7.62" size="1.27" layer="95" rot="R180" xref="yes"/>
+<wire x1="-17.78" y1="-63.5" x2="-20.32" y2="-63.5" width="0.1524" layer="91"/>
+<label x="-20.32" y="-63.5" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="N$3" class="0">
@@ -22909,8 +22934,8 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 </segment>
 <segment>
 <pinref part="R1" gate="G$1" pin="1"/>
-<wire x1="27.94" y1="20.32" x2="25.4" y2="20.32" width="0.1524" layer="91"/>
-<label x="25.4" y="20.32" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="17.78" y1="22.86" x2="15.24" y2="22.86" width="0.1524" layer="91"/>
+<label x="15.24" y="22.86" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="PWM_SW2" class="0">
@@ -22933,8 +22958,8 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 </segment>
 <segment>
 <pinref part="LM35" gate="-2" pin="S"/>
-<wire x1="-27.94" y1="2.54" x2="-30.48" y2="2.54" width="0.1524" layer="91"/>
-<label x="-30.48" y="2.54" size="1.27" layer="95" rot="R180" xref="yes"/>
+<wire x1="7.62" y1="38.1" x2="5.08" y2="38.1" width="0.1524" layer="91"/>
+<label x="5.08" y="38.1" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="N$1" class="0">
@@ -22959,8 +22984,8 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 </segment>
 <segment>
 <pinref part="DC_OUT" gate="G$1" pin="2"/>
-<wire x1="5.08" y1="38.1" x2="2.54" y2="38.1" width="0.1524" layer="91"/>
-<label x="2.54" y="38.1" size="1.27" layer="95" rot="R180" xref="yes"/>
+<wire x1="-17.78" y1="-81.28" x2="-20.32" y2="-81.28" width="0.1524" layer="91"/>
+<label x="-20.32" y="-81.28" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="N$8" class="0">
@@ -23003,7 +23028,7 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <segment>
 <pinref part="OK1" gate="G$1" pin="A"/>
 <pinref part="R1" gate="G$1" pin="2"/>
-<wire x1="38.1" y1="20.32" x2="40.64" y2="20.32" width="0.1524" layer="91"/>
+<wire x1="27.94" y1="22.86" x2="30.48" y2="22.86" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
