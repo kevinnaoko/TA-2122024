@@ -10,12 +10,15 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   Sim800l.begin(9600);
-  
+ 
+
   
 }
 
-void loop() {    
-  while(Sim800l.available()){ 
+void loop() {  
+//  Serial.println("HAI");
+  
+  while(Sim800l.available()){
     Serial.write(Sim800l.read());
   }
  

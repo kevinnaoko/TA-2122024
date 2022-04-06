@@ -20,13 +20,11 @@
 // Define the serial console for debug prints, if needed
 #define TINY_GSM_DEBUG SerialMon
 
-#define MODEM_TX             27
-#define MODEM_RX             26
 // set GSM PIN, if any
 #define GSM_PIN ""
 
 // Your GPRS credentials, if any
-const char apn[] = "internet";
+const char apn[] = "internet"; // APN (example: internet.vodafone.pt) use https://wiki.apnchanger.org
 const char gprsUser[] = "";
 const char gprsPass[] = "";
 
@@ -34,7 +32,14 @@ const char gprsPass[] = "";
 const char simPIN[]   = ""; 
 
 // MQTT details
-const char* broker = "34.101.49.52";                   
+const char* broker = "34.101.49.52";                    // Public IP address or domain name
+const char* mqttUsername = "REPLACE_WITH_YOUR_MQTT_USER";  // MQTT username
+const char* mqttPassword = "REPLACE_WITH_YOUR_MQTT_PASS";  // MQTT password
+
+const char* topicOutput1 = "esp/output1";
+const char* topicOutput2 = "esp/output2";
+const char* topicTemperature = "esp/temperature";
+const char* topicHumidity = "esp/humidity";
 
 // Define the serial console for debug prints, if needed
 //#define DUMP_AT_COMMANDS
@@ -50,10 +55,28 @@ const char* broker = "34.101.49.52";
   TinyGsm modem(SerialAT);
 #endif
 
-#include <PubSubClient.h> 
+#include <PubSubClient.h>
+// #include <Adafruit_Sensor.h>
+// #include <Adafruit_BME280.h>
 
 TinyGsmClient client(modem);
 PubSubClient mqtt(client);
+
+// TTGO T-Call pins
+#define MODEM_RST            5
+#define MODEM_PWKEY          4
+#define MODEM_POWER_ON       23
+#define MODEM_TX             27
+#define MODEM_RX             26
+#define I2C_SDA              21
+#define I2C_SCL              22
+
+// BME280 pins
+#define I2C_SDA_2            18
+#define I2C_SCL_2            19
+
+#define OUTPUT_1             2
+#define OUTPUT_2             15
 
 uint32_t lastReconnectAttempt = 0;
 
@@ -101,18 +124,22 @@ void mqttCallback(char* topic, byte* message, unsigned int len) {
     Serial.print("Changing output to ");
     if(messageTemp == "true"){
       Serial.println("true");
+      digitalWrite(OUTPUT_1, HIGH);
     }
     else if(messageTemp == "false"){
       Serial.println("false");
+      digitalWrite(OUTPUT_1, LOW);
     }
   }
   else if (String(topic) == "esp/output2") {
     Serial.print("Changing output to ");
     if(messageTemp == "true"){
       Serial.println("true");
+      digitalWrite(OUTPUT_2, HIGH);
     }
     else if(messageTemp == "false"){
       Serial.println("false");
+      digitalWrite(OUTPUT_2, LOW);
     }
   }
 }
@@ -122,10 +149,10 @@ boolean mqttConnect() {
   SerialMon.print(broker);
 
   // Connect to MQTT Broker without username and password
-  boolean status = mqtt.connect("GsmClientN");
+  //boolean status = mqtt.connect("GsmClientN");
 
   // Or, if you want to authenticate MQTT:
-//  boolean status = mqtt.connect("GsmClientN", mqttUsername, mqttPassword);???
+  boolean status = mqtt.connect("GsmClientN", mqttUsername, mqttPassword);
 
   if (status == false) {
     SerialMon.println(" fail");
@@ -133,7 +160,8 @@ boolean mqttConnect() {
     return false;
   }
   SerialMon.println(" success");
-  mqtt.subscribe("sys/commands"); 
+  mqtt.subscribe(topicOutput1);
+  mqtt.subscribe(topicOutput2);
 
   return mqtt.connected();
 }
@@ -143,13 +171,25 @@ void setup() {
   // Set console baud rate
   SerialMon.begin(115200);
   delay(10);
-   
+  
+  // Start I2C communication
+  I2CPower.begin(I2C_SDA, I2C_SCL, 400000);
+  I2CBME.begin(I2C_SDA_2, I2C_SCL_2, 400000);
   
   // Keep power when running from battery
   bool isOk = setPowerBoostKeepOn(1);
   SerialMon.println(String("IP5306 KeepOn ") + (isOk ? "OK" : "FAIL"));
 
+  // Set modem reset, enable, power pins
+  pinMode(MODEM_PWKEY, OUTPUT);
+  pinMode(MODEM_RST, OUTPUT);
+  pinMode(MODEM_POWER_ON, OUTPUT);
+  digitalWrite(MODEM_PWKEY, LOW);
+  digitalWrite(MODEM_RST, HIGH);
+  digitalWrite(MODEM_POWER_ON, HIGH);
   
+  pinMode(OUTPUT_1, OUTPUT);
+  pinMode(OUTPUT_2, OUTPUT);
   
   SerialMon.println("Wait...");
 
@@ -171,6 +211,12 @@ void setup() {
   if ( GSM_PIN && modem.getSimStatus() != 3 ) {
     modem.simUnlock(GSM_PIN);
   }
+
+  // You might need to change the BME280 I2C address, in our case it's 0x76
+//  if (!bme.begin(0x76, &I2CBME)) {
+//    Serial.println("Could not find a valid BME280 sensor, check wiring!");
+//    while (1);
+//  }
 
   SerialMon.print("Connecting to APN: ");
   SerialMon.print(apn);
@@ -209,10 +255,29 @@ void loop() {
   long now = millis();
   if (now - lastMsg > 30000) {
     lastMsg = now;
-     
-    char tempString[12] = "test esp32";
+    
+    // Temperature in Celsius
+//    temperature = bme.readTemperature();   
+    // Uncomment the next line to set temperature in Fahrenheit 
+    // (and comment the previous temperature line)
+    //temperature = 1.8 * bme.readTemperature() + 32; // Temperature in Fahrenheit
+    
+    // Convert the value to a char array
+//    char tempString[8];
+//    dtostrf(temperature, 1, 2, tempString);
+//    Serial.print("Temperature: ");
+//    Serial.println(tempString);
+    char tempString[8] = "test";
     mqtt.publish("sys/test", tempString);
- 
+
+//    humidity = bme.readHumidity();
+    
+    // Convert the value to a char array
+//    char humString[8];
+//    dtostrf(humidity, 1, 2, humString);
+//    Serial.print("Humidity: ");
+//    Serial.println(humString);
+//    mqtt.publish(topicHumidity, humString);
   }
 
   mqtt.loop();
