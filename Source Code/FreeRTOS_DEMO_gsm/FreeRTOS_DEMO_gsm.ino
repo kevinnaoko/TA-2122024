@@ -210,6 +210,7 @@ void MQTTLoop(void *parameter)
         int gsmStatus = checkGsmNetwork();
         int modemStatus = modem.isGprsConnected();
 
+        // Setiap 15 detik, apabila koneksi GPRS belum ada, dipanggil fungsi koneksi GPRS 
         if (millis() - lastGprsAttempt > 15000 && gsmStatus == 1 && modemStatus == 0){
             if (modem.isGprsConnected()){
                 Serial.println("GPRS Connected");
@@ -224,38 +225,35 @@ void MQTTLoop(void *parameter)
             }
         }
         
-//        else{
-//            Serial.println("Network unavailable, cant connect to GPRS & broker");
-//        }
+        // else{
+        //     Serial.println("Network unavailable, cant connect to GPRS & broker");
+        // }
 
-//        if (!modem.isGprsConnected() && millis() - lastGprsAttempt > 30000){
-//            lastGprsAttempt = millis();
-//            gprsConnectFuction();
-//        }
+        // if (!modem.isGprsConnected() && millis() - lastGprsAttempt > 30000){
+        //     lastGprsAttempt = millis();
+        //     gprsConnectFuction();
+        // }
 
-        
+        // Bila sudah terkoneksi GPRS namun belum terkoneksi ke broker MQTT dipanggil fungsi koneksi ke broker
         if (!client.connected() && modem.isGprsConnected()){
             reconnectmqttserver();
         } 
         
         // fungsi untuk keberjalanan modul PubSubClient.h
-        client.loop();
+        client.loop(); 
         
-//        Serial.print("Network status: ");
-//        Serial.println(gsmStatus);
-//        Serial.print("GPRS status: ");
-//        Serial.println(modemStatus);
+        // test doang, delete nanti 
+        // if (millis() - lastDebugUpload > 15000){
+        //     Serial.print("Network status: ");
+        //     Serial.println(gsmStatus);
+        //     Serial.print("GPRS status: ");
+        //     Serial.println(modemStatus);
+        //     lastDebugUpload = millis();
+        //     Serial.println("debug set cmd_sendSlotL = 1");
+        //     cmd_sendSlotL = 1;
+        // }
 
-        if (millis() - lastDebugUpload > 15000){
-            Serial.print("Network status: ");
-            Serial.println(gsmStatus);
-            Serial.print("GPRS status: ");
-            Serial.println(modemStatus);
-            lastDebugUpload = millis();
-            Serial.println("debug set cmd_sendSlotL = 1");
-            cmd_sendSlotL = 1;
-        }
-
+        // Sampling lokasi apabila informasi belum didapatkan 
         if (!(isGetLocation))
         {   
             if (checkGsm() == 1){
@@ -270,7 +268,12 @@ void MQTTLoop(void *parameter)
                 
         }
 
-        if (client.connected() && modem.isGprsConnected()){
+        // Proses bila sudah terkoneksi ke broker
+        // terdapat beberapa variabel command yang diset 1 pada state tertentu di Task Left dan Right battery
+        // proses publish harus dilakukan terpisah dengan Task Left dan Right
+        // karena proses komunikasi dengan SIM800L harus ada di task yang level prioritas nya lebih tinggi
+        if (client.connected()){
+            // command publsih data slot kiri (slot 1)
             if (cmd_sendSlotL == 1){  
                 strcpy(stringHolder, blank);
                 buildStringBatteryInfo(0, stringHolder);
@@ -283,7 +286,7 @@ void MQTTLoop(void *parameter)
     
                 cmd_sendSlotL = 0;
             }
-    
+            // command publsih data slot kiri (slot 2)
             if (cmd_sendSlotR == 1){  
                 strcpy(stringHolder, blank);
                 buildStringBatteryInfo(1, stringHolder);
@@ -298,7 +301,8 @@ void MQTTLoop(void *parameter)
             }
         }
 
-        
+        // bila koneksi ke broker belum ada, command publish ditahan dulu
+        // publish dilakukan setelah koneksi ke broker berhasil dilakukan  
         else{
             Serial.println("Can't upload, MQTT / GPRS unavailable");
             Serial.print("Network status: ");
@@ -1340,25 +1344,25 @@ int checkGsmNetwork(){
 }
 
 void gprsConnectFuction(){
-  Serial.println("Initializing modem...");
-  modem.init();
+    Serial.println("Initializing modem...");
+    modem.init();
 
-  String modemInfo = modem.getModemInfo();
-  Serial.print("Modem Info: ");
-  Serial.println(modemInfo);
+    String modemInfo = modem.getModemInfo();
+    Serial.print("Modem Info: ");
+    Serial.println(modemInfo);
 
-  Serial.print("Connecting to APN: ");
-  Serial.print(apn);
-  if (!modem.gprsConnect(apn)) {
-    Serial.println(" fail");
-    // try again in 30 secs
-    // ESP.restart();
-  }
-  else {
-    Serial.println(" -- OK");
-  }
-  
-  if (modem.isGprsConnected()) {
-    Serial.println("GPRS connected"); 
-  }
+    Serial.print("Connecting to APN: ");
+    Serial.print(apn);
+    if (!modem.gprsConnect(apn)) {
+        Serial.println(" fail");
+        // try again in 30 secs
+        // ESP.restart();
+    }
+    else {
+        Serial.println(" -- OK");
+    }
+    
+    if (modem.isGprsConnected()) {
+        Serial.println("GPRS connected"); 
+    }
 }
