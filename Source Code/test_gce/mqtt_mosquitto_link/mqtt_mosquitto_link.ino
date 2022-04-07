@@ -4,17 +4,42 @@
 #define brokerAddress "34.101.49.52"
 #define brokerPort 1883
 
+
+#define Sim800l Serial1
+
+#define TINY_GSM_MODEM_SIM800 // Modem is SIM800L
+
 #include <String.h>
 #include <WiFi.h>
 
+#include <Wire.h>
+#include <TinyGsmClient.h>
+
+#ifdef DUMP_AT_COMMANDS
+  #include <StreamDebugger.h>
+  StreamDebugger debugger(Sim800l, Serial);
+  TinyGsm modem(debugger);
+#else
+  TinyGsm modem(Sim800l);
+#endif
+
 #include <PubSubClient.h>
+ 
+#define TINY_GSM_DEBUG Serial
 
+#define MODEM_TX             27
+#define MODEM_RX             26
 
-#include <SoftwareSerial.h>
-SoftwareSerial Sim800l(26, 27);
+const char apn[] = "internet";
 
-WiFiClient espClient;
-PubSubClient client(espClient);
+//#include <SoftwareSerial.h>
+//SoftwareSerial Sim800l(26, 27);
+
+//WiFiClient espClient;
+//PubSubClient client(espClient);
+
+TinyGsmClient clientelle(modem);
+PubSubClient client(clientelle);
 
 // functions
 void reconnectmqttserver();
@@ -91,19 +116,26 @@ void setup()
 //  Serial.begin(115200);
   // put your setup code here, to run once:
   Serial.begin(9600);
-  Sim800l.begin(9600);
-
-  WiFi.disconnect();
+//  Sim800l.begin(9600);
+  Sim800l.begin(9600, SERIAL_8N1, MODEM_RX, MODEM_TX); 
   delay(3000);
-  Serial.println("start");
-  WiFi.begin("ThinQ","kentnaoko");
-  while ((!(WiFi.status() == WL_CONNECTED))){
-    delay(300);
-    Serial.print("...");
-  }
-  Serial.println("Connected");
-  Serial.println("Your IP is");
-  Serial.println((WiFi.localIP()));
+  
+  // wifi connection
+//  WiFi.disconnect();
+//  delay(3000);
+//  Serial.println("start");
+//  WiFi.begin("ThinQ","kentnaoko");
+//  while ((!(WiFi.status() == WL_CONNECTED))){
+//    delay(300);
+//    Serial.print("...");
+//  }
+//  Serial.println("Connected");
+//  Serial.println("Your IP is");
+//  Serial.println((WiFi.localIP()));
+
+  // gprs connection
+  gprsConnectFuction();
+
   client.setServer(brokerAddress, brokerPort);
   client.setCallback(callback);
 
@@ -175,6 +207,31 @@ void loop()
  
 }
 
+void gprsConnectFuction(){
+  Serial.println("Initializing modem...");
+  modem.init();
+
+  String modemInfo = modem.getModemInfo();
+  Serial.print("Modem Info: ");
+  Serial.println(modemInfo);
+
+  Serial.print("Connecting to APN: ");
+  Serial.print(apn);
+  if (!modem.gprsConnect(apn)) {
+    Serial.println(" fail");
+    // try again in 30 secs
+    ESP.restart();
+  }
+  else {
+    Serial.println(" -- OK");
+  }
+  
+  if (modem.isGprsConnected()) {
+    Serial.println("GPRS connected");
+    lastGprsAttempt = 1;
+  }
+}
+
 void reconnectmqttserver() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
@@ -182,6 +239,7 @@ void reconnectmqttserver() {
     clientId += String(random(0xffff), HEX);
     if (client.connect(clientId.c_str())) {
       Serial.println("connected");
+      client.subscribe("sys/commands");
     } 
     else {
       Serial.print("failed, rc=");
@@ -193,10 +251,16 @@ void reconnectmqttserver() {
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print("Message arrived on topic: ");
+  Serial.print(topic);
+  Serial.print(". Message: ");
   String MQTT_DATA = "";
+  
   for (int i=0;i<length;i++) {
-   MQTT_DATA += (char)payload[i];}
-
+    Serial.print((char)payload[i]);
+    MQTT_DATA += (char)payload[i];
+  }
+  Serial.println();
 }
 
 void buildStringBatteryInfo(int battSelect, char* holder){
@@ -479,6 +543,44 @@ int checkGsm(){
 //    Serial.print("buf:");
 //    Serial.println(buffer2);
 //    Serial.println("DONE");
+
+    if (buffer2.indexOf("OK")>0){
+        return 1;        
+    }
+    else{
+        return 0;
+    }
+}
+
+int checkGsmNetwork(){
+    String buffer2;
+    int intercharTime = 0;
+    Sim800l.print("AT+CREG?\r");
+
+    while ((intercharTime) < 100)
+    {
+        if (Sim800l.available())
+        {
+            int c = Sim800l.read(); 
+            // Serial.print((char)c);
+            buffer2.concat((char)c); 
+            intercharTime = 0; 
+        }
+        else
+        { 
+            intercharTime += LOOP_DELAY_MS;
+        }
+
+        delay(LOOP_DELAY_MS);
+    }
+    
+//    while (Sim800l.available()){
+//        Serial.write(Sim800l.read());
+//    }
+
+    Serial.print("buf:");
+    Serial.println(buffer2);
+    Serial.println("DONE");
 
     if (buffer2.indexOf("OK")>0){
         return 1;        

@@ -7,18 +7,24 @@
   
   The above copyright notice and this permission notice shall be included in all
   copies or substantial portions of the Software.
+
+  https://github.com/vshymanskyy/TinyGSM/blob/master/examples/AllFunctions/AllFunctions.ino
+  
 */
+#define MAX_DELAY_MS_GEOLOC 10000
+#define MAX_DELAY_MS_TIME 1000
+#define LOOP_DELAY_MS 2 
 
 // Select your modem:
 #define TINY_GSM_MODEM_SIM800 // Modem is SIM800L
 
 // Set serial for debug console (to the Serial Monitor, default speed 115200)
-#define SerialMon Serial
+//#define SerialMon Serial
 // Set serial for AT commands
 #define SerialAT Serial1
 
 // Define the serial console for debug prints, if needed
-#define TINY_GSM_DEBUG SerialMon
+#define TINY_GSM_DEBUG Serial
 
 #define MODEM_TX             27
 #define MODEM_RX             26
@@ -44,7 +50,7 @@ const char* broker = "34.101.49.52";
 
 #ifdef DUMP_AT_COMMANDS
   #include <StreamDebugger.h>
-  StreamDebugger debugger(SerialAT, SerialMon);
+  StreamDebugger debugger(SerialAT, Serial);
   TinyGsm modem(debugger);
 #else
   TinyGsm modem(SerialAT);
@@ -52,8 +58,8 @@ const char* broker = "34.101.49.52";
 
 #include <PubSubClient.h> 
 
-TinyGsmClient client(modem);
-PubSubClient mqtt(client);
+TinyGsmClient clientelle(modem);
+PubSubClient mqtt(clientelle);
 
 uint32_t lastReconnectAttempt = 0;
 
@@ -69,6 +75,10 @@ TwoWire I2CBME = TwoWire(1);
 float temperature = 0;
 float humidity = 0;
 long lastMsg = 0;
+
+//fx
+void getCurrentTime(char* currentTime);
+int checkGsm();
 
 bool setPowerBoostKeepOn(int en){
   I2CPower.beginTransmission(IP5306_ADDR);
@@ -118,21 +128,18 @@ void mqttCallback(char* topic, byte* message, unsigned int len) {
 }
 
 boolean mqttConnect() {
-  SerialMon.print("Connecting to ");
-  SerialMon.print(broker);
+  Serial.print("Connecting to ");
+  Serial.print(broker);
 
   // Connect to MQTT Broker without username and password
-  boolean status = mqtt.connect("GsmClientN");
-
-  // Or, if you want to authenticate MQTT:
-//  boolean status = mqtt.connect("GsmClientN", mqttUsername, mqttPassword);???
+  boolean status = mqtt.connect("GsmClientN"); 
 
   if (status == false) {
-    SerialMon.println(" fail");
+    Serial.println(" fail");
     ESP.restart();
     return false;
   }
-  SerialMon.println(" success");
+  Serial.println(" success");
   mqtt.subscribe("sys/commands"); 
 
   return mqtt.connected();
@@ -141,17 +148,14 @@ boolean mqttConnect() {
 
 void setup() {
   // Set console baud rate
-  SerialMon.begin(115200);
+  Serial.begin(115200);
   delay(10);
-   
-  
+    
   // Keep power when running from battery
-  bool isOk = setPowerBoostKeepOn(1);
-  SerialMon.println(String("IP5306 KeepOn ") + (isOk ? "OK" : "FAIL"));
+  //  bool isOk = setPowerBoostKeepOn(1);
+  //  Serial.println(String("IP5306 KeepOn ") + (isOk ? "OK" : "FAIL"));
 
-  
-  
-  SerialMon.println("Wait...");
+  Serial.println("Wait...");
 
   // Set GSM module baud rate and UART pins
   SerialAT.begin(115200, SERIAL_8N1, MODEM_RX, MODEM_TX);
@@ -159,31 +163,32 @@ void setup() {
 
   // Restart takes quite some time
   // To skip it, call init() instead of restart()
-  SerialMon.println("Initializing modem...");
-  modem.restart();
-  // modem.init();
+  Serial.println("Initializing modem...");
+  //  modem.restart();
+  modem.init();
 
   String modemInfo = modem.getModemInfo();
-  SerialMon.print("Modem Info: ");
-  SerialMon.println(modemInfo);
+  Serial.print("Modem Info: ");
+  Serial.println(modemInfo);
 
   // Unlock your SIM card with a PIN if needed
-  if ( GSM_PIN && modem.getSimStatus() != 3 ) {
-    modem.simUnlock(GSM_PIN);
-  }
+//  if ( GSM_PIN && modem.getSimStatus() != 3 ) {
+//    modem.simUnlock(GSM_PIN);
+//  }
 
-  SerialMon.print("Connecting to APN: ");
-  SerialMon.print(apn);
-  if (!modem.gprsConnect(apn, gprsUser, gprsPass)) {
-    SerialMon.println(" fail");
+  Serial.print("Connecting to APN: ");
+  Serial.print(apn);
+  if (!modem.gprsConnect(apn)) {
+    Serial.println(" fail");
+    // try again in 30 secs
     ESP.restart();
   }
   else {
-    SerialMon.println(" OK");
+    Serial.println(" -- OK");
   }
   
   if (modem.isGprsConnected()) {
-    SerialMon.println("GPRS connected");
+    Serial.println("GPRS connected");
   }
 
   // MQTT Broker setup
@@ -193,7 +198,7 @@ void setup() {
 
 void loop() {
   if (!mqtt.connected()) {
-    SerialMon.println("=== MQTT NOT CONNECTED ===");
+    Serial.println("=== MQTT NOT CONNECTED ===");
     // Reconnect every 10 seconds
     uint32_t t = millis();
     if (t - lastReconnectAttempt > 10000L) {
@@ -209,11 +214,107 @@ void loop() {
   long now = millis();
   if (now - lastMsg > 30000) {
     lastMsg = now;
-     
+    
+    char blank[1] = "";
+    char stringHolder[30];
+      
+    getCurrentTime(stringHolder);
+    Serial.print("hey:");
+    Serial.println(stringHolder);
+    
     char tempString[12] = "test esp32";
-    mqtt.publish("sys/test", tempString);
+    mqtt.publish("sys/test", stringHolder);
+    
+    strcpy(stringHolder, blank);
  
   }
 
   mqtt.loop();
+}
+
+int checkGsm(){
+    String buffer2;
+    int intercharTime = 0;
+    SerialAT.print("AT\r");
+
+    while ((intercharTime) < 100)
+    {
+        if (SerialAT.available())
+        {
+            int c = SerialAT.read(); 
+            // Serial.print((char)c);
+            buffer2.concat((char)c); 
+            intercharTime = 0; 
+        }
+        else
+        { 
+            intercharTime += LOOP_DELAY_MS;
+        }
+
+        delay(LOOP_DELAY_MS);
+    }
+    
+//    while (Sim800l.available()){
+//        Serial.write(Sim800l.read());
+//    }
+
+//    Serial.print("buf:");
+//    Serial.println(buffer2);
+//    Serial.println("DONE");
+
+    if (buffer2.indexOf("OK")>0){
+        return 1;        
+    }
+    else{
+        return 0;
+    }
+}
+
+void getCurrentTime(char* currentTime)
+{
+    if (checkGsm() == 0){
+        Serial.println("SIM800L offline, cannot get time");
+        return;
+    }
+    
+    int intercharTime = 0; 
+    Serial.println("Get time info ..."); 
+    SerialAT.print("AT+CCLK?\r");  
+    String buffer2;
+
+    while (SerialAT.available()){
+        Serial.write(SerialAT.read());
+    }
+
+    while ((intercharTime) < MAX_DELAY_MS_TIME){
+        if (SerialAT.available()){
+            int c = SerialAT.read();  
+            //Serial.print((char)c);
+            buffer2.concat((char)c); 
+            intercharTime = 0; 
+        }
+        else{ 
+            intercharTime += LOOP_DELAY_MS;
+        }
+
+        delay(LOOP_DELAY_MS);
+    }
+
+    int str_len = buffer2.length() + 1;
+    char strProcess[str_len];
+    buffer2.toCharArray(strProcess, str_len);
+
+    // Parsing (+CCLK: "03/01/01,00:01:58+28")
+    char *token; 
+    token = strtok(strProcess, "\""); 
+    token = strtok(NULL, "+"); 
+    if (token == NULL){
+        Serial.println("\nBuffer error, force quit fx\n");
+        return;
+    }
+    // the snprintf solution
+    char timeString[str_len+2];
+    snprintf(timeString, sizeof timeString, "\"%s\"", token);
+    strcpy(currentTime, timeString);
+    return;
 }

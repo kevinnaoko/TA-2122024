@@ -1,3 +1,4 @@
+import paho.mqtt.client as mqtt
 import hashlib
 from re import search
 from flask import Flask, redirect, url_for, render_template, request, flash, session
@@ -503,6 +504,20 @@ def testmap():
 
 @app.route("/testTable")
 def testtable(): 
+    return render_template('testTable.html')  
+
+@app.route("/testPublish")
+def testPublish(): 
+    
+    broker_address = "34.101.49.52" 
+    topic = "sys/commands"
+    #broker_address="iot.eclipse.org"
+    print("creating new instance")
+    client = mqtt.Client("P1") #create new instance
+    print("connecting to broker")
+    client.connect(broker_address) #connect to broker 
+    print("Publishing message to topic", topic)
+    client.publish(topic,"testPaho")
     return render_template('testTable.html')  
 
 if __name__ == "__main__":
