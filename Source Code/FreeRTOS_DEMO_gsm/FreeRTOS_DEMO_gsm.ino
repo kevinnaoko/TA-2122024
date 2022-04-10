@@ -11,6 +11,7 @@
 //#include <SoftwareSerial.h>
 //SoftwareSerial Sim800l(26, 27);
 
+#define PRODUCT_ID 3
 #define TINY_GSM_MODEM_SIM800 // Modem is SIM800L 
 #include <TinyGsmClient.h>
 #define Sim800l Serial1 
@@ -127,6 +128,12 @@ char topics[3][20] = {
     "sys/charger3/device", 
 };
 char commandTopic[25] = "sys/charger3/commands";
+// char topics[3][20]; 
+// char commandTopic[25];
+// sprintf(topics[0], "sys/charger%d/s1", PRODUCT_ID);
+// sprintf(topics[1], "sys/charger%d/s2", PRODUCT_ID);
+// sprintf(topics[2], "sys/charger%d/device", PRODUCT_ID);
+// sprintf(commandTopic, "sys/charger%d/commands", PRODUCT_ID); 
  
 void setup()
 {

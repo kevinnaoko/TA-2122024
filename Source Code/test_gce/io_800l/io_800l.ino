@@ -17,7 +17,7 @@ void setup() {
 }
 
 void loop() {    
-    int serialusage = 0;
+    int serialusage = 1;
     if (serialusage == 1){
         while(Sim800l.available()){ 
             Serial.write(Sim800l.read());
