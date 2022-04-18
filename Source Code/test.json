@@ -1,9 +1,26 @@
+{ 
+    "considerIp": true,
+    "cellTowers": [
+        {
+            "cellId": 28392,
+            "locationAreaCode": 10510,
+            "mobileCountryCode": 510,
+            "mobileNetworkCode": 89   
+        }
+    ]
+}
 
+mcc=510
+mnc=89
+lac=10510
+cid=28392 
 
 {
-    "Charging Mode": 0,
-    "MCC" : 510,
-    "MNC" : 10, 
-    "LAC" : 14016,
-    "Cell ID" : 65372
+    "Product ID" : 1,
+    "Status" : 0,
+    "SN"   : "0123456789abcdef",
+    "Time" : "22/04/07,19:12:42",
+    "SoC"  : 50,
+    "SoH"  : 75,
+    "Volt" : 59
 }

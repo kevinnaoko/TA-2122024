@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+{% block title %} Charger {% endblock %}
+
+{% block scripts %} 
+<!-- <meta http-equiv="refresh" content="5" /> -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD62AEOgl0CjwL8dGWcl4fLG5IoiwHHghw&callback=initMap"
+    type="text/javascript">
+</script>
+
+<script  type="text/javascript"> 
+    function initMap() {
+        var coords = { lat: {{ lat }}, lng: {{ lon }} };  
+        // var coords = { lat: -6.8770328, lng: 107.6123459 };
+        var map = new google.maps.Map(document.getElementById('map'),{
+            center: coords,
+            disableDefaultUI: true,
+            zoom: 16
+        });
+
+        var marker1 = new google.maps.Marker({
+            position: coords,
+            map: map
+        });
+
+    } 
+</script>
+
+{% endblock %}
+
+{% block styles %} 
+<style>
+    body {
+        margin: 0;
+        background-color: #f7f7f7;
+    }
+ 
+
+    .container-fluid {      
+
+        font-family: 'Quicksand', sans-serif;
+        font-size: 16px;
+ 
+
+    }
+
+    .container-fluid div {
+        padding: 10px;
+    }
+
+    .dataTables_length {
+        float: right;
+    }
+
+    .dataTables_info {
+        float: left;
+    }
+
+    .table-sm {
+        text-align: center; 
+    }
+
+    .table-sm {
+        text-align: center; 
+    }
+  
+    .card{
+        height:250px; 
+        padding:0px; 
+    } 
+
+    .card-img-top{
+        padding-top: 2em;
+        padding-bottom: 1em;
+        max-width: 25%; 
+        height: auto;
+        align-self: center;   
+    }
+    .col-sm-8 { 
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-weight: bold;
+        font-size: 20px;
+    }
+    .col-sm-1{
+        align-content: center;
+        text-align: center;
+    } 
+    .card{
+        background-color: #f7f7f7;
+    } 
+    .card-title{
+        font-weight: bold;
+    }
+    .card-text{
+        font-size: 14px;
+        text-align: center;
+    } 
+    .container-fluid{
+        padding: 0 100px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row" style="margin-top: 15px; margin-bottom:0; padding-bottom:0; margin-left:0"> 
+        <h4 style="margin:0; padding:0">{{device_name}}</h4> 
+    </div>
+ 
+    <div class="row" style="margin-bottom:0; padding-bottom:0">
+        <!-- Slot 1 latest info -->
+        <div class="col-sm-2"> 
+            <div class="card" style="height: 220px;">
+                {% if s1_data[0]['stat'] == 0 %} 
+                    {% set src_slot_1 = "idle.png" %}
+                    {% set txt_slot_1 = "Idle" %}
+                {% elif s1_data[0]['stat'] == 1 %}
+                    {% set src_slot_1 = "charging.png" %}
+                    {% set txt_slot_1 = "Charging" %}
+                {% elif s1_data[0]['stat'] == 2 %}
+                    {% set src_slot_1 = "fullcharge.png" %}
+                    {% set txt_slot_1 = "Charged" %}
+                {% else %}
+                    {% set src_slot_1 = "no_data.png" %} 
+                    {% set txt_slot_1 = "No Data" %}
+                {% endif %} 
+                
+                <img class="card-img-top" src="{{ url_for('static', filename=src_slot_1) }}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title" style="text-align:center">Slot One</h5>  
+                    <p class="card-text"> {{ txt_slot_1 }} </p> 
+                </div>
+            </div>
+        </div>
+        <!-- Slot 2 latest info -->
+        <div class="col-sm-2"> 
+            <div class="card" style="height: 220px;">
+                {% if s2_data[0]['stat'] == 0 %} 
+                    {% set src_slot_2 = "idle.png" %}
+                    {% set txt_slot_2 = "Idle" %} 
+                {% elif s2_data[0]['stat'] == 1 %}
+                    {% set src_slot_2 = "charging.png" %}
+                    {% set txt_slot_2 = "Charging" %} 
+                {% elif s2_data[0]['stat'] == 2 %}
+                    {% set src_slot_2 = "fullcharge.png" %}
+                    {% set txt_slot_2 = "Charged" %}
+                {% else %}
+                    {% set src_slot_2 = "no_data.png" %} 
+                    {% set txt_slot_2 = "No Data" %}
+                {% endif %}
+                
+                <!-- <div class="card" style="height: 100px; background-color: {{color}} ">  -->
+                    <img class="card-img-top" src="{{ url_for('static', filename=src_slot_2) }}" alt="Card image cap">
+                <!-- </div> -->
+                <div class="card-body">
+                    <h5 class="card-title" style="text-align:center">Slot Two</h5>  
+                    <p class="card-text"> {{ txt_slot_2 }} </p> 
+                </div>
+            </div>
+        </div>
+        <!-- Charging Mode latest info -->
+        <div class="col-sm-2">
+            <div class="card" style="height: 220px;">
+                {% if device_info[1] == 0 %} 
+                    {% set src_dev = "slowcharge.png" %}
+                    {% set txt_dev = "Slow Charge" %}
+                {% elif device_info[1] == 1 %}
+                    {% set src_dev = "fastcharge.png" %}
+                    {% set txt_dev = "Fast Charge" %}
+                {% endif %}
+                <img class="card-img-top" src="{{ url_for('static', filename=src_dev) }}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title" style="text-align:center">Chg Mode</h5>  
+                    <p class="card-text"> {{ txt_dev }} </p> 
+                </div>
+            </div> 
+        </div>
+        <div class="col-sm-6"> 
+            <p>Device Location</p>
+            <div id="map" style="width:100%; height:180px;"></div>
+    
+        </div>
+    </div>
+
+    <!-- <div class="row" style="text-align:center; margin:0; padding:0"> 
+        <div class="col-sm-6"> 
+            <h5>Slot 1</h5> 
+        </div>
+        <div class="col-sm-6"> 
+            <h5>Slot 2</h5> 
+        </div>
+    </div> -->
+
+    <div class="row" style="margin:0; padding:0">
+        <div class="col-sm-6" style="margin:0; padding:0"> 
+            <div class="table-responsive" style="margin:0; padding:0"> 
+                <table id="slot1" class="table table-sm table-bordered">
+                    <thead class="table-light" >
+                        <tr>
+                            <th scope="col">Entry</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Serial Number</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">SoC</th>
+                            <th scope="col">SoH</th>
+                            <th scope="col">Volt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for x in range (0,len[0]) %}
+                        <tr>
+                            <th scope="row"> {{ len[0] - loop.index + 1 }}</th>
+                            <td>{{ s1_data[x]['stat'] }}</td>
+                            <td>{{ s1_data[x]['sn'] }}</td>
+                            <td>{{ s1_data[x]['time'] }}</td>
+                            <td>{{ s1_data[x]['soc'] }}</td>
+                            <td>{{ s1_data[x]['soh'] }}</td>
+                            <td>{{ s1_data[x]['volt'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-sm-6" style="margin:0; padding:0">
+            <div class="table-responsive" style="margin:0; padding:0"> 
+                <table id="slot2" class="table table-sm table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Entry</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Serial Number</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">SoC</th>
+                            <th scope="col">SoH</th>
+                            <th scope="col">Volt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for x in range (0,len[1]) %}
+                        <tr>
+                            <th scope="row"> {{ len[1] - loop.index + 1 }}</th>
+                            <td>{{ s2_data[x]['stat'] }}</td>
+                            <td>{{ s2_data[x]['sn'] }}</td>
+                            <td>{{ s2_data[x]['time'] }}</td>
+                            <td>{{ s2_data[x]['soc'] }}</td>
+                            <td>{{ s2_data[x]['soh'] }}</td>
+                            <td>{{ s2_data[x]['volt'] }}</td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scriptBottom %} 
+<script>
+    $(document).ready(function () {
+        $('#slot1').DataTable({  
+            "order": [[ 0, "desc" ]],
+            lengthMenu: [5, 10, 20, 50, 100, 200],
+            dom: '<"row"<"col-sm-6"<"toolbar1">><"col-sm-6"l>>rtp',
+            pageLength : 5, 
+            });
+
+        $('#slot2').DataTable({   
+            "order": [[ 0, "desc" ]],
+            lengthMenu: [5, 10, 20, 50, 100, 200],
+            dom: '<"row"<"col-sm-6"<"toolbar2">><"col-sm-6"l>>rtp',
+            pageLength : 5, 
+            });
+
+        $('#example').DataTable( {
+            "dom": '<"toolbar">frtip'
+        });
+    
+        $("div.toolbar1").html('<b>Slot 1</b>');
+
+        $("div.toolbar2").html('<b>Slot 2</b>');
+        }); 
+        
+
+</script>
+{% endblock %}

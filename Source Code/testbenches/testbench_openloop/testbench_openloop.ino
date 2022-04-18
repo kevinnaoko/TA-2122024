@@ -1,21 +1,14 @@
-#include <Adafruit_ADS1X15.h>
-
-
-Adafruit_ADS1015 ads1015_01;    // Construct an ads1015 
-//Adafruit_ADS1015 ads1015_02;
-
 int PWM_FREQUENCY = 20000; 
 int PWM_CHANNEL = 0; 
 int PWM_RESOUTION = 12; 
 int GPIOPIN = 5 ; 
 int NPNPIN = 19 ; 
-int RELAYPIN = 13; 
 //int peweem = 240;
 //int limitPwm = 235;
 //int maxPwm = 255;
 
-int peweem = 3854;
-int limitPwm = 3770;
+int peweem = 0;
+int limitPwm = 50;
 int maxPwm = 4095;
 int isRedFlag = 0;
 
@@ -31,7 +24,6 @@ hw_timer_t * timer = NULL;
 void IRAM_ATTR onTimer() {
   state = !state;
   digitalWrite(LED_BUILTIN, state);
-//  digitalWrite(RELAYPIN, state);
 }
 
 void setup() {
@@ -41,7 +33,6 @@ void setup() {
   ledcAttachPin(GPIOPIN, PWM_CHANNEL);
   pinMode(NPNPIN, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(RELAYPIN, OUTPUT);
 
   //timer
   /* Use 1st timer of 4 */
@@ -60,10 +51,7 @@ void setup() {
   timerAlarmEnable(timer);
   Serial.println("start timer");
 
-  
-  /* ads init */
-  ads1015_01.begin(0x48); //suhu
-  //ads1015_02.begin(0x49); //arus
+   
 }
 
 int current;
@@ -84,8 +72,8 @@ void loop() {
 
 
   //readTemp
-  int readAdcTemp = ads1015_01.readADC_SingleEnded(0);
-  float temperature = ((float(  (readAdcTemp*3)  ) ) / 10 );
+//  int readAdcTemp = ads1015_01.readADC_SingleEnded(0);
+//  float temperature = ((float(  (readAdcTemp*3)  ) ) / 10 );
 
   // CL current control
 //  if (current > refCurrent){
@@ -133,40 +121,13 @@ void loop() {
     peweem = maxPwm;
   }
   
- 
-  //temp Limit
-  if (isRedFlag == 0 && temperature > 50.00){
-    isRedFlag = 1;
-  }
-
-  if (isRedFlag == 1 && temperature < 45.00){
-    isRedFlag = 0;
-  }
-
-  if (isRedFlag == 1){
-    peweem = maxPwm;
-  }
-
 //  Serial.print("Volt: ");
 //  Serial.print(readAdc*3);
 //  Serial.print("   Current: ");
 //  Serial.print(current);
- 
-  Serial.print("ADC NMOS: ");
-  Serial.print(readAdcTemp);
-
-  Serial.print("Temp NMOS: ");
-  Serial.print(temperature);
- 
-  Serial.print("   RefCurrent: ");
-  Serial.print(refCurrent);
-
   
   Serial.print("   PWM: ");
-  Serial.print(peweem);
-  
-  Serial.print("   Current: ");
-  Serial.println(current);
+  Serial.println(peweem);
  
   
   ledcWrite(PWM_CHANNEL, peweem);
