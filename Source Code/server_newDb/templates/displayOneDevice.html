@@ -164,10 +164,10 @@
         <!-- Charging Mode latest info -->
         <div class="col-sm-2">
             <div class="card" style="height: 220px;">
-                {% if device_info[1] == 0 %} 
+                {% if device_info['chgMode'] == 0 %} 
                     {% set src_dev = "slowcharge.png" %}
                     {% set txt_dev = "Slow Charge" %}
-                {% elif device_info[1] == 1 %}
+                {% elif device_info['chgMode'] == 1 %}
                     {% set src_dev = "fastcharge.png" %}
                     {% set txt_dev = "Fast Charge" %}
                 {% endif %}
@@ -200,7 +200,7 @@
                 <table id="slot1" class="table table-sm table-bordered">
                     <thead class="table-light" >
                         <tr>
-                            <th scope="col">Entry</th>
+                            <th scope="col">#</th>
                             <th scope="col">Status</th>
                             <th scope="col">Serial Number</th>
                             <th scope="col">Time</th>
@@ -231,7 +231,7 @@
                 <table id="slot2" class="table table-sm table-bordered">
                     <thead class="table-light">
                         <tr>
-                            <th scope="col">Entry</th>
+                            <th scope="col">#</th>
                             <th scope="col">Status</th>
                             <th scope="col">Serial Number</th>
                             <th scope="col">Time</th>

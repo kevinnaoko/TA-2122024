@@ -1,8 +1,8 @@
 #include <Adafruit_ADS1X15.h>
 
 
-Adafruit_ADS1015 ads1015_01;    // Construct an ads1015 
-//Adafruit_ADS1015 ads1015_02;
+//Adafruit_ADS1015 ads1015_01;    // Construct an ads1015 
+Adafruit_ADS1015 ads1015_02;
 
 int PWM_FREQUENCY = 20000; 
 int PWM_CHANNEL = 0; 
@@ -62,8 +62,8 @@ void setup() {
 
   
   /* ads init */
-  ads1015_01.begin(0x48); //suhu
-  //ads1015_02.begin(0x49); //arus
+//  ads1015_01.begin(0x48); //suhu
+  ads1015_02.begin(0x49); //arus
 }
 
 int current;
@@ -74,28 +74,15 @@ int target_current = 600;   //mA
 int vcc = 5111;   //mV
 int qov = vcc/2;    //mV
 int max_current = 20000;   //mA
-int readAdc;
 int driftVoltage = 17;
 
 void loop() {  
-  // read current
-  //int readAdcCurrent = ads1015_02.readADC_SingleEnded(0);
-  //float current = ((float(  (readAdcCurrent*3 + driftVoltage)  ) - qov) ) / 0.155 ;
 
 
   //readTemp
-  int readAdcTemp = ads1015_01.readADC_SingleEnded(0);
-  float temperature = ((float(  (readAdcTemp*3)  ) ) / 10 );
+//  int readAdcTemp = ads1015_01.readADC_SingleEnded(0);
+//  float temperature = ((float(  (readAdcTemp*3)  ) ) / 10 );
 
-  // CL current control
-//  if (current > refCurrent){
-//    peweem++;
-//  }
-//  else{
-//    if (peweem > 210){
-//      peweem--;
-//    }
-//  }
 
   // read serial
   static byte ndx = 0;
@@ -121,8 +108,21 @@ void loop() {
   // insert serial to refCurrent
   if (newData == true){
     newData = false;
-    peweem = atoi(receivedChars);
+    refCurrent = atoi(receivedChars);
   }
+
+  
+  // CL current control
+  if (current > refCurrent){
+    peweem++;
+  }
+  else{
+    if (peweem > 210){
+      peweem--;
+    }
+  }
+
+  
 
   //hardlimit PWM
   if (peweem < limitPwm){
@@ -135,38 +135,43 @@ void loop() {
   
  
   //temp Limit
-  if (isRedFlag == 0 && temperature > 50.00){
-    isRedFlag = 1;
-  }
+//  if (isRedFlag == 0 && temperature > 50.00){
+//    isRedFlag = 1;
+//  }
+//
+//  if (isRedFlag == 1 && temperature < 45.00){
+//    isRedFlag = 0;
+//  }
+//
+//  if (isRedFlag == 1){
+//    peweem = maxPwm;
+//  }
 
-  if (isRedFlag == 1 && temperature < 45.00){
-    isRedFlag = 0;
-  }
+  
+  // read current
+  int readAdcCurrent = ads1015_02.readADC_SingleEnded(0);
+  float current = ((float(  (readAdcCurrent*3 + driftVoltage)  ) - qov) ) / 0.155 ;
 
-  if (isRedFlag == 1){
-    peweem = maxPwm;
-  }
+  int readAdcVoltage = ads1015_02.readADC_SingleEnded(1);
+  float voltage = float( readAdcCurrent*3 );
 
-//  Serial.print("Volt: ");
-//  Serial.print(readAdc*3);
-//  Serial.print("   Current: ");
-//  Serial.print(current);
+  Serial.print("Current: ");
+  Serial.print(readAdcCurrent);
+  Serial.print("   VOltage: ");
+  Serial.print(readAdcVoltage);
  
-  Serial.print("ADC NMOS: ");
-  Serial.print(readAdcTemp);
+//  Serial.print("ADC Temp: ");
+//  Serial.print(readAdcTemp);
 
-  Serial.print("Temp NMOS: ");
-  Serial.print(temperature);
+//  Serial.print("Temp NMOS: ");
+//  Serial.print(temperature);
  
   Serial.print("   RefCurrent: ");
   Serial.print(refCurrent);
 
   
   Serial.print("   PWM: ");
-  Serial.print(peweem);
-  
-  Serial.print("   Current: ");
-  Serial.println(current);
+  Serial.println(peweem);
  
   
   ledcWrite(PWM_CHANNEL, peweem);

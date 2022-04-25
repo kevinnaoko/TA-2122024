@@ -6,18 +6,34 @@
  *    Kevin Naoko
  *    Eren
  */ 
+
+ 
+#define TINY_GSM_MODEM_SIM800 // Modem is SIM800L 
+ 
 #include <WiFi.h> 
 //#include <SoftwareSerial.h>
 //SoftwareSerial Sim800l(26, 27);
+#include <TinyGsmClient.h>  // Untuk GSM
+#include <PubSubClient.h> // Untuk Wifi
+
+// Library for ADS1115
+#include <Wire.h>
+#include <Adafruit_ADS1X15.h>
+
+#define RELAY_ACTIVE_HIGH
+#ifdef RELAY_ACTIVE_HIGH
+    #define RELAY_ON 1
+    #define RELAY_OFF 0
+#else
+    #define RELAY_ON 0
+    #define RELAY_OFF 1
+#endif
 
 #define PRODUCT_ID 3
-#define TINY_GSM_MODEM_SIM800 // Modem is SIM800L 
-#include <TinyGsmClient.h>
 #define Sim800l Serial1 
 TinyGsm modem(Sim800l);
 
 
-#include <PubSubClient.h> 
 //untuk wifi
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -25,10 +41,6 @@ PubSubClient client(espClient);
 //untuk gsm
 //TinyGsmClient clientelle(modem);
 //PubSubClient client(clientelle);
-
-// Library for ADS1115
-#include <Wire.h>
-#include <Adafruit_ADS1X15.h>
 
 // delay definition 
 #define MAX_DELAY_MS_GEOLOC 10000
@@ -45,19 +57,17 @@ PubSubClient client(espClient);
 
 // Pin Definition
 // Right Side
-#define triggerButtonR 5
-#define batteryButtonR 35
+#define batteryButtonR 26
 #define chargerSW1R 32
 #define chargerSW2R 33
 #define redR 15
 #define greenR 2
-#define blueR 14
+#define blueR 0
 
 // Left Side
-#define triggerButtonL 18
-#define batteryButtonL 13
+#define batteryButtonL 27
 #define chargerSW1L 23
-#define chargerSW2L 25
+#define chargerSW2L 18  // Nanti diubah
 #define redL 4
 #define greenL 16
 #define blueL 17
@@ -66,10 +76,12 @@ PubSubClient client(espClient);
 #define chargingModePin 19
 #define SDA 21
 #define SCL 22
-#define txBMS 12
-#define rxBMS 14
-#define txGSM 26
-#define rxGSM 27
+#define txBMS 10
+#define rxBMS 9
+//#define txGSM 26
+//#define rxGSM 27
+#define relayCharger 25
+#define triggerButton 13
 
 #define delayChargingState 60000
 
@@ -78,10 +90,14 @@ PubSubClient client(espClient);
 #define brokerIP "34.101.49.52"
 
 // wifi param
-#define wifi_ssid "ThinQ"
-#define wifi_password "kentnaoko"
+#define wifi_ssid "Kost Kiki 4"
+#define wifi_password "tanyacahya"
+//#define wifi_ssid "ThinQ"
+//#define wifi_password "kentnaoko"
 
 // sim800 + gprs param
+#define MODEM_TX 27
+#define MODEM_RX 26
 #define MODEM_TX 27
 #define MODEM_RX 26
 const char apn[] = "internet";
@@ -128,14 +144,25 @@ char topics[3][20] = {
     "sys/device", 
 };
 char commandTopic[25] = "sys/charger3/commands";
+int readAdcCurrent;
+float current;  
+int readAdcVoltage;
+float voltage;
+int readAdcTemperature;
+float temperature;
+int driftVoltage=0;
+int qov = 2500;
+
 // char topics[3][20]; 
 // char commandTopic[25];
 // sprintf(commandTopic, "sys/charger%d/commands", PRODUCT_ID); 
+
+Adafruit_ADS1015 ads1015T;    // ADS1115 untuk temperatur
+Adafruit_ADS1015 ads1015VI;    // ADS1115 untuk tegangan dan arus
  
 void setup()
 {
     // Right Side Pin Configuration
-    pinMode(triggerButtonR, INPUT_PULLUP);
     pinMode(batteryButtonR, INPUT_PULLUP);
     pinMode(chargerSW1R, OUTPUT);
     pinMode(chargerSW2R, OUTPUT);
@@ -144,7 +171,6 @@ void setup()
     pinMode(blueR, OUTPUT);
 
     // Left Side Pin Configuration
-    pinMode(triggerButtonL, INPUT_PULLUP);
     pinMode(batteryButtonL, INPUT_PULLUP);
     pinMode(chargerSW1L, OUTPUT);
     pinMode(chargerSW2L, OUTPUT);
@@ -153,7 +179,9 @@ void setup()
     pinMode(blueL, OUTPUT);
 
     // Other pins configuration
+    pinMode(triggerButton, INPUT_PULLUP);
     pinMode(chargingModePin, INPUT_PULLUP);
+    pinMode(relayCharger, OUTPUT);
 
     // Initialize serial communication
     Serial.begin(9600); 
@@ -173,26 +201,37 @@ void setup()
     Serial.println((WiFi.localIP()));
 
     // Connect to GPRS
-    if (checkGsmNetwork() == 1){
-        gprsConnectFuction();     
-    } 
-    else{
-        Serial.println("Network unavailable, retrying GPRS in 30secs");
-    }
+//    if (checkGsmNetwork() == 1){
+//        gprsConnectFuction();     
+//    } 
+//    else{
+//        Serial.println("Network unavailable, retrying GPRS in 30secs");
+//    }
 
     // mqtt params
     client.setServer(brokerIP, 1883);
     client.setCallback(callback);
 
+    
+    Serial.println("HAI");
+
     // untuk wifi
 //    reconnectmqttserver();
+
+    // Inisialisasi ADS
+    ads1015T.begin(0x48);   // Temperatur
+    ads1015VI.begin(0x49);  // Tegangan dan Arus
+
+    // Mematikan relay
+    digitalWrite(relayCharger, RELAY_OFF);
      
     // Task Idle R and L
-//    xTaskCreatePinnedToCore(LeftCode, "Left", 10000, NULL, 1, NULL, 0);
-////    xTaskCreatePinnedToCore(SamplingTemperature, "SamplingTemperature", 10000, NULL, 1, NULL, 0);
-//    xTaskCreatePinnedToCore(RightCode, "Right", 10000, NULL, 1, NULL, 1);
+    xTaskCreatePinnedToCore(LeftCode, "Left", 10000, NULL, 1, NULL, 0);
+    xTaskCreatePinnedToCore(Sampling, "Sampling", 10000, NULL, 1, NULL, 0);
+    xTaskCreatePinnedToCore(RightCode, "Right", 10000, NULL, 1, NULL, 1);
     xTaskCreatePinnedToCore(MQTTLoop, "MQTTLoop", 10000, NULL, 2, NULL, 1);
-//    xTaskCreatePinnedToCore(GsmTask, "GsmTask", 10000, NULL, 1, NULL, 0);    
+//    xTaskCreatePinnedToCore(GsmTask, "GsmTask", 10000, NULL, 1, NULL, 0);  
+
 
 }
 
@@ -200,12 +239,24 @@ void loop()
 {
 }
 
-//void SamplingTemperature(void *parameter)
-//{
-//    for (;;)
-//    { 
-//    }
-//}
+void Sampling(void *parameter)
+{
+    for (;;)
+    {
+          readAdcCurrent = ads1015VI.readADC_SingleEnded(0);
+          current = ((float(  (readAdcCurrent*3 + driftVoltage)  ) - qov) ) / 0.155 ;
+
+          readAdcVoltage = ads1015VI.readADC_SingleEnded(1);
+          voltage = readAdcVoltage;
+          voltage = float( readAdcVoltage*3 );
+          voltage *= 34;
+
+          readAdcTemperature = ads1015T.readADC_SingleEnded(0);
+          temperature = float( readAdcTemperature*3 )/100;
+
+          vTaskDelay(3 / portTICK_PERIOD_MS);
+    }
+}
 
 void MQTTLoop(void *parameter)
 {
@@ -255,25 +306,25 @@ void MQTTLoop(void *parameter)
         client.loop(); 
         
         // test doang, delete nanti 
-         if (millis() - lastDebugUpload > 5000){
-//             Serial.print("Network status: ");
-//             Serial.println(gsmStatus);
-//             Serial.print("GPRS status: ");
-//             Serial.println(modemStatus);
-             lastDebugUpload = millis();
-             Serial.println("debug set cmd_sendSlotL = 1");
-//             cmd_sendSlotL = 1;
-
-            strcpy(stringHolder, blank);
-            buildStringBatteryInfo(0, stringHolder);
-            Serial.println(stringHolder);
-            client.publish(topics[0], stringHolder);
-            strcpy(stringHolder, blank);
-            buildStringDeviceInfo(stringHolder);
-            Serial.println(stringHolder);
-            client.publish(topics[2], stringHolder);
-
-         }
+//         if (millis() - lastDebugUpload > 5000){
+////             Serial.print("Network status: ");
+////             Serial.println(gsmStatus);
+////             Serial.print("GPRS status: ");
+////             Serial.println(modemStatus);
+//             lastDebugUpload = millis();
+//             Serial.println("debug set cmd_sendSlotL = 1");
+////             cmd_sendSlotL = 1;
+//
+//            strcpy(stringHolder, blank);
+//            buildStringBatteryInfo(0, stringHolder);
+//            Serial.println(stringHolder);
+//            client.publish(topics[0], stringHolder);
+//            strcpy(stringHolder, blank);
+//            buildStringDeviceInfo(stringHolder);
+//            Serial.println(stringHolder);
+//            client.publish(topics[2], stringHolder);
+//
+//         }
 
         // Sampling lokasi apabila informasi belum didapatkan 
         if (!(isGetLocation))
@@ -426,14 +477,17 @@ void idleTransitionL()
     int16_t adc;
     float vBattery = 0;
 
+    triggerDetectedL = digitalRead(triggerButton);
+    Serial.println(voltage);
+
     // Apabila terdeteksi ada baterai, pindah ke state 1. Selain itu, pindah ke state 2
-    if (battSWL == 0)
+    if (battSWL == 1 && voltage > 40000)
     {
         stateL = RETRIEVE_SERIAL;
     }
     else
     {
-        triggerDetectedL = digitalRead(triggerButtonL);
+        triggerDetectedL = digitalRead(triggerButton);
         if (triggerDetectedL == 0)
         {
             stateL = TRIGGER;
@@ -444,9 +498,6 @@ void idleTransitionL()
 void stateIdleL()
 {
     //  Serial.print("L Idle\n");
-
-    // Membuka transistor SW2
-    digitalWrite(chargerSW2L, HIGH);
 
     // Memberika indikator LED merah
     LED_1L(HIGH, LOW, LOW);
@@ -559,7 +610,7 @@ void stateRetrieveSerialL()
     Serial.println(SoCL);
 
     // Transisi state
-    if (battSWL == 0)
+    if (battSWL == 1 && voltage > 40000)
     {
         if (plusCount == 2 && serialNumberCount > 1)
         {
@@ -592,9 +643,17 @@ void stateTriggerBMSL()
     vTaskDelay(500 / portTICK_PERIOD_MS);
     LED_1L(HIGH, HIGH, LOW);
 
-    digitalWrite(chargerSW2L, HIGH);
+    if(stateR != CHARGING){
+        digitalWrite(relayCharger, RELAY_ON);   
+    }
 
-    if (battSWL == 0)
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+    if(stateR != CHARGING){
+        digitalWrite(relayCharger, RELAY_OFF);   
+    }
+
+    if (battSWL == 1 && voltage > 40000)
     {
         stateL = RETRIEVE_SERIAL;
     }
@@ -634,7 +693,7 @@ void initChargingL()
 
     // Apabila respon yang didapat adalah "Lok", pindah ke state 5. Selain itu, kirimkan request.
     // Tapi apabila baterai dilepas, kembali ke state idle
-    if (battSWL == 0)
+    if (battSWL == 1 && voltage > 40000)
     {
         if (strncmp(msgL, "Lok", 3) == 0)
         {
@@ -658,19 +717,26 @@ void stateChargingL()
 {
     //  Serial.print("L Charging\n");
     byte battSWL = digitalRead(batteryButtonL);
-    LED_1L(LOW, LOW, HIGH);
     float tegangan;
     float arus;
 
+    LED_1L(LOW, LOW, HIGH);
+    
+    // Mengaktifkan relay
+    digitalWrite(relayCharger, RELAY_ON);
+   
     vTaskDelay(delayChargingState / portTICK_PERIOD_MS); // Nanti diubah
 
-    if (battSWL == 0)
+    if (battSWL == 1 && voltage > 40000)
     {
         stateL = 4;
         cmd_sendSlotL = 1;
     }
     else
     {
+        if(stateR != CHARGING){
+            digitalWrite(relayCharger, RELAY_OFF);
+        }
         stateL = 0;
         cmd_sendSlotL = 1;
     }
@@ -683,7 +749,7 @@ void stateFinishChargeL()
 
     LED_1L(LOW, HIGH, LOW);
 
-    if (battSWL == 0)
+    if (battSWL == 1 && voltage > 40000)
     {
         stateL = 4;
     }
@@ -710,13 +776,13 @@ void idleTransitionR()
     int16_t adc;
     float vBattery;
 
-    if (battSWR == 0)
+    if (battSWR == 1 && voltage > 40000)
     {
         stateR = 1;
     }
     else
     {
-        triggerDetectedR = digitalRead(triggerButtonR);
+        triggerDetectedR = digitalRead(triggerButton);
         if (triggerDetectedR == 0)
         {
             stateR = 2;
@@ -823,7 +889,7 @@ void stateRetrieveSerialR()
     Serial.println(totalCapacityR);
     Serial.println(SoCR);
 
-    if (battSWR == 0)
+    if (battSWR == 1 && voltage > 40000)
     {
         if (plusCount == 2 && serialNumberCount > 1)
         {
@@ -856,9 +922,17 @@ void stateTriggerBMSR()
     vTaskDelay(500 / portTICK_PERIOD_MS);
     LED_1R(HIGH, HIGH, LOW);
 
-    digitalWrite(chargerSW2R, HIGH);
+    if(stateL != CHARGING){
+        digitalWrite(relayCharger, RELAY_ON);   
+    }
 
-    if (battSWR == 0)
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+    if(stateL != CHARGING){
+        digitalWrite(relayCharger, RELAY_OFF);   
+    }
+
+    if (battSWR == 1 && voltage > 40000)
     {
         stateR = 1;
     }
@@ -892,7 +966,7 @@ void initChargingR()
 
     Serial.println(msgR);
 
-    if (battSWR == 0)
+    if (battSWR == 1 && voltage > 40000)
     {
         if (strncmp(msgR, "Rok", 3) == 0)
         {
@@ -920,8 +994,11 @@ void stateChargingR()
 
     vTaskDelay(delayChargingState / portTICK_PERIOD_MS); // Nanti dihapus
 
-    if (battSWR == 0)
+    if (battSWR == 1 && voltage > 40000)
     {
+        if(stateR != CHARGING){
+            digitalWrite(relayCharger, RELAY_OFF);
+        }
         stateR = 4;
         cmd_sendSlotR = 1;
     }
@@ -939,11 +1016,11 @@ void stateFinishChargeR()
 
     LED_1R(LOW, HIGH, LOW);
 
-    if (battSWR == 0)
+    if (battSWR == 1 && voltage > 40000)
     {
         stateR = 4;
     }
-    else if (battSWR == 1)
+    else
     {
         stateR = 0;
         cmd_sendSlotR = 1;
