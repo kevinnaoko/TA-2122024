@@ -98,8 +98,6 @@ PubSubClient client(espClient);
 // sim800 + gprs param
 #define MODEM_TX 27
 #define MODEM_RX 26
-#define MODEM_TX 27
-#define MODEM_RX 26
 const char apn[] = "internet";
 
 // Global Variables
@@ -185,6 +183,7 @@ void setup()
 
     // Initialize serial communication
     Serial.begin(9600); 
+    Serial1.begin(9600, SERIAL_8N1, rxBMS, txBMS); 
     Sim800l.begin(9600, SERIAL_8N1, MODEM_RX, MODEM_TX); 
 
     // Connect to WiFi
@@ -518,25 +517,25 @@ void stateRetrieveSerialL()
     byte battSWL = digitalRead(batteryButtonL);
 
     // Mengirim request serial number. request dikirimkan dua kali karena ada delay respon dari BMS sebesar satu request
-    Serial.write("LSerial_Number");
+    Serial1.write("LSerial_Number");
 
     // Pada titik ini, biasanya respon yang dikirimkan dari BMS bukan respon dari request di atas, melainkan request sebelumnya lagi
     // Jadi, ini untuk menghilangkan respon dari request sebelumnya yang sebenarnya tidak dibutuhkan lagi
-    while (Serial.available())
+    while (Serial1.available())
     {
-        Serial.read();
+        Serial1.read();
     }
 
     vTaskDelay(800 / portTICK_PERIOD_MS);
 
     // Mengirimkan request lagi
-    Serial.write("LSerial_Number");
-    Serial.flush();
+    Serial1.write("LSerial_Number");
+    Serial1.flush();
 
     // Membaca respon dari request
-    while (Serial.available() > 0)
+    while (Serial1.available() > 0)
     {
-        msgL[readIdx] = Serial.read();
+        msgL[readIdx] = Serial1.read();
         readIdx++;
     }
 
@@ -577,25 +576,25 @@ void stateRetrieveSerialL()
     Serial.println(serialNumberL);
 
     // Mengirim request serial number. request dikirimkan dua kali karena ada delay respon dari BMS sebesar satu request
-    Serial.write("LBatt_Info");
+    Serial1.write("LBatt_Info");
 
     // Pada titik ini, biasanya respon yang dikirimkan dari BMS bukan respon dari request di atas, melainkan request sebelumnya lagi
     // Jadi, ini untuk menghilangkan respon dari request sebelumnya yang sebenarnya tidak dibutuhkan lagi
-    while (Serial.available())
+    while (Serial1.available())
     {
-        Serial.read();
+        Serial1.read();
     }
 
     vTaskDelay(800 / portTICK_PERIOD_MS);
 
     // Mengirimkan request lagi
-    Serial.write("LBatt_Info");
-    Serial.flush();
+    Serial1.write("LBatt_Info");
+    Serial1.flush();
 
     // Membaca respon dari request
-    while (Serial.available() > 0)
+    while (Serial1.available() > 0)
     {
-        msgL[readIdx] = Serial.read();
+        msgL[readIdx] = Serial1.read();
         readIdx++;
     }
 
@@ -678,10 +677,10 @@ void initChargingL()
     vTaskDelay(500 / portTICK_PERIOD_MS);
 
     // Meminta request dan membaca respon yang didapat
-    Serial.write("LCharge");
-    while (Serial.available() > 0)
+    Serial1.write("LCharge");
+    while (Serial1.available() > 0)
     {
-        msgL[readIdx] = Serial.read();
+        msgL[readIdx] = Serial1.read();
         readIdx++;
     }
 
@@ -809,18 +808,18 @@ void stateRetrieveSerialR()
     int serialNumberCount = 0;
     byte battSWR = digitalRead(batteryButtonR);
 
-    Serial.write("RSerial_Number");
-    while (Serial.available())
+    Serial1.write("RSerial_Number");
+    while (Serial1.available())
     {
-        Serial.read();
+        Serial1.read();
     }
 
     vTaskDelay(500 / portTICK_PERIOD_MS);
 
-    Serial.write("RSerial_Number");
-    while (Serial.available() > 0)
+    Serial1.write("RSerial_Number");
+    while (Serial1.available() > 0)
     {
-        msgR[readIdx] = Serial.read();
+        msgR[readIdx] = Serial1.read();
         readIdx++;
     }
 
@@ -857,25 +856,25 @@ void stateRetrieveSerialR()
     Serial.println(serialNumberR);
 
     // Mengirim request serial number. request dikirimkan dua kali karena ada delay respon dari BMS sebesar satu request
-    Serial.write("RBatt_Info");
+    Serial1.write("RBatt_Info");
 
     // Pada titik ini, biasanya respon yang dikirimkan dari BMS bukan respon dari request di atas, melainkan request sebelumnya lagi
     // Jadi, ini untuk menghilangkan respon dari request sebelumnya yang sebenarnya tidak dibutuhkan lagi
-    while (Serial.available())
+    while (Serial1.available())
     {
-        Serial.read();
+        Serial1.read();
     }
 
     vTaskDelay(800 / portTICK_PERIOD_MS);
 
     // Mengirimkan request lagi
-    Serial.write("RBatt_Info");
-    Serial.flush();
+    Serial1.write("RBatt_Info");
+    Serial1.flush();
 
     // Membaca respon dari request
-    while (Serial.available() > 0)
+    while (Serial1.available() > 0)
     {
-        msgR[readIdx] = Serial.read();
+        msgR[readIdx] = Serial1.read();
         readIdx++;
     }
 
@@ -955,10 +954,10 @@ void initChargingR()
     LED_1R(LOW, LOW, HIGH);
     vTaskDelay(500 / portTICK_PERIOD_MS);
 
-    Serial.write("RCharge");
-    while (Serial.available() > 0)
+    Serial1.write("RCharge");
+    while (Serial1.available() > 0)
     {
-        msgR[readIdx] = Serial.read();
+        msgR[readIdx] = Serial1.read();
         readIdx++;
     }
 
