@@ -8,8 +8,8 @@ int NPNPIN = 19 ;
 //int maxPwm = 255;
 
 int peweem = 0;
-int limitPwm = 50;
-int maxPwm = 4095;
+int limitPwm = 2040;
+int maxPwm = 2048;
 int isRedFlag = 0;
 
 const byte numChars = 32;
@@ -113,13 +113,10 @@ void loop() {
   }
 
   //hardlimit PWM
-  if (peweem < limitPwm){
+  if (peweem > limitPwm){
     peweem = limitPwm;
   }
   
-  else if (peweem > maxPwm){
-    peweem = maxPwm;
-  }
   
 //  Serial.print("Volt: ");
 //  Serial.print(readAdc*3);

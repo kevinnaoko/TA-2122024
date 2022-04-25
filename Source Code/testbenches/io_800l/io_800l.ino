@@ -1,29 +1,40 @@
-/* 
-***************************************************
-*/ 
-
 #include <SoftwareSerial.h>
-SoftwareSerial Sim800l(26, 27);
-   
 
-void setup() {
-  // put your setup code here, to run once:
+SoftwareSerial mySerial(26,27); // RX, TX 
+
+void setup()  
+{
+  // Open serial communication
   Serial.begin(9600);
-  Sim800l.begin(9600);
- 
 
-  
+  // set the data rate for the SoftwareSerial port
+  mySerial.begin(9600);
+
+  delay(1000);
+  Serial.println("Testing SIM800L module");
+  Serial.println();
+  Serial.print("Sizeof(mySerial) = "); Serial.println(sizeof(mySerial));
+  Serial.println();
+
 }
 
-void loop() {  
-//  Serial.println("HAI");
-  
-  while(Sim800l.available()){
-    Serial.write(Sim800l.read());
-  }
- 
-  while(Serial.available()){
-    Sim800l.write(Serial.read());
+void loop() // run over and over
+{
+
+  if( mySerial.available() )
+  {
+    char c = mySerial.read();
+    Serial.print(c);
   }
 
-} 
+  if(Serial.available())
+  {
+    String Arsp = Serial.readString();
+
+    Serial.println("Serial available");
+    Serial.println(Arsp);
+    mySerial.println(Arsp);
+    Serial.println("Serial available end");
+  }
+
+}
