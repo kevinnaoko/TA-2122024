@@ -57,20 +57,20 @@ PubSubClient client(espClient);
 
 // Pin Definition
 // Right Side
-#define batteryButtonR 26
+#define batteryButtonR 12
 #define chargerSW1R 32
 #define chargerSW2R 33
-#define redR 15
-#define greenR 2
-#define blueR 0
+#define redR 4
+#define greenR 17
+#define blueR 16
 
 // Left Side
-#define batteryButtonL 27
+#define batteryButtonL 14
 #define chargerSW1L 23
 #define chargerSW2L 18  // Nanti diubah
-#define redL 4
-#define greenL 16
-#define blueL 17
+#define redL 15
+#define greenL 0
+#define blueL 2
 
 // Others
 #define chargingModePin 19
@@ -83,7 +83,7 @@ PubSubClient client(espClient);
 #define relayCharger 25
 #define triggerButton 13
 
-#define delayChargingState 60000
+#define delayChargingState 5000
 
 // mqtt
 //#define brokerIP "192.168.1.102"
@@ -397,6 +397,8 @@ void LeftCode(void *parameter)
 {
     for (;;)
     {
+        Serial.print("STATE L:");
+        Serial.println(stateL); 
         if (stateL == IDLE)
         {
             stateIdleL();
@@ -422,6 +424,8 @@ void LeftCode(void *parameter)
         {
             stateChargingL();
         }
+        
+        vTaskDelay(3 / portTICK_PERIOD_MS);
     }
 }
 
@@ -429,6 +433,8 @@ void RightCode(void *parameter)
 {
     for (;;)
     {
+        Serial.print("STATE R:");
+        Serial.println(stateR); 
         if (stateR == IDLE)
         {
             stateIdleR();
@@ -454,6 +460,8 @@ void RightCode(void *parameter)
         {
             stateChargingR();
         }
+
+        vTaskDelay(3 / portTICK_PERIOD_MS);
     }
 }
 
@@ -727,15 +735,15 @@ void stateChargingL()
 
     if (battSWL == 1 && voltage > 40000)
     {
-        stateL = 4;
+        if(stateR != CHARGING){
+            digitalWrite(relayCharger, RELAY_OFF);
+        }
+        stateL = FINISH_CHARGING;
         cmd_sendSlotL = 1;
     }
     else
     {
-        if(stateR != CHARGING){
-            digitalWrite(relayCharger, RELAY_OFF);
-        }
-        stateL = 0;
+        stateL = IDLE;
         cmd_sendSlotL = 1;
     }
 }
@@ -749,11 +757,11 @@ void stateFinishChargeL()
 
     if (battSWL == 1 && voltage > 40000)
     {
-        stateL = 4;
+        stateL = FINISH_CHARGING;
     }
-    else if (battSWL == 1)
+    else
     {
-        stateL = 0;
+        stateL = IDLE;
         cmd_sendSlotL = 1;
     }
     vTaskDelay(50 / portTICK_PERIOD_MS);
@@ -774,16 +782,18 @@ void idleTransitionR()
     int16_t adc;
     float vBattery;
 
+    Serial.println(battSWR);
+
     if (battSWR == 1 && voltage > 40000)
     {
-        stateR = 1;
+        stateR = RETRIEVE_SERIAL;
     }
     else
     {
         triggerDetectedR = digitalRead(triggerButton);
         if (triggerDetectedR == 0)
         {
-            stateR = 2;
+            stateR = TRIGGER;
         }
     }
 }
@@ -891,16 +901,16 @@ void stateRetrieveSerialR()
     {
         if (plusCount == 2 && serialNumberCount > 1)
         {
-            stateR = 3;
+            stateR = INIT_CHARGING;
         }
         else
         {
-            stateR = 1;
+            stateR = RETRIEVE_SERIAL;
         }
     }
     else
     {
-        stateR = 0;
+        stateR = IDLE;
     }
 
     vTaskDelay(2000 / portTICK_PERIOD_MS);
@@ -932,11 +942,11 @@ void stateTriggerBMSR()
 
     if (battSWR == 1 && voltage > 40000)
     {
-        stateR = 1;
+        stateR = RETRIEVE_SERIAL;
     }
     else
     {
-        stateR = 0;
+        stateR = IDLE;
     }
 }
 
@@ -968,17 +978,17 @@ void initChargingR()
     {
         if (strncmp(msgR, "Rok", 3) == 0)
         {
-            stateR = 5;
+            stateR = CHARGING;
             cmd_sendSlotR = 1;
         }
         else
         {
-            stateR = 3;
+            stateR = INIT_CHARGING;
         }
     }
     else
     {
-        stateR = 0;
+        stateR = IDLE;
     }
 
     vTaskDelay(1000 / portTICK_PERIOD_MS);
@@ -997,12 +1007,12 @@ void stateChargingR()
         if(stateR != CHARGING){
             digitalWrite(relayCharger, RELAY_OFF);
         }
-        stateR = 4;
+        stateR = FINISH_CHARGING;
         cmd_sendSlotR = 1;
     }
     else
     {
-        stateR = 0;
+        stateR = IDLE;
         cmd_sendSlotR = 1;
     }
 }
@@ -1016,11 +1026,11 @@ void stateFinishChargeR()
 
     if (battSWR == 1 && voltage > 40000)
     {
-        stateR = 4;
+        stateR = FINISH_CHARGING;
     }
     else
     {
-        stateR = 0;
+        stateR = IDLE;
         cmd_sendSlotR = 1;
     }
     vTaskDelay(50 / portTICK_PERIOD_MS);
