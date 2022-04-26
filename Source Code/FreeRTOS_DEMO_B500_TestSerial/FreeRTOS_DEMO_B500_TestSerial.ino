@@ -83,15 +83,15 @@ PubSubClient client(espClient);
 #define relayCharger 25
 #define triggerButton 13
 
-#define delayChargingState 20000
+#define delayChargingState 1000
 
 // mqtt
 //#define brokerIP "192.168.1.102"
 #define brokerIP "34.101.49.52"
 
 // wifi param
-#define wifi_ssid "ASUS"
-#define wifi_password "12345678"
+#define wifi_ssid "Samsung A5"
+#define wifi_password "laruku1991"
 //#define wifi_ssid "ThinQ"
 //#define wifi_password "kentnaoko"
 
@@ -150,6 +150,8 @@ int readAdcTemperature;
 float temperature;
 int driftVoltage = -62;
 int qov = 2500;
+int overheatFlag = 0;
+int overcurrentFlag = 0;
 long t = millis();
 long t1 = millis();
 
@@ -251,11 +253,11 @@ void Sampling(void *parameter)
 {
     for (;;)
     {
-//        if (millis() - t > 2000){
-//           Serial.print("Current: "); 
-//           Serial.println(current);
-//           Serial.print("Voltage: ");
-//           Serial.println(voltage);
+        if (millis() - t > 2000){
+           Serial.print("Current: "); 
+           Serial.println(current);
+           Serial.print("Voltage: ");
+           Serial.println(voltage);
 //           Serial.print("Temperature: ");
 //           Serial.println(readAdcTemperature); 
 //
@@ -271,8 +273,8 @@ void Sampling(void *parameter)
 //           
 //           Serial.print("A3: ");
 //           Serial.println(adc_ads1[3]); 
-//           t = millis(); 
-//        }
+           t = millis(); 
+        }
         
         readAdcCurrent = ads1015VI.readADC_SingleEnded(0);
         current = ((float(  (readAdcCurrent*3 + driftVoltage)  ) - float(qov)) ) / 0.155 ;
@@ -290,6 +292,20 @@ void Sampling(void *parameter)
         adc_ads1[3] = ads1015T.readADC_SingleEnded(3);
         
         temperature = float( readAdcTemperature*3 )/100;
+
+        if(temperature > 70){
+            overheatFlag = 1;
+        }
+        else{
+            overheatFlag = 0;
+        }
+
+        if(current > 15000){
+            overcurrentFlag = 1;
+        }
+        else{
+            overcurrentFlag = 0;
+        }
         
         vTaskDelay(3 / portTICK_PERIOD_MS);
     }
@@ -441,31 +457,35 @@ void LeftCode(void *parameter)
 //            Serial.println(stateL);
 //            t = millis();
 //        }
-        
-        if (stateL == IDLE)
-        {
-            stateIdleL();
-            idleTransitionL();
+        if(!(overheatFlag) && !(overcurrentFlag)){
+          stateFaultL();
         }
-        else if (stateL == RETRIEVE_SERIAL)
-        {
-            stateRetrieveSerialL();
-        }
-        else if (stateL == TRIGGER)
-        {
-            stateTriggerBMSL();
-        }
-        else if (stateL == INIT_CHARGING)
-        {
-            initChargingL();
-        }
-        else if (stateL == FINISH_CHARGING)
-        {
-            stateFinishChargeL();
-        }
-        else if (stateL == CHARGING)
-        {
-            stateChargingL();
+        else{
+          if (stateL == IDLE)
+          {
+              stateIdleL();
+              idleTransitionL();
+          }
+          else if (stateL == RETRIEVE_SERIAL)
+          {
+              stateRetrieveSerialL();
+          }
+          else if (stateL == TRIGGER)
+          {
+              stateTriggerBMSL();
+          }
+          else if (stateL == INIT_CHARGING)
+          {
+              initChargingL();
+          }
+          else if (stateL == FINISH_CHARGING)
+          {
+              stateFinishChargeL();
+          }
+          else if (stateL == CHARGING)
+          {
+              stateChargingL();
+          } 
         }
         
         vTaskDelay(3 / portTICK_PERIOD_MS);
@@ -481,30 +501,36 @@ void RightCode(void *parameter)
 //            Serial.println(stateR);
 //            t1 = millis();
 //        }
-        if (stateR == IDLE)
-        {
-            stateIdleR();
-            idleTransitionR();
+
+        if(!(overheatFlag) && !(overcurrentFlag)){
+          stateFaultR();
         }
-        else if (stateR == RETRIEVE_SERIAL)
-        {
-            stateRetrieveSerialR();
-        }
-        else if (stateR == TRIGGER)
-        {
-            stateTriggerBMSR();
-        }
-        else if (stateR == INIT_CHARGING)
-        {
-            initChargingR();
-        }
-        else if (stateR == FINISH_CHARGING)
-        {
-            stateFinishChargeR();
-        }
-        else if (stateR == CHARGING)
-        {
-            stateChargingR();
+        else{
+          if (stateR == IDLE)
+          {
+              stateIdleR();
+              idleTransitionR();
+          }
+          else if (stateR == RETRIEVE_SERIAL)
+          {
+              stateRetrieveSerialR();
+          }
+          else if (stateR == TRIGGER)
+          {
+              stateTriggerBMSR();
+          }
+          else if (stateR == INIT_CHARGING)
+          {
+              initChargingR();
+          }
+          else if (stateR == FINISH_CHARGING)
+          {
+              stateFinishChargeR();
+          }
+          else if (stateR == CHARGING)
+          {
+              stateChargingR();
+          } 
         }
 
         vTaskDelay(3 / portTICK_PERIOD_MS);
@@ -517,6 +543,17 @@ void LED_1L(int red_light_value_1, int green_light_value_1, int blue_light_value
     digitalWrite(redL, red_light_value_1);
     digitalWrite(greenL, green_light_value_1);
     digitalWrite(blueL, blue_light_value_1);
+}
+
+void stateFaultL(){
+	digitalWrite(relayCharger, RELAY_OFF);
+	
+    LED_1L(HIGH, LOW, LOW);
+    vTaskDelay(500 / portTICK_PERIOD_MS);
+    LED_1L(LOW, LOW, LOW);
+    vTaskDelay(500 / portTICK_PERIOD_MS);
+    stateL = IDLE;
+    
 }
 
 void idleTransitionL()
@@ -786,11 +823,16 @@ void stateChargingL()
 
     if (battSWL == 1 && voltage > 40000)
     {
-        if(stateR != CHARGING){
-            digitalWrite(relayCharger, RELAY_OFF);
-        }
-        stateL = FINISH_CHARGING;
-        cmd_sendSlotL = 1;
+      if(current < 0){
+         if(stateR != CHARGING){
+              digitalWrite(relayCharger, RELAY_OFF);
+          }
+          stateL = FINISH_CHARGING;
+          cmd_sendSlotL = 1;  
+      }
+      else{
+          stateL = stateChargingL;
+      }
     }
     else
     {
@@ -826,6 +868,17 @@ void LED_1R(int red_light_value_1, int green_light_value_1, int blue_light_value
     digitalWrite(blueR, blue_light_value_1);
 }
 
+void stateFaultR(){
+	digitalWrite(relayCharger, RELAY_OFF); 
+	
+    LED_1R(HIGH, LOW, LOW);
+    vTaskDelay(500 / portTICK_PERIOD_MS);
+    LED_1R(LOW, LOW, LOW);
+    vTaskDelay(500 / portTICK_PERIOD_MS);
+    stateR = IDLE;
+    
+}
+
 void idleTransitionR()
 {
     byte triggerDetectedR;
@@ -854,7 +907,6 @@ void idleTransitionR()
 void stateIdleR()
 {
     //  Serial.print("R Idle\n");
-    digitalWrite(chargerSW2R, HIGH);
 
     LED_1R(HIGH, LOW, LOW);
     vTaskDelay(50 / portTICK_PERIOD_MS);
@@ -871,16 +923,17 @@ void stateRetrieveSerialR()
     int serialNumberCount = 0;
     byte battSWR = digitalRead(batteryButtonR);
 
-	Serial.write("RSerial_Number");
+
+    xSemaphoreTake(xMutex, portMAX_DELAY);
+    {
+        Serial.write("RSerial_Number");
         while (Serial.available())
         {
             Serial.read();
         }
     
-	vTaskDelay(500 / portTICK_PERIOD_MS);
-
-    xSemaphoreTake(xMutex, portMAX_DELAY);
-    {    
+        vTaskDelay(500 / portTICK_PERIOD_MS);
+    
         Serial.write("RSerial_Number");
         while (Serial.available() > 0)
         {
@@ -952,45 +1005,32 @@ void stateRetrieveSerialR()
         }
     }
     xSemaphoreGive(xMutex);
-	
-	  msgIdx = 0;
-    while(msgIdx < readIdx+1){
-      Serial.print(msg[msgIdx]);
-      Serial.print(" , ");
-      Serial.println(msg[msgIdx], HEX);
-  
-      msgIdx++;
-    }	
-	
+    
     remainingCapacityR = (msgR[76] << 8) | (msgR[77]);
     totalCapacityR = (msgR[78] << 8) | (msgR[79]);
     SoCR = (double) remainingCapacityR / (double) totalCapacityR;
     SoHR = (msgR[80] << 8) | (msgR[81]);
 
-    Serial.print("SOH : ");
     Serial.println(SoHR);
-    Serial.print("Remaining Capacity : ");
     Serial.println(remainingCapacityR);
-    Serial.print("Total Capacity : ");
     Serial.println(totalCapacityR);
-    Serial.print("SOC : ");
     Serial.println(SoCR);
 
-//    if (battSWR == 1 && voltage > 40000)
-//    {
-//        if (plusCount == 2 && serialNumberCount > 1)
-//        {
-//            stateR = INIT_CHARGING;
-//        }
-//        else
-//        {
-//            stateR = RETRIEVE_SERIAL;
-//        }
-//    }
-//    else
-//    {
-//        stateR = IDLE;
-//    }
+    if (battSWR == 1 && voltage > 40000)
+    {
+        if (plusCount == 2 && serialNumberCount > 1)
+        {
+            stateR = INIT_CHARGING;
+        }
+        else
+        {
+            stateR = RETRIEVE_SERIAL;
+        }
+    }
+    else
+    {
+        stateR = IDLE;
+    }
 
     vTaskDelay(2000 / portTICK_PERIOD_MS);
 }
@@ -1086,11 +1126,16 @@ void stateChargingR()
 
     if (battSWR == 1 && voltage > 40000)
     {
-        if(stateL != CHARGING){
-            digitalWrite(relayCharger, RELAY_OFF);
-        }
-        stateR = FINISH_CHARGING;
-        cmd_sendSlotR = 1;
+      if(current < 0){
+         if(stateL != CHARGING){
+              digitalWrite(relayCharger, RELAY_OFF);
+          }
+          stateR = FINISH_CHARGING;
+          cmd_sendSlotR = 1;  
+      }
+      else{
+          stateR = stateChargingR;
+      }
     }
     else
     {
