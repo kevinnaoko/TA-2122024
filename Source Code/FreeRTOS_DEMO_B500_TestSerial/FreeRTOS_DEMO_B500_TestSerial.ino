@@ -83,15 +83,15 @@ PubSubClient client(espClient);
 #define relayCharger 25
 #define triggerButton 13
 
-#define delayChargingState 1000
+#define delayChargingState 20000
 
 // mqtt
 //#define brokerIP "192.168.1.102"
 #define brokerIP "34.101.49.52"
 
 // wifi param
-#define wifi_ssid "Samsung A5"
-#define wifi_password "laruku1991"
+#define wifi_ssid "ASUS"
+#define wifi_password "12345678"
 //#define wifi_ssid "ThinQ"
 //#define wifi_password "kentnaoko"
 
@@ -251,13 +251,13 @@ void Sampling(void *parameter)
 {
     for (;;)
     {
-        if (millis() - t > 2000){
-           Serial.print("Current: "); 
-           Serial.println(current);
-           Serial.print("Voltage: ");
-           Serial.println(voltage);
-           Serial.print("Temperature: ");
-           Serial.println(readAdcTemperature); 
+//        if (millis() - t > 2000){
+//           Serial.print("Current: "); 
+//           Serial.println(current);
+//           Serial.print("Voltage: ");
+//           Serial.println(voltage);
+//           Serial.print("Temperature: ");
+//           Serial.println(readAdcTemperature); 
 //
 //           
 //           Serial.print("A0: ");
@@ -271,8 +271,8 @@ void Sampling(void *parameter)
 //           
 //           Serial.print("A3: ");
 //           Serial.println(adc_ads1[3]); 
-           t = millis(); 
-        }
+//           t = millis(); 
+//        }
         
         readAdcCurrent = ads1015VI.readADC_SingleEnded(0);
         current = ((float(  (readAdcCurrent*3 + driftVoltage)  ) - float(qov)) ) / 0.155 ;
@@ -786,16 +786,11 @@ void stateChargingL()
 
     if (battSWL == 1 && voltage > 40000)
     {
-      if(current < 0){
-         if(stateR != CHARGING){
-              digitalWrite(relayCharger, RELAY_OFF);
-          }
-          stateL = FINISH_CHARGING;
-          cmd_sendSlotL = 1;  
-      }
-      else{
-          stateL = CHARGING;
-      }
+        if(stateR != CHARGING){
+            digitalWrite(relayCharger, RELAY_OFF);
+        }
+        stateL = FINISH_CHARGING;
+        cmd_sendSlotL = 1;
     }
     else
     {
@@ -876,17 +871,16 @@ void stateRetrieveSerialR()
     int serialNumberCount = 0;
     byte battSWR = digitalRead(batteryButtonR);
 
-
-    xSemaphoreTake(xMutex, portMAX_DELAY);
-    {
-        Serial.write("RSerial_Number");
+	Serial.write("RSerial_Number");
         while (Serial.available())
         {
             Serial.read();
         }
     
-        vTaskDelay(500 / portTICK_PERIOD_MS);
-    
+	vTaskDelay(500 / portTICK_PERIOD_MS);
+
+    xSemaphoreTake(xMutex, portMAX_DELAY);
+    {    
         Serial.write("RSerial_Number");
         while (Serial.available() > 0)
         {
@@ -958,32 +952,45 @@ void stateRetrieveSerialR()
         }
     }
     xSemaphoreGive(xMutex);
-    
+	
+	  msgIdx = 0;
+    while(msgIdx < readIdx+1){
+      Serial.print(msg[msgIdx]);
+      Serial.print(" , ");
+      Serial.println(msg[msgIdx], HEX);
+  
+      msgIdx++;
+    }	
+	
     remainingCapacityR = (msgR[76] << 8) | (msgR[77]);
     totalCapacityR = (msgR[78] << 8) | (msgR[79]);
     SoCR = (double) remainingCapacityR / (double) totalCapacityR;
     SoHR = (msgR[80] << 8) | (msgR[81]);
 
+    Serial.print("SOH : ");
     Serial.println(SoHR);
+    Serial.print("Remaining Capacity : ");
     Serial.println(remainingCapacityR);
+    Serial.print("Total Capacity : ");
     Serial.println(totalCapacityR);
+    Serial.print("SOC : ");
     Serial.println(SoCR);
 
-    if (battSWR == 1 && voltage > 40000)
-    {
-        if (plusCount == 2 && serialNumberCount > 1)
-        {
-            stateR = INIT_CHARGING;
-        }
-        else
-        {
-            stateR = RETRIEVE_SERIAL;
-        }
-    }
-    else
-    {
-        stateR = IDLE;
-    }
+//    if (battSWR == 1 && voltage > 40000)
+//    {
+//        if (plusCount == 2 && serialNumberCount > 1)
+//        {
+//            stateR = INIT_CHARGING;
+//        }
+//        else
+//        {
+//            stateR = RETRIEVE_SERIAL;
+//        }
+//    }
+//    else
+//    {
+//        stateR = IDLE;
+//    }
 
     vTaskDelay(2000 / portTICK_PERIOD_MS);
 }
@@ -1079,16 +1086,11 @@ void stateChargingR()
 
     if (battSWR == 1 && voltage > 40000)
     {
-      if(current < 0){
-         if(stateL != CHARGING){
-              digitalWrite(relayCharger, RELAY_OFF);
-          }
-          stateR = FINISH_CHARGING;
-          cmd_sendSlotR = 1;  
-      }
-      else{
-          stateR = CHARGING;
-      }
+        if(stateL != CHARGING){
+            digitalWrite(relayCharger, RELAY_OFF);
+        }
+        stateR = FINISH_CHARGING;
+        cmd_sendSlotR = 1;
     }
     else
     {
