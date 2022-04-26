@@ -16,6 +16,8 @@ byte state = 1;
 unsigned short voltageTemp = 0;
 unsigned short soh;
 unsigned short remainingCapacity;
+unsigned short totalCapacity;
+double soc;
 int battVoltage = 0;
 
 void get_serial(char LorR){
@@ -109,7 +111,12 @@ void loop(){
   
     current = (msg[12]<<8) | (msg[13]);
 
-    for(int i = 0; i < 19; i++){
+    remainingCapacity = (msg[76] << 8) | (msg[77]);
+    totalCapacity = (msg[78] << 8) | (msg[79]);
+    soc = (double) remainingCapacity / (double) totalCapacity;
+    soh = (msg[80] << 8) | (msg[81]);
+
+    for(int i = 0; i < 38; i+=2){
       voltageTemp = (msg[14+i]<<8) | (msg[14+i+1]);
       battVoltage += voltageTemp;
       Serial.print("Cell ");
@@ -117,10 +124,6 @@ void loop(){
       Serial.print(" : ");
       Serial.println(voltageTemp);
     }
-
-    soh = (msg[80]<<8) | (msg[81]);
-
-    remainingCapacity = (msg[76]<<8) | (msg[77]);
 
     Serial.print("Voltage: ");
     Serial.println(battVoltage);
@@ -133,7 +136,12 @@ void loop(){
 
     Serial.print("Remaining Capacity: ");
     Serial.println(remainingCapacity);
-  
+
+    Serial.print("Total Capacity: ");
+    Serial.println(totalCapacity);
+
+    Serial.print("SoC: ");
+    Serial.println(soc);  
   }
   battVoltage = 0;
   Serial.print("Keluar");

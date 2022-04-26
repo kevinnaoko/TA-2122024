@@ -83,7 +83,7 @@ PubSubClient client(espClient);
 #define relayCharger 25
 #define triggerButton 13
 
-#define delayChargingState 5000
+#define delayChargingState 20000
 
 // mqtt
 //#define brokerIP "192.168.1.102"
@@ -148,8 +148,12 @@ int readAdcVoltage;
 float voltage;
 int readAdcTemperature;
 float temperature;
-int driftVoltage=0;
+int driftVoltage = -62;
 int qov = 2500;
+long t = millis();
+long t1 = millis();
+
+int adc_ads1[5];
 
 // char topics[3][20]; 
 // char commandTopic[25];
@@ -157,6 +161,9 @@ int qov = 2500;
 
 Adafruit_ADS1015 ads1015T;    // ADS1115 untuk temperatur
 Adafruit_ADS1015 ads1015VI;    // ADS1115 untuk tegangan dan arus
+
+// Mutex Definition
+SemaphoreHandle_t xMutex;
  
 void setup()
 {
@@ -222,6 +229,9 @@ void setup()
 
     // Mematikan relay
     digitalWrite(relayCharger, RELAY_OFF);
+
+    //Mutex
+    xMutex = xSemaphoreCreateMutex();
      
     // Task Idle R and L
     xTaskCreatePinnedToCore(LeftCode, "Left", 10000, NULL, 1, NULL, 0);
@@ -241,18 +251,47 @@ void Sampling(void *parameter)
 {
     for (;;)
     {
-          readAdcCurrent = ads1015VI.readADC_SingleEnded(0);
-          current = ((float(  (readAdcCurrent*3 + driftVoltage)  ) - qov) ) / 0.155 ;
+//        if (millis() - t > 2000){
+//           Serial.print("Current: "); 
+//           Serial.println(current);
+//           Serial.print("Voltage: ");
+//           Serial.println(voltage);
+//           Serial.print("Temperature: ");
+//           Serial.println(readAdcTemperature); 
+//
+//           
+//           Serial.print("A0: ");
+//           Serial.println(adc_ads1[0]); 
+//           
+//           Serial.print("A1: ");
+//           Serial.println(adc_ads1[1]); 
+//           
+//           Serial.print("A2: ");
+//           Serial.println(adc_ads1[2]); 
+//           
+//           Serial.print("A3: ");
+//           Serial.println(adc_ads1[3]); 
+//           t = millis(); 
+//        }
+        
+        readAdcCurrent = ads1015VI.readADC_SingleEnded(0);
+        current = ((float(  (readAdcCurrent*3 + driftVoltage)  ) - float(qov)) ) / 0.155 ;
+        
+        readAdcVoltage = ads1015VI.readADC_SingleEnded(1);
+        voltage = readAdcVoltage;
+        voltage = float( readAdcVoltage*3 );
+        voltage *= 34;
+        
+        readAdcTemperature = ads1015T.readADC_SingleEnded(0);
 
-          readAdcVoltage = ads1015VI.readADC_SingleEnded(1);
-          voltage = readAdcVoltage;
-          voltage = float( readAdcVoltage*3 );
-          voltage *= 34;
-
-          readAdcTemperature = ads1015T.readADC_SingleEnded(0);
-          temperature = float( readAdcTemperature*3 )/100;
-
-          vTaskDelay(3 / portTICK_PERIOD_MS);
+        adc_ads1[0] = ads1015T.readADC_SingleEnded(0);
+        adc_ads1[1] = ads1015T.readADC_SingleEnded(1);
+        adc_ads1[2] = ads1015T.readADC_SingleEnded(2);
+        adc_ads1[3] = ads1015T.readADC_SingleEnded(3);
+        
+        temperature = float( readAdcTemperature*3 )/100;
+        
+        vTaskDelay(3 / portTICK_PERIOD_MS);
     }
 }
 
@@ -397,8 +436,12 @@ void LeftCode(void *parameter)
 {
     for (;;)
     {
-        Serial.print("STATE L:");
-        Serial.println(stateL); 
+//        if (millis() - t > 1000){
+//            Serial.print("StateL : ");
+//            Serial.println(stateL);
+//            t = millis();
+//        }
+        
         if (stateL == IDLE)
         {
             stateIdleL();
@@ -433,8 +476,11 @@ void RightCode(void *parameter)
 {
     for (;;)
     {
-        Serial.print("STATE R:");
-        Serial.println(stateR); 
+//        if (millis() - t1 > 1000){
+//            Serial.print("StateR : ");
+//            Serial.println(stateR);
+//            t1 = millis();
+//        }
         if (stateR == IDLE)
         {
             stateIdleR();
@@ -484,12 +530,17 @@ void idleTransitionL()
     float vBattery = 0;
 
     triggerDetectedL = digitalRead(triggerButton);
-    Serial.println(voltage);
+
+    
+//    Serial.print(battSWL);
+//    Serial.println(voltage);
 
     // Apabila terdeteksi ada baterai, pindah ke state 1. Selain itu, pindah ke state 2
-    if (battSWL == 1 && voltage > 40000)
+    if (voltage > 40000)
     {
-        stateL = RETRIEVE_SERIAL;
+        if(battSWL == 1){
+            stateL = RETRIEVE_SERIAL;   
+        }
     }
     else
     {
@@ -782,11 +833,13 @@ void idleTransitionR()
     int16_t adc;
     float vBattery;
 
-    Serial.println(battSWR);
+//    Serial.println(battSWR);
 
-    if (battSWR == 1 && voltage > 40000)
+    if (voltage > 40000)
     {
-        stateR = RETRIEVE_SERIAL;
+        if(battSWR == 1){
+            stateR = RETRIEVE_SERIAL;   
+        }
     }
     else
     {
@@ -810,6 +863,7 @@ void stateIdleR()
 void stateRetrieveSerialR()
 {
     LED_1R(HIGH, HIGH, LOW);
+    byte tempByte;
     int readIdx = 0;
     int msgIdx = 0;
     int serialNumberIdx = 0;
@@ -817,20 +871,27 @@ void stateRetrieveSerialR()
     int serialNumberCount = 0;
     byte battSWR = digitalRead(batteryButtonR);
 
-    Serial.write("RSerial_Number");
-    while (Serial.available())
-    {
-        Serial.read();
-    }
 
-    vTaskDelay(500 / portTICK_PERIOD_MS);
-
-    Serial.write("RSerial_Number");
-    while (Serial.available() > 0)
+    xSemaphoreTake(xMutex, portMAX_DELAY);
     {
-        msgR[readIdx] = Serial.read();
-        readIdx++;
+        Serial.write("RSerial_Number");
+        while (Serial.available())
+        {
+            Serial.read();
+        }
+    
+        vTaskDelay(500 / portTICK_PERIOD_MS);
+    
+        Serial.write("RSerial_Number");
+        while (Serial.available() > 0)
+        {
+            msgR[readIdx] = Serial.read();
+            readIdx++;
+        }
     }
+    xSemaphoreGive(xMutex);
+    
+    
 
     while (msgIdx < readIdx + 1)
     {
@@ -876,21 +937,27 @@ void stateRetrieveSerialR()
 
     vTaskDelay(800 / portTICK_PERIOD_MS);
 
-    // Mengirimkan request lagi
-    Serial.write("RBatt_Info");
-    Serial.flush();
+    readIdx = 0;
 
-    // Membaca respon dari request
-    while (Serial.available() > 0)
+    xSemaphoreTake(xMutex, portMAX_DELAY);
     {
-        msgR[readIdx] = Serial.read();
-        readIdx++;
+        // Mengirimkan request lagi
+        Serial.write("RBatt_Info");
+        Serial.flush();
+    
+        // Membaca respon dari request
+        while (Serial.available() > 0)
+        {
+            msgR[readIdx] = Serial.read();
+            readIdx++;
+        }
     }
-
-    SoHR = (msgR[80] << 8) | (msgR[81]);
+    xSemaphoreGive(xMutex);
+    
     remainingCapacityR = (msgR[76] << 8) | (msgR[77]);
     totalCapacityR = (msgR[78] << 8) | (msgR[79]);
     SoCR = (double) remainingCapacityR / (double) totalCapacityR;
+    SoHR = (msgR[80] << 8) | (msgR[81]);
 
     Serial.println(SoHR);
     Serial.println(remainingCapacityR);
@@ -1000,11 +1067,14 @@ void stateChargingR()
     byte battSWR = digitalRead(batteryButtonR);
     LED_1R(LOW, LOW, HIGH);
 
+     digitalWrite(relayCharger, RELAY_ON);
+
+
     vTaskDelay(delayChargingState / portTICK_PERIOD_MS); // Nanti dihapus
 
     if (battSWR == 1 && voltage > 40000)
     {
-        if(stateR != CHARGING){
+        if(stateL != CHARGING){
             digitalWrite(relayCharger, RELAY_OFF);
         }
         stateR = FINISH_CHARGING;
