@@ -1004,7 +1004,6 @@ design rules under a new name.</description>
 <element name="X10" library="JST XH Connectors v1-0" package="JST-XH-02-PACKAGE-LONG-PAD" value="JST-XH-02-PIN-LONG-PAD" x="79.4258" y="23.6474" smashed="yes"/>
 <element name="X11" library="JST XH Connectors v1-0" package="JST-XH-02-PACKAGE-LONG-PAD" value="JST-XH-02-PIN-LONG-PAD" x="84.2772" y="31.6738" smashed="yes" rot="R90"/>
 <element name="X12" library="JST XH Connectors v1-0" package="JST-XH-02-PACKAGE-LONG-PAD" value="JST-XH-02-PIN-LONG-PAD" x="84.074" y="48.133" smashed="yes" rot="R90"/>
-<element name="X13" library="JST XH Connectors v1-0" package="JST-XH-02-PACKAGE-LONG-PAD" value="JST-XH-02-PIN-LONG-PAD" x="84.328" y="40.005" smashed="yes" rot="R90"/>
 </elements>
 <signals>
 <signal name="BLU_KIRI">
@@ -1211,11 +1210,10 @@ design rules under a new name.</description>
 <signal name="N$53">
 <contactref element="JP5" pad="6"/>
 </signal>
-<signal name="OVERRIDE_BMS_KIRI">
-<contactref element="U$1" pad="11"/>
-</signal>
 <signal name="DETEKSI_BATERAI_KIRI">
 <contactref element="U$1" pad="10"/>
+<contactref element="X11" pad="1"/>
+<wire x1="29.2708" y1="58.5878" x2="84.2772" y2="30.4038" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SWITCH_MODE_DAYA">
 <contactref element="U$1" pad="9"/>
@@ -1224,9 +1222,8 @@ design rules under a new name.</description>
 </signal>
 <signal name="DETEKSI_BATERAI_KANAN">
 <contactref element="U$1" pad="8"/>
-</signal>
-<signal name="OVERRIDE_BMS_KANAN">
-<contactref element="U$1" pad="7"/>
+<contactref element="X12" pad="1"/>
+<wire x1="34.3508" y1="58.5878" x2="84.074" y2="46.863" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$3">
 <contactref element="U$1" pad="15"/>
@@ -1268,30 +1265,23 @@ design rules under a new name.</description>
 </signal>
 <signal name="OVERRIDE_BMS">
 <contactref element="X9" pad="1"/>
+<contactref element="U$1" pad="11"/>
+<wire x1="26.7308" y1="58.5878" x2="69.7738" y2="23.7236" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="N$10">
 <contactref element="X10" pad="2"/>
 </signal>
-<signal name="DETEKSI_BATERAI">
-<contactref element="X11" pad="1"/>
-</signal>
 <signal name="N$12">
 <contactref element="X11" pad="2"/>
-</signal>
-<signal name="N$13">
-<contactref element="X12" pad="1"/>
 </signal>
 <signal name="N$14">
 <contactref element="X12" pad="2"/>
 </signal>
-<signal name="N$15">
-<contactref element="X13" pad="1"/>
-</signal>
-<signal name="N$16">
-<contactref element="X13" pad="2"/>
-</signal>
 <signal name="N$7">
 <contactref element="X9" pad="2"/>
+</signal>
+<signal name="N$8">
+<contactref element="U$1" pad="7"/>
 </signal>
 </signals>
 <mfgpreviewcolors>
