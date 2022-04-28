@@ -90,8 +90,8 @@ PubSubClient client(espClient);
 #define brokerIP "34.101.49.52"
 
 // wifi param
-#define wifi_ssid "Samsung A5"
-#define wifi_password "laruku1991"
+#define wifi_ssid "ASUS"
+#define wifi_password "12345678"
 //#define wifi_ssid "ThinQ"
 //#define wifi_password "kentnaoko"
 

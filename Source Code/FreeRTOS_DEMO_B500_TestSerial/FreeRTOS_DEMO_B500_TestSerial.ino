@@ -7,7 +7,7 @@
  *    Eren
  */ 
 
- 
+#define DEMO 0               // 1 = true, 0 = false
 #define TINY_GSM_MODEM_SIM800 // Modem is SIM800L 
  
 #include <WiFi.h> 
@@ -83,15 +83,15 @@ PubSubClient client(espClient);
 #define relayCharger 25
 #define triggerButton 13
 
-#define delayChargingState 1000
+#define delayChargingState 15000
 
 // mqtt
 //#define brokerIP "192.168.1.102"
 #define brokerIP "34.101.49.52"
 
 // wifi param
-#define wifi_ssid "Samsung A5"
-#define wifi_password "laruku1991"
+#define wifi_ssid "ASUS"
+#define wifi_password "12345678"
 //#define wifi_ssid "ThinQ"
 //#define wifi_password "kentnaoko"
 
@@ -127,6 +127,7 @@ unsigned short totalCapacityL;
 double SoCL;
 double voltL;
 char msgL[200];
+char msgBattInfoL[200];
 char serialNumberL[16] = "";
 byte cmd_sendSlotL = 0;
 
@@ -152,8 +153,10 @@ int driftVoltage = -62;
 int qov = 2500;
 int overheatFlag = 0;
 int overcurrentFlag = 0;
+int triggerFlag = 0;
 long t = millis();
 long t1 = millis();
+long t_overcurrentFlag = millis();
 
 int adc_ads1[5];
 
@@ -253,13 +256,14 @@ void Sampling(void *parameter)
 {
     for (;;)
     {
+        int triggerDetected;
         if (millis() - t > 2000){
-           Serial.print("Current: "); 
-           Serial.println(current);
-           Serial.print("Voltage: ");
-           Serial.println(voltage);
+//           Serial.print("Current: "); SF
+//           Serial.println(current);
+//           Serial.print("Voltage: ");
+//           Serial.println(voltage);
 //           Serial.print("Temperature: ");
-//           Serial.println(readAdcTemperature); 
+//           Serial.println(temperature+3); 
 //
 //           
 //           Serial.print("A0: ");
@@ -275,9 +279,14 @@ void Sampling(void *parameter)
 //           Serial.println(adc_ads1[3]); 
            t = millis(); 
         }
+
+        triggerDetected = !(digitalRead(triggerButton));
+        if( triggerDetected && stateL == IDLE && stateR == IDLE){
+            triggerFlag = 1;
+        }
         
         readAdcCurrent = ads1015VI.readADC_SingleEnded(0);
-        current = ((float(  (readAdcCurrent*3 + driftVoltage)  ) - float(qov)) ) / 0.155 ;
+        current = ((float(  (readAdcCurrent*3 + driftVoltage)  ) - float(qov)) ) / 0.093 ;
         
         readAdcVoltage = ads1015VI.readADC_SingleEnded(1);
         voltage = readAdcVoltage;
@@ -291,19 +300,25 @@ void Sampling(void *parameter)
         adc_ads1[2] = ads1015T.readADC_SingleEnded(2);
         adc_ads1[3] = ads1015T.readADC_SingleEnded(3);
         
-        temperature = float( readAdcTemperature*3 )/100;
+        temperature = (float( readAdcTemperature*3 )/7.2) - 8.5;
 
-        if(temperature > 70){
+        if(temperature > 67){
+            Serial.println("OVERHEAT DETECTED");
             overheatFlag = 1;
         }
-        else{
+        
+        if (overheatFlag == 1 && temperature < 57){
+            Serial.println("Resume normal operation");
             overheatFlag = 0;
         }
 
         if(current > 15000){
+            Serial.println("OVERCURRENT DETECTED");
             overcurrentFlag = 1;
+            t_overcurrentFlag = millis();
         }
-        else{
+        if (overcurrentFlag == 1 && millis() - t_overcurrentFlag > 30000 ){
+            Serial.println("Resume normal operation");
             overcurrentFlag = 0;
         }
         
@@ -457,8 +472,11 @@ void LeftCode(void *parameter)
 //            Serial.println(stateL);
 //            t = millis();
 //        }
-        if(!(overheatFlag) && !(overcurrentFlag)){
+        if(overheatFlag || overcurrentFlag){
           stateFaultL();
+        }
+        else if(triggerFlag){
+            stateTriggerBMS();
         }
         else{
           if (stateL == IDLE)
@@ -472,7 +490,7 @@ void LeftCode(void *parameter)
           }
           else if (stateL == TRIGGER)
           {
-              stateTriggerBMSL();
+//              stateTriggerBMSL();
           }
           else if (stateL == INIT_CHARGING)
           {
@@ -502,8 +520,11 @@ void RightCode(void *parameter)
 //            t1 = millis();
 //        }
 
-        if(!(overheatFlag) && !(overcurrentFlag)){
+        if(overheatFlag || overcurrentFlag){
           stateFaultR();
+        }
+        else if(triggerFlag){
+            // TIdak melakukan apapun
         }
         else{
           if (stateR == IDLE)
@@ -575,17 +596,13 @@ void idleTransitionL()
     // Apabila terdeteksi ada baterai, pindah ke state 1. Selain itu, pindah ke state 2
     if (voltage > 40000)
     {
-        if(battSWL == 1){
+        if(battSWL == 1 && stateR != RETRIEVE_SERIAL && stateR != INIT_CHARGING){
             stateL = RETRIEVE_SERIAL;   
         }
     }
     else
     {
-        triggerDetectedL = digitalRead(triggerButton);
-        if (triggerDetectedL == 0)
-        {
-            stateL = TRIGGER;
-        }
+        stateL = IDLE;
     }
 }
 
@@ -604,12 +621,15 @@ void stateRetrieveSerialL()
 {
     // Memberikan indikator LED warna kuning
     LED_1L(HIGH, HIGH, LOW);
-    int readIdx = 0;
-    int msgIdx = 0;
+    int readIdx;
+    int msgIdx;
     int serialNumberIdx = 0;
     int plusCount = 0;
     int serialNumberCount = 0;
     byte battSWL = digitalRead(batteryButtonL);
+
+    readIdx = 0;
+    msgIdx = 0;
 
     // Mengirim request serial number. request dikirimkan dua kali karena ada delay respon dari BMS sebesar satu request
     Serial.write("LSerial_Number");
@@ -621,11 +641,10 @@ void stateRetrieveSerialL()
         Serial.read();
     }
 
-    vTaskDelay(800 / portTICK_PERIOD_MS);
+    vTaskDelay(500 / portTICK_PERIOD_MS);
 
     // Mengirimkan request lagi
     Serial.write("LSerial_Number");
-    Serial.flush();
 
     // Membaca respon dari request
     while (Serial.available() > 0)
@@ -668,8 +687,13 @@ void stateRetrieveSerialL()
     serialNumberL[msgIdx] = '\0';
 
     // Untuk troubleshooting
+    Serial.println();
+    Serial.print("Serial Number Slot Kiri: ");
     Serial.println(serialNumberL);
 
+    readIdx = 0;
+    msgIdx = 0;
+    
     // Mengirim request serial number. request dikirimkan dua kali karena ada delay respon dari BMS sebesar satu request
     Serial.write("LBatt_Info");
 
@@ -677,26 +701,59 @@ void stateRetrieveSerialL()
     // Jadi, ini untuk menghilangkan respon dari request sebelumnya yang sebenarnya tidak dibutuhkan lagi
     while (Serial.available())
     {
-        Serial.read();
+        msgL[readIdx] = Serial.read();
     }
 
-    vTaskDelay(800 / portTICK_PERIOD_MS);
+    vTaskDelay(500 / portTICK_PERIOD_MS);
 
     // Mengirimkan request lagi
     Serial.write("LBatt_Info");
-    Serial.flush();
 
     // Membaca respon dari request
     while (Serial.available() > 0)
     {
-        msgL[readIdx] = Serial.read();
+        msgBattInfoL[readIdx] = Serial.read();
         readIdx++;
     }
 
-    SoHL = (msgL[80] << 8) | (msgL[81]);
-    remainingCapacityL = (msgL[76] << 8) | (msgL[77]);
-    totalCapacityL = (msgL[78] << 8) | (msgL[79]);
-    SoCL = (double) remainingCapacityL / (double) totalCapacityL;
+    readIdx = 0;
+    msgIdx = 0;
+
+    vTaskDelay(500 / portTICK_PERIOD_MS);
+
+    // Mengirimkan request lagi
+    Serial.write("LBatt_Info");
+
+    // Membaca respon dari request
+    while (Serial.available() > 0)
+    {
+        msgBattInfoL[readIdx] = Serial.read();
+        readIdx++;
+    }
+
+    msgIdx = 0;
+
+    while(msgIdx < readIdx+1){
+      Serial.print(msgBattInfoL[msgIdx]);
+      Serial.print(" , ");
+      Serial.println(msgBattInfoL[msgIdx], HEX);
+  
+      msgIdx++;
+    }    
+
+    if( strncmp(msgBattInfoL, "Lerror", 6) == 0 ){
+        Serial.println("Data battery info tidak valid!");
+        SoHL = -1;
+        remainingCapacityL = -1;
+        totalCapacityL = -1;
+        SoCL = -1;
+    }
+    else{
+        SoHL = (msgBattInfoL[80] << 8) | (msgBattInfoL[81]);
+        remainingCapacityL = (msgBattInfoL[76] << 8) | (msgBattInfoL[77]);
+        totalCapacityL = (msgBattInfoL[78] << 8) | (msgBattInfoL[79]);
+        SoCL = (double) remainingCapacityL / (double) totalCapacityL;        
+    }
 
     Serial.println(SoHL);
     Serial.println(remainingCapacityL);
@@ -718,43 +775,38 @@ void stateRetrieveSerialL()
     else
     {
         stateL = IDLE;
-    }
+    }   
 
     vTaskDelay(2000 / portTICK_PERIOD_MS);
 }
 
-void stateTriggerBMSL()
+void stateTriggerBMS()
 {
     //  Serial.print("L Triggered\n");
-    byte battSWL = digitalRead(batteryButtonL);
     LED_1L(HIGH, HIGH, LOW);
+    LED_1R(HIGH, HIGH, LOW);
     vTaskDelay(500 / portTICK_PERIOD_MS);
     LED_1L(LOW, LOW, LOW);
+    LED_1R(LOW, LOW, LOW);
     vTaskDelay(500 / portTICK_PERIOD_MS);
     LED_1L(HIGH, HIGH, LOW);
+    LED_1R(HIGH, HIGH, LOW);
     vTaskDelay(500 / portTICK_PERIOD_MS);
     LED_1L(LOW, LOW, LOW);
+    LED_1R(LOW, LOW, LOW);
     vTaskDelay(500 / portTICK_PERIOD_MS);
     LED_1L(HIGH, HIGH, LOW);
+    LED_1R(HIGH, HIGH, LOW);
 
-    if(stateR != CHARGING){
-        digitalWrite(relayCharger, RELAY_ON);   
-    }
+    digitalWrite(relayCharger, RELAY_ON);   
 
     vTaskDelay(1000 / portTICK_PERIOD_MS);
 
-    if(stateR != CHARGING){
-        digitalWrite(relayCharger, RELAY_OFF);   
-    }
+    digitalWrite(relayCharger, RELAY_OFF);   
 
-    if (battSWL == 1 && voltage > 40000)
-    {
-        stateL = RETRIEVE_SERIAL;
-    }
-    else
-    {
-        stateL = IDLE;
-    }
+    stateL = IDLE;
+    stateR = IDLE;
+    triggerFlag = 0;
 }
 
 void initChargingL()
@@ -783,6 +835,8 @@ void initChargingL()
     msgL[readIdx] = '\0';
 
     // Untuk troubleshooting
+    Serial.println();
+    Serial.print("Mode charge baterai kiri: ");
     Serial.println(msgL);
 
     // Apabila respon yang didapat adalah "Lok", pindah ke state 5. Selain itu, kirimkan request.
@@ -823,20 +877,31 @@ void stateChargingL()
 
     if (battSWL == 1 && voltage > 40000)
     {
-      if(current < 0){
-         if(stateR != CHARGING){
-              digitalWrite(relayCharger, RELAY_OFF);
-          }
-          stateL = FINISH_CHARGING;
-          cmd_sendSlotL = 1;  
-      }
-      else{
-          stateL = stateChargingL;
-      }
+        if (DEMO == 1){
+            if(stateR != CHARGING){
+                digitalWrite(relayCharger, RELAY_OFF);
+            }
+            stateL = FINISH_CHARGING;
+            cmd_sendSlotL = 1;  
+        }
+
+        else {
+            if(current < 0){
+                if(stateR != CHARGING){
+                    digitalWrite(relayCharger, RELAY_OFF);
+                }
+                stateL = FINISH_CHARGING;
+                cmd_sendSlotL = 1;  
+            }
+            else{
+                stateL = CHARGING;
+            }
+        }
     }
     else
     {
         stateL = IDLE;
+        digitalWrite(relayCharger, RELAY_OFF);
         cmd_sendSlotL = 1;
     }
 }
@@ -890,17 +955,13 @@ void idleTransitionR()
 
     if (voltage > 40000)
     {
-        if(battSWR == 1){
+        if(battSWR == 1 && stateL != RETRIEVE_SERIAL && stateL != INIT_CHARGING){
             stateR = RETRIEVE_SERIAL;   
         }
     }
     else
     {
-        triggerDetectedR = digitalRead(triggerButton);
-        if (triggerDetectedR == 0)
-        {
-            stateR = TRIGGER;
-        }
+        stateR = IDLE;
     }
 }
 
@@ -975,6 +1036,8 @@ void stateRetrieveSerialR()
 
     serialNumberR[msgIdx] = '\0';
 
+    Serial.println();
+    Serial.print("Serial Number Slot Kanan: ");
     Serial.println(serialNumberR);
 
     // Mengirim request serial number. request dikirimkan dua kali karena ada delay respon dari BMS sebesar satu request
@@ -1091,6 +1154,8 @@ void initChargingR()
 
     msgR[readIdx] = '\0';
 
+    Serial.println();
+    Serial.print("Mode charge baterai kanan: ");
     Serial.println(msgR);
 
     if (battSWR == 1 && voltage > 40000)
@@ -1126,20 +1191,34 @@ void stateChargingR()
 
     if (battSWR == 1 && voltage > 40000)
     {
-      if(current < 0){
-         if(stateL != CHARGING){
-              digitalWrite(relayCharger, RELAY_OFF);
-          }
-          stateR = FINISH_CHARGING;
-          cmd_sendSlotR = 1;  
-      }
-      else{
-          stateR = stateChargingR;
-      }
+        if (DEMO == 1){
+            if(stateL != CHARGING){
+                digitalWrite(relayCharger, RELAY_OFF);
+            }
+            stateR = FINISH_CHARGING;
+            cmd_sendSlotR = 1;  
+        }
+
+        else {
+            if(current < 0){
+                if(stateL != CHARGING){
+                    digitalWrite(relayCharger, RELAY_OFF);
+                }
+                stateR = FINISH_CHARGING;
+                cmd_sendSlotR = 1;  
+            }
+            else{
+                stateR = CHARGING;
+            }
+        }
+
+        
+            
     }
     else
     {
         stateR = IDLE;
+        digitalWrite(relayCharger, RELAY_ON);
         cmd_sendSlotR = 1;
     }
 }
