@@ -3,7 +3,7 @@
 <eagle version="9.6.1">
 <drawing>
 <settings>
-<setting alwaysvectorfont="yes"/>
+<setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="no" altdistance="0.000123031496" altunitdist="mil" altunit="mil"/>
@@ -2710,7 +2710,7 @@ design rules under a new name.</description>
 <attribute name="NAME" x="53.855909375" y="75.07219375" size="0.6096" layer="25" font="vector" ratio="20" rot="R270" align="bottom-center"/>
 <attribute name="VALUE" x="47.074109375" y="75.04679375" size="0.6096" layer="27" font="vector" ratio="20" rot="R270" align="top-center"/>
 </element>
-<element name="330" library="rcl" library_urn="urn:adsk.eagle:library:334" package="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="6k" x="34.742409375" y="62.80399375" smashed="yes">
+<element name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" package="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="6k" x="34.742409375" y="62.80399375" smashed="yes">
 <attribute name="NAME" x="32.202409375" y="64.09939375" size="0.9906" layer="25" ratio="10"/>
 <attribute name="POPULARITY" value="48" x="34.742409375" y="62.80399375" size="1.778" layer="27" display="off"/>
 <attribute name="SPICEPREFIX" value="R" x="34.742409375" y="62.80399375" size="1.778" layer="27" display="off"/>
@@ -2844,7 +2844,7 @@ design rules under a new name.</description>
 <contactref element="DB_R" pad="2"/>
 <contactref element="U$3" pad="GND1"/>
 <contactref element="U$3" pad="GND"/>
-<contactref element="330" pad="1"/>
+<contactref element="R2" pad="1"/>
 <contactref element="GND" pad="1"/>
 <contactref element="GND" pad="2"/>
 <contactref element="GND" pad="3"/>
@@ -3556,7 +3556,7 @@ design rules under a new name.</description>
 </signal>
 <signal name="N$1">
 <contactref element="D4" pad="A"/>
-<contactref element="330" pad="2"/>
+<contactref element="R2" pad="2"/>
 <wire x1="46.99" y1="62.23" x2="38.735" y2="62.23" width="0.3048" layer="1"/>
 <wire x1="47.625" y1="61.595" x2="46.99" y2="62.23" width="0.3048" layer="1"/>
 <wire x1="49.53" y1="63.5" x2="47.625" y2="61.595" width="0.3048" layer="16"/>

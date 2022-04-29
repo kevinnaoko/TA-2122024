@@ -17010,16 +17010,16 @@ high speed</description>
 <pad name="NC" x="6.1" y="6" drill="1.2"/>
 <pad name="COIL2" x="-6.1" y="-6" drill="0.8"/>
 </package>
-<package name="TERMINAL_4P">
-<pad name="P$1" x="0" y="-3.81" drill="1.8542" shape="square"/>
-<pad name="P$2" x="0" y="4.572" drill="1.8542" shape="square"/>
-<wire x1="-2.54" y1="-6.35" x2="9.652" y2="-6.35" width="0.127" layer="21"/>
-<wire x1="9.652" y1="-6.35" x2="9.652" y2="24.892" width="0.127" layer="21"/>
-<wire x1="9.652" y1="24.892" x2="-2.54" y2="24.892" width="0.127" layer="21"/>
-<wire x1="-2.54" y1="24.892" x2="-2.54" y2="-6.35" width="0.127" layer="21"/>
-<text x="7.62" y="5.08" size="1.27" layer="21" rot="R90">TERMINAL</text>
-<pad name="P$3" x="0" y="13.208" drill="1.8542" shape="square" rot="R180"/>
-<pad name="P$4" x="0" y="21.59" drill="1.8542" shape="square" rot="R180"/>
+<package name="TERMINAL_2P">
+<pad name="1" x="0" y="-3.81" drill="1.8542" shape="square"/>
+<pad name="2" x="0" y="4.572" drill="1.8542" shape="square"/>
+<wire x1="-2.54" y1="-8.89" x2="9.652" y2="-8.89" width="0.127" layer="21"/>
+<wire x1="9.652" y1="-8.89" x2="9.652" y2="9.652" width="0.127" layer="21"/>
+<wire x1="9.652" y1="9.652" x2="-2.54" y2="9.652" width="0.127" layer="21"/>
+<wire x1="-2.54" y1="9.652" x2="-2.54" y2="-8.89" width="0.127" layer="21"/>
+<text x="8.89" y="-3.81" size="1.27" layer="21" rot="R90">TERMINAL</text>
+<text x="-2.54" y="-11.43" size="1.27" layer="25">&gt;NAME</text>
+<text x="-2.54" y="-13.97" size="1.27" layer="27">&gt;VALUE</text>
 </package>
 </packages>
 <symbols>
@@ -17063,17 +17063,15 @@ high speed</description>
 <pin name="COIL2" x="-10.16" y="-5.08" visible="off" length="middle" direction="pas"/>
 <pin name="NC" x="10.16" y="5.08" visible="off" length="middle" direction="pas" rot="R180"/>
 </symbol>
-<symbol name="TERMINAL_4P">
-<wire x1="-7.62" y1="12.7" x2="5.08" y2="12.7" width="0.254" layer="94"/>
-<wire x1="5.08" y1="12.7" x2="5.08" y2="-12.7" width="0.254" layer="94"/>
-<wire x1="5.08" y1="-12.7" x2="-7.62" y2="-12.7" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="-12.7" x2="-7.62" y2="12.7" width="0.254" layer="94"/>
-<pin name="IN_1" x="-12.7" y="-7.62"/>
-<pin name="IN_2" x="-12.7" y="-2.54"/>
-<text x="-7.62" y="-15.24" size="1.27" layer="95">&gt;NAME</text>
-<text x="-7.62" y="-17.78" size="1.27" layer="96">&gt;VALUES</text>
-<pin name="IN_3" x="-12.7" y="2.54"/>
-<pin name="IN_4" x="-12.7" y="7.62"/>
+<symbol name="TERMINAL_2P">
+<wire x1="-10.16" y1="5.08" x2="2.54" y2="5.08" width="0.254" layer="94"/>
+<wire x1="2.54" y1="5.08" x2="2.54" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-2.54" x2="-10.16" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-2.54" x2="-10.16" y2="5.08" width="0.254" layer="94"/>
+<pin name="IN_1" x="-17.78" y="0"/>
+<pin name="IN_2" x="-17.78" y="2.54"/>
+<text x="-10.16" y="-7.62" size="1.27" layer="96">&gt;VALUE</text>
+<text x="-10.16" y="-5.08" size="1.27" layer="95">&gt;NAME</text>
 </symbol>
 </symbols>
 <devicesets>
@@ -17104,17 +17102,15 @@ high speed</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="TERMINAL_4P">
+<deviceset name="TERMINAL_2P">
 <gates>
-<gate name="G$1" symbol="TERMINAL_4P" x="0" y="0"/>
+<gate name="G$1" symbol="TERMINAL_2P" x="0" y="0"/>
 </gates>
 <devices>
-<device name="" package="TERMINAL_4P">
+<device name="" package="TERMINAL_2P">
 <connects>
-<connect gate="G$1" pin="IN_1" pad="P$1"/>
-<connect gate="G$1" pin="IN_2" pad="P$2"/>
-<connect gate="G$1" pin="IN_3" pad="P$3"/>
-<connect gate="G$1" pin="IN_4" pad="P$4"/>
+<connect gate="G$1" pin="IN_1" pad="1"/>
+<connect gate="G$1" pin="IN_2" pad="2"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -20154,13 +20150,14 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <part name="U$3" library="sim800v2" deviceset="SIM800V2" device=""/>
 <part name="D4" library="Sparkfun_LED" deviceset="LED" device="5MM" value="LED_G"/>
 <part name="330" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="6k"/>
-<part name="U$4" library="TA_library" deviceset="TERMINAL_4P" device=""/>
 <part name="GND" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X5" device="" package3d_urn="urn:adsk.eagle:package:22469/2" value="GND"/>
 <part name="5V" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X5" device="" package3d_urn="urn:adsk.eagle:package:22469/2" value="5V"/>
 <part name="LED_L" library="JST XH Connectors v1-0" deviceset="JST-XH-04-PIN" device="-LONG-PAD"/>
 <part name="LED_R" library="JST XH Connectors v1-0" deviceset="JST-XH-04-PIN" device="-LONG-PAD"/>
 <part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E3.5-10" package3d_urn="urn:adsk.eagle:package:23351/1" value="2mF"/>
 <part name="CHARGER" library="Rembrandt Electronics - JST XH Connectors v1-0" deviceset="JST-XH-10-PIN" device="-LONG-PAD"/>
+<part name="OUT" library="TA_library" deviceset="TERMINAL_2P" device=""/>
+<part name="IN" library="TA_library" deviceset="TERMINAL_2P" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -20273,9 +20270,6 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <instance part="330" gate="G$1" x="-205.74" y="198.12" smashed="yes" rot="R90">
 <attribute name="NAME" x="-207.2386" y="194.31" size="1.778" layer="95" rot="R90"/>
 </instance>
-<instance part="U$4" gate="G$1" x="-33.02" y="220.98" smashed="yes">
-<attribute name="NAME" x="-40.64" y="205.74" size="1.27" layer="95"/>
-</instance>
 <instance part="GND" gate="A" x="-27.94" y="182.88" smashed="yes">
 <attribute name="NAME" x="-34.29" y="191.135" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-34.29" y="172.72" size="1.778" layer="96"/>
@@ -20342,6 +20336,14 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 </instance>
 <instance part="CHARGER" gate="-10" x="-124.46" y="48.26" smashed="yes">
 <attribute name="NAME" x="-121.92" y="47.498" size="1.524" layer="95"/>
+</instance>
+<instance part="OUT" gate="G$1" x="-76.2" y="228.6" smashed="yes">
+<attribute name="VALUE" x="-86.36" y="220.98" size="1.27" layer="96"/>
+<attribute name="NAME" x="-86.36" y="223.52" size="1.27" layer="95"/>
+</instance>
+<instance part="IN" gate="G$1" x="-76.2" y="213.36" smashed="yes">
+<attribute name="VALUE" x="-86.36" y="205.74" size="1.27" layer="96"/>
+<attribute name="NAME" x="-86.36" y="208.28" size="1.27" layer="95"/>
 </instance>
 </instances>
 <busses>
@@ -20963,9 +20965,9 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <label x="-132.08" y="223.52" size="1.27" layer="95" xref="yes"/>
 </segment>
 <segment>
-<pinref part="U$4" gate="G$1" pin="IN_4"/>
-<wire x1="-45.72" y1="228.6" x2="-50.8" y2="228.6" width="0.1524" layer="91"/>
-<label x="-50.8" y="228.6" size="1.27" layer="95" rot="R180" xref="yes"/>
+<pinref part="OUT" gate="G$1" pin="IN_2"/>
+<wire x1="-93.98" y1="231.14" x2="-96.52" y2="231.14" width="0.1524" layer="91"/>
+<label x="-96.52" y="231.14" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="N$23" class="0">
@@ -21042,20 +21044,20 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 </net>
 <net name="AC+" class="0">
 <segment>
-<pinref part="U$4" gate="G$1" pin="IN_3"/>
-<wire x1="-45.72" y1="223.52" x2="-50.8" y2="223.52" width="0.1524" layer="91"/>
-<label x="-50.8" y="223.52" size="1.27" layer="95" rot="R180" xref="yes"/>
-</segment>
-<segment>
 <pinref part="HI_LINK1" gate="G$1" pin="AC+"/>
 <wire x1="-118.84" y1="153.08" x2="-121.92" y2="153.08" width="0.1524" layer="91"/>
 <wire x1="-121.92" y1="153.08" x2="-121.92" y2="152.4" width="0.1524" layer="91"/>
 <label x="-121.92" y="152.4" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="U$4" gate="G$1" pin="IN_2"/>
-<wire x1="-45.72" y1="218.44" x2="-50.8" y2="218.44" width="0.1524" layer="91"/>
-<label x="-50.8" y="218.44" size="1.27" layer="95" rot="R180" xref="yes"/>
+<pinref part="IN" gate="G$1" pin="IN_2"/>
+<wire x1="-93.98" y1="215.9" x2="-96.52" y2="215.9" width="0.1524" layer="91"/>
+<label x="-96.52" y="215.9" size="1.27" layer="95" rot="R180" xref="yes"/>
+</segment>
+<segment>
+<pinref part="OUT" gate="G$1" pin="IN_1"/>
+<wire x1="-93.98" y1="228.6" x2="-96.52" y2="228.6" width="0.1524" layer="91"/>
+<label x="-96.52" y="228.6" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="AC-" class="0">
@@ -21071,9 +21073,9 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <label x="-121.92" y="144.78" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="U$4" gate="G$1" pin="IN_1"/>
-<wire x1="-45.72" y1="213.36" x2="-50.8" y2="213.36" width="0.1524" layer="91"/>
-<label x="-50.8" y="213.36" size="1.27" layer="95" rot="R180" xref="yes"/>
+<pinref part="IN" gate="G$1" pin="IN_1"/>
+<wire x1="-93.98" y1="213.36" x2="-96.52" y2="213.36" width="0.1524" layer="91"/>
+<label x="-96.52" y="213.36" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="N$2" class="0">

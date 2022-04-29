@@ -1367,14 +1367,15 @@
 <library name="Hi Link">
 <packages>
 <package name="HI_LINK">
-<wire x1="0" y1="0" x2="57" y2="0" width="0.127" layer="21"/>
-<wire x1="57" y1="0" x2="57" y2="33" width="0.127" layer="21"/>
-<wire x1="57" y1="33" x2="0" y2="33" width="0.127" layer="21"/>
-<text x="27" y="16" size="1.27" layer="25">Hi Link</text>
-<pad name="OUT-" x="54" y="30" drill="2.54" diameter="5"/>
-<pad name="OUT+" x="54" y="3" drill="2.54" diameter="5"/>
-<pad name="AC-" x="3" y="12" drill="2.54" diameter="5"/>
-<pad name="AC+" x="3" y="21" drill="2.54" diameter="5"/>
+<wire x1="-26.67" y1="-16.51" x2="30.33" y2="-16.51" width="0.127" layer="21"/>
+<wire x1="30.33" y1="-16.51" x2="30.33" y2="16.49" width="0.127" layer="21"/>
+<wire x1="30.33" y1="16.49" x2="-26.67" y2="16.49" width="0.127" layer="21"/>
+<text x="-0.94" y="-14.48" size="1.27" layer="25">Hi Link</text>
+<pad name="OUT-" x="27.33" y="13.49" drill="2.54" diameter="5"/>
+<pad name="OUT+" x="27.33" y="-13.51" drill="2.54" diameter="5"/>
+<pad name="AC-" x="-23.67" y="-4.51" drill="2.54" diameter="5"/>
+<pad name="AC+" x="-23.67" y="4.49" drill="2.54" diameter="5"/>
+<wire x1="-26.67" y1="16.51" x2="-26.67" y2="-16.51" width="0.1524" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -19825,7 +19826,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="X6" library="JST XH Connectors v1-0" deviceset="JST-XH-04-PIN" device="-LONG-PAD"/>
 <part name="X8" library="JST XH Connectors v1-0" deviceset="JST-XH-03-PIN" device="-LONG-PAD"/>
 <part name="JP2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-2X4" device="" package3d_urn="urn:adsk.eagle:package:22461/2"/>
-<part name="X9" library="JST XH Connectors v1-0" deviceset="JST-XH-02-PIN" device="-LONG-PAD"/>
+<part name="OVR_BMS" library="JST XH Connectors v1-0" deviceset="JST-XH-02-PIN" device="-LONG-PAD"/>
 <part name="X10" library="JST XH Connectors v1-0" deviceset="JST-XH-02-PIN" device="-LONG-PAD"/>
 <part name="X11" library="JST XH Connectors v1-0" deviceset="JST-XH-02-PIN" device="-LONG-PAD"/>
 <part name="X12" library="JST XH Connectors v1-0" deviceset="JST-XH-02-PIN" device="-LONG-PAD"/>
@@ -19927,10 +19928,10 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <instance part="JP2" gate="A" x="-147.32" y="190.5" smashed="yes">
 <attribute name="VALUE" x="-153.67" y="182.88" size="1.778" layer="96"/>
 </instance>
-<instance part="X9" gate="-2" x="-30.48" y="124.46" smashed="yes">
+<instance part="OVR_BMS" gate="-2" x="-30.48" y="124.46" smashed="yes">
 <attribute name="NAME" x="-27.94" y="123.698" size="1.524" layer="95"/>
 </instance>
-<instance part="X9" gate="-1" x="-30.48" y="127" smashed="yes">
+<instance part="OVR_BMS" gate="-1" x="-30.48" y="127" smashed="yes">
 <attribute name="NAME" x="-27.94" y="126.238" size="1.524" layer="95"/>
 </instance>
 <instance part="X10" gate="-2" x="-30.48" y="116.84" smashed="yes">
@@ -20140,7 +20141,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="-172.72" y="124.46" size="1.27" layer="95" rot="R270" xref="yes"/>
 </segment>
 <segment>
-<pinref part="X9" gate="-2" pin="S"/>
+<pinref part="OVR_BMS" gate="-2" pin="S"/>
 <wire x1="-33.02" y1="124.46" x2="-35.56" y2="124.46" width="0.1524" layer="91"/>
 <label x="-35.56" y="124.46" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
@@ -20423,7 +20424,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </net>
 <net name="OVERRIDE_BMS" class="0">
 <segment>
-<pinref part="X9" gate="-1" pin="S"/>
+<pinref part="OVR_BMS" gate="-1" pin="S"/>
 <wire x1="-33.02" y1="127" x2="-35.56" y2="127" width="0.1524" layer="91"/>
 <label x="-35.56" y="127" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>

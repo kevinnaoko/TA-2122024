@@ -2963,7 +2963,22 @@ design rules under a new name.</description>
 <wire x1="8.255" y1="79.375" x2="8.255" y2="84.455" width="0.3048" layer="1"/>
 <wire x1="7.62" y1="102.235" x2="8.255" y2="102.1334" width="0.3048" layer="1"/>
 <wire x1="8.255" y1="79.375" x2="8.763" y2="79.248" width="0.3048" layer="1"/>
-<wire x1="29.845" y1="116.84" x2="29.845" y2="110.49" width="0" layer="19" extent="1-16"/>
+<polygon width="0.1524" layer="1" isolate="1.6764">
+<vertex x="-2.54" y="135.89"/>
+<vertex x="86.36" y="135.89"/>
+<vertex x="87.63" y="134.62"/>
+<vertex x="87.63" y="-2.54"/>
+<vertex x="88.9" y="-3.81"/>
+<vertex x="-2.54" y="-3.81"/>
+<vertex x="-3.81" y="-2.54"/>
+<vertex x="-3.81" y="134.62"/>
+</polygon>
+<polygon width="0.1524" layer="16" isolate="1.6764">
+<vertex x="-3.81" y="137.16"/>
+<vertex x="88.9" y="137.16"/>
+<vertex x="88.9" y="-5.08"/>
+<vertex x="-3.81" y="-5.08"/>
+</polygon>
 </signal>
 <signal name="5V">
 <contactref element="C2" pad="1"/>

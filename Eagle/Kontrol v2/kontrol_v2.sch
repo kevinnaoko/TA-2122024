@@ -20149,7 +20149,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <part name="JP3" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X16" device="" package3d_urn="urn:adsk.eagle:package:22432/2"/>
 <part name="U$3" library="sim800v2" deviceset="SIM800V2" device=""/>
 <part name="D4" library="Sparkfun_LED" deviceset="LED" device="5MM" value="LED_G"/>
-<part name="330" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="6k"/>
+<part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="6k"/>
 <part name="GND" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X5" device="" package3d_urn="urn:adsk.eagle:package:22469/2" value="GND"/>
 <part name="5V" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X5" device="" package3d_urn="urn:adsk.eagle:package:22469/2" value="5V"/>
 <part name="LED_L" library="JST XH Connectors v1-0" deviceset="JST-XH-04-PIN" device="-LONG-PAD"/>
@@ -20267,7 +20267,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <instance part="D4" gate="D1" x="-205.74" y="208.28" smashed="yes" rot="R180">
 <attribute name="VALUE" x="-207.645" y="212.852" size="1.778" layer="96" font="vector" rot="R270" align="top-left"/>
 </instance>
-<instance part="330" gate="G$1" x="-205.74" y="198.12" smashed="yes" rot="R90">
+<instance part="R2" gate="G$1" x="-205.74" y="198.12" smashed="yes" rot="R90">
 <attribute name="NAME" x="-207.2386" y="194.31" size="1.778" layer="95" rot="R90"/>
 </instance>
 <instance part="GND" gate="A" x="-27.94" y="182.88" smashed="yes">
@@ -20488,7 +20488,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <label x="-165.1" y="58.42" size="1.27" layer="95" xref="yes"/>
 </segment>
 <segment>
-<pinref part="330" gate="G$1" pin="1"/>
+<pinref part="R2" gate="G$1" pin="1"/>
 <wire x1="-205.74" y1="193.04" x2="-205.74" y2="190.5" width="0.1524" layer="91"/>
 <label x="-205.74" y="190.5" size="1.27" layer="95" rot="R270" xref="yes"/>
 </segment>
@@ -20987,7 +20987,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <net name="N$1" class="0">
 <segment>
 <pinref part="D4" gate="D1" pin="A"/>
-<pinref part="330" gate="G$1" pin="2"/>
+<pinref part="R2" gate="G$1" pin="2"/>
 <wire x1="-205.74" y1="205.74" x2="-205.74" y2="203.2" width="0.1524" layer="91"/>
 </segment>
 </net>

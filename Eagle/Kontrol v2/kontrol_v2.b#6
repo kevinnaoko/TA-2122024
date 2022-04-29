@@ -3,7 +3,7 @@
 <eagle version="9.6.1">
 <drawing>
 <settings>
-<setting alwaysvectorfont="no"/>
+<setting alwaysvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="no" altdistance="0.000123031496" altunitdist="mil" altunit="mil"/>
@@ -176,6 +176,9 @@
 <dimension x1="81.28" y1="129.54" x2="81.28" y2="2.54" x3="96.52" y3="66.04" textsize="1.778" layer="1" dtype="diameter"/>
 <dimension x1="2.54" y1="2.54" x2="81.28" y2="2.54" x3="41.91" y3="-12.7" textsize="1.778" layer="1" dtype="diameter"/>
 <dimension x1="2.54" y1="2.54" x2="2.54" y2="129.54" x3="-24.13" y3="66.04" textsize="1.778" layer="1" dtype="diameter"/>
+<dimension x1="85.088671875" y1="132.77946875" x2="85.09" y2="0" x3="104.139375" y3="66.389925" textsize="1.778" layer="1" dtype="diameter"/>
+<dimension x1="0" y1="-2.54" x2="84.34148125" y2="-2.47276875" x3="42.182940625" y3="-17.812178125" textsize="1.778" layer="1" dtype="diameter"/>
+<dimension x1="0" y1="0" x2="3.81" y2="3.81" x3="5.08" y3="-1.27" textsize="1.778" layer="1" dtype="diameter"/>
 </plain>
 <libraries>
 <library name="pinhead" urn="urn:adsk.eagle:library:325">
