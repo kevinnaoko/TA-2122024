@@ -8,34 +8,34 @@
 </settings>
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="yes" active="no"/>
-<layer number="2" name="Route2" color="16" fill="1" visible="yes" active="no"/>
-<layer number="3" name="Route3" color="17" fill="1" visible="yes" active="no"/>
-<layer number="4" name="Route4" color="18" fill="1" visible="yes" active="no"/>
-<layer number="5" name="Route5" color="19" fill="1" visible="yes" active="no"/>
-<layer number="6" name="Route6" color="25" fill="1" visible="yes" active="no"/>
-<layer number="7" name="Route7" color="26" fill="1" visible="yes" active="no"/>
-<layer number="8" name="Route8" color="27" fill="1" visible="yes" active="no"/>
-<layer number="9" name="Route9" color="28" fill="1" visible="yes" active="no"/>
-<layer number="10" name="Route10" color="29" fill="1" visible="yes" active="no"/>
-<layer number="11" name="Route11" color="30" fill="1" visible="yes" active="no"/>
-<layer number="12" name="Route12" color="20" fill="1" visible="yes" active="no"/>
-<layer number="13" name="Route13" color="21" fill="1" visible="yes" active="no"/>
-<layer number="14" name="Route14" color="22" fill="1" visible="yes" active="no"/>
-<layer number="15" name="Route15" color="23" fill="1" visible="yes" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="no"/>
-<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="no"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="no"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="no"/>
-<layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="no"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="no"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="no"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="no"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="no"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="no"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="no"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="no"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="no"/>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
+<layer number="2" name="Route2" color="16" fill="1" visible="no" active="no"/>
+<layer number="3" name="Route3" color="17" fill="1" visible="no" active="no"/>
+<layer number="4" name="Route4" color="18" fill="1" visible="no" active="no"/>
+<layer number="5" name="Route5" color="19" fill="1" visible="no" active="no"/>
+<layer number="6" name="Route6" color="25" fill="1" visible="no" active="no"/>
+<layer number="7" name="Route7" color="26" fill="1" visible="no" active="no"/>
+<layer number="8" name="Route8" color="27" fill="1" visible="no" active="no"/>
+<layer number="9" name="Route9" color="28" fill="1" visible="no" active="no"/>
+<layer number="10" name="Route10" color="29" fill="1" visible="no" active="no"/>
+<layer number="11" name="Route11" color="30" fill="1" visible="no" active="no"/>
+<layer number="12" name="Route12" color="20" fill="1" visible="no" active="no"/>
+<layer number="13" name="Route13" color="21" fill="1" visible="no" active="no"/>
+<layer number="14" name="Route14" color="22" fill="1" visible="no" active="no"/>
+<layer number="15" name="Route15" color="23" fill="1" visible="no" active="no"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="no" active="no"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="no" active="no"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="no"/>
+<layer number="20" name="Dimension" color="24" fill="1" visible="no" active="no"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="no"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="no"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="no"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="no"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="no"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="no"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="no" active="no"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="no" active="no"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="no"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="no"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="no"/>
@@ -44,8 +44,8 @@
 <layer number="34" name="bFinish" color="6" fill="6" visible="no" active="no"/>
 <layer number="35" name="tGlue" color="7" fill="4" visible="no" active="no"/>
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="no"/>
-<layer number="37" name="tTest" color="7" fill="1" visible="yes" active="no"/>
-<layer number="38" name="bTest" color="7" fill="1" visible="yes" active="no"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="no" active="no"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="no" active="no"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="no"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="no"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="no"/>
@@ -53,19 +53,19 @@
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="no"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="no"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="no"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="no"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="no"/>
-<layer number="48" name="Document" color="7" fill="1" visible="yes" active="no"/>
-<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="no"/>
-<layer number="50" name="dxf" color="7" fill="1" visible="yes" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="no"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="no"/>
-<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="yes" active="no"/>
-<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="yes" active="no"/>
-<layer number="56" name="wert" color="7" fill="1" visible="yes" active="no"/>
-<layer number="57" name="tCAD" color="7" fill="1" visible="yes" active="no"/>
-<layer number="59" name="tCarbon" color="7" fill="1" visible="yes" active="no"/>
-<layer number="60" name="bCarbon" color="7" fill="1" visible="yes" active="no"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="no"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="no" active="no"/>
+<layer number="48" name="Document" color="7" fill="1" visible="no" active="no"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="no" active="no"/>
+<layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="no"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="no"/>
+<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
+<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
+<layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
+<layer number="57" name="tCAD" color="7" fill="1" visible="no" active="no"/>
+<layer number="59" name="tCarbon" color="7" fill="1" visible="no" active="no"/>
+<layer number="60" name="bCarbon" color="7" fill="1" visible="no" active="no"/>
 <layer number="88" name="SimResults" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="89" name="SimProbes" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
@@ -22471,6 +22471,109 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 </deviceset>
 </devicesets>
 </library>
+<library name="JST XH Connectors v1-0">
+<packages>
+<package name="JST-XH-03-PACKAGE-LONG-PAD">
+<description>&lt;b&gt;JST XH Connector Long Pads (Package)&lt;/b&gt;&lt;p&gt;
+
+Wire to board connector.
+
+Pitch: 2,54 mm, (0.100")&lt;p&gt;
+Number of pins: &lt;b&gt;3&lt;/b&gt;&lt;b&gt;&lt;P&gt;
+
+&lt;b&gt;Created by Rembrandt Electronics&lt;/b&gt;&lt;p&gt;
+&lt;b&gt;www.rembrandtelectronics.com&lt;/b&gt;&lt;p&gt;</description>
+<wire x1="4.95" y1="-2.3575" x2="4.95" y2="3.3925" width="0.254" layer="21"/>
+<wire x1="4.95" y1="3.3925" x2="-4.95" y2="3.3925" width="0.254" layer="21"/>
+<wire x1="-4.95" y1="3.3925" x2="-4.95" y2="-2.3575" width="0.254" layer="21"/>
+<wire x1="-4.95" y1="-2.3575" x2="4.95" y2="-2.3575" width="0.254" layer="21"/>
+<pad name="3" x="2.54" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="2" x="0" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="1" x="-2.54" y="0" drill="1.016" shape="long" rot="R90"/>
+<text x="-5.555" y="-2.04" size="1.016" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<text x="-4.6025" y="3.8925" size="1.016" layer="27" ratio="10">&gt;VALUE</text>
+<text x="-4.1675" y="-1.4875" size="1.016" layer="51" ratio="10">1</text>
+<wire x1="-2.6" y1="-2.3" x2="-2.6" y2="-1.8" width="0.254" layer="21"/>
+<wire x1="2.5" y1="-2.3" x2="2.5" y2="-1.8" width="0.254" layer="21"/>
+</package>
+<package name="JST-XH-03-PACKAGE-ROUND-PAD">
+<description>&lt;b&gt;JST XH Connector Round Pads (Package)&lt;/b&gt;&lt;p&gt;
+
+Wire to board connector.
+
+Pitch: 2,54 mm, (0.100")&lt;p&gt;
+Number of pins: &lt;b&gt;3&lt;/b&gt;&lt;b&gt;&lt;P&gt;
+
+&lt;b&gt;Created by Rembrandt Electronics&lt;/b&gt;&lt;p&gt;
+&lt;b&gt;www.rembrandtelectronics.com&lt;/b&gt;&lt;p&gt;</description>
+<wire x1="4.95" y1="-2.3575" x2="4.95" y2="3.3925" width="0.254" layer="21"/>
+<wire x1="4.95" y1="3.3925" x2="-4.95" y2="3.3925" width="0.254" layer="21"/>
+<wire x1="-4.95" y1="3.3925" x2="-4.95" y2="-2.3575" width="0.254" layer="21"/>
+<wire x1="-4.95" y1="-2.3575" x2="4.95" y2="-2.3575" width="0.254" layer="21"/>
+<pad name="3" x="2.54" y="0" drill="1.016" rot="R90"/>
+<pad name="2" x="0" y="0" drill="1.016" rot="R90"/>
+<pad name="1" x="-2.54" y="0" drill="1.016" rot="R90"/>
+<text x="-5.555" y="-2.04" size="1.016" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<text x="-4.6025" y="3.8925" size="1.016" layer="27" ratio="10">&gt;VALUE</text>
+<text x="-4.1675" y="-1.4875" size="1.016" layer="51" ratio="10">1</text>
+<wire x1="-2.6" y1="-2.3" x2="-2.6" y2="-1.8" width="0.254" layer="21"/>
+<wire x1="2.5" y1="-2.3" x2="2.5" y2="-1.8" width="0.254" layer="21"/>
+</package>
+</packages>
+<symbols>
+<symbol name="MV">
+<wire x1="1.27" y1="0" x2="0" y2="0" width="0.6096" layer="94"/>
+<text x="2.54" y="-0.762" size="1.524" layer="95">&gt;NAME</text>
+<text x="-0.762" y="1.397" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="S" x="-2.54" y="0" visible="off" length="short" direction="pas"/>
+</symbol>
+<symbol name="M">
+<wire x1="1.27" y1="0" x2="0" y2="0" width="0.6096" layer="94"/>
+<text x="2.54" y="-0.762" size="1.524" layer="95">&gt;NAME</text>
+<pin name="S" x="-2.54" y="0" visible="off" length="short" direction="pas"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="JST-XH-03-PIN" prefix="X">
+<description>&lt;b&gt;JST XH Connector 2 Pin&lt;/b&gt;&lt;p&gt;
+
+Wire to board connector.
+
+Pitch: 2,54 mm, (0.100")&lt;p&gt;
+Number of pins: &lt;b&gt;3&lt;/b&gt;&lt;b&gt;&lt;P&gt;
+
+&lt;b&gt;Created by Rembrandt Electronics&lt;/b&gt;&lt;p&gt;
+&lt;b&gt;www.rembrandtelectronics.com&lt;/b&gt;&lt;p&gt;</description>
+<gates>
+<gate name="-1" symbol="MV" x="2.54" y="7.62" addlevel="always" swaplevel="1"/>
+<gate name="-2" symbol="M" x="2.54" y="5.08" addlevel="always" swaplevel="1"/>
+<gate name="-3" symbol="M" x="2.54" y="2.54" addlevel="always" swaplevel="1"/>
+</gates>
+<devices>
+<device name="-LONG-PAD" package="JST-XH-03-PACKAGE-LONG-PAD">
+<connects>
+<connect gate="-1" pin="S" pad="1"/>
+<connect gate="-2" pin="S" pad="2"/>
+<connect gate="-3" pin="S" pad="3"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="-ROUND-PAD" package="JST-XH-03-PACKAGE-ROUND-PAD">
+<connects>
+<connect gate="-1" pin="S" pad="1"/>
+<connect gate="-2" pin="S" pad="2"/>
+<connect gate="-3" pin="S" pad="3"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -22520,13 +22623,13 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <part name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="1k"/>
 <part name="SOURCE" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
 <part name="DRAIN" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
-<part name="U$1" library="TA_library" deviceset="TERMINAL_2P" device="" value="DRAIN_JUMP"/>
-<part name="U$2" library="TA_library" deviceset="TERMINAL_2P" device="" value="SOURCE_JUMP"/>
-<part name="U$3" library="TA_library" deviceset="TERMINAL_2P" device="" value="NMOS_SNUB_JUMP"/>
-<part name="U$4" library="TA_library" deviceset="TERMINAL_2P" device="" value="DIODE_SNUB_JUMP"/>
-<part name="U$5" library="TA_library" deviceset="TERMINAL_2P" device="" value="DC_OUTPUT"/>
-<part name="U$6" library="TA_library" deviceset="TERMINAL_2P" device="" value="INDUCTOR_JUMP"/>
-<part name="U$7" library="TA_library" deviceset="TERMINAL_2P" device="" value="AC_INPUT"/>
+<part name="DRAIN_JUMP" library="TA_library" deviceset="TERMINAL_2P" device="" value="DRAIN_JUMP"/>
+<part name="SOURCE_JUMP" library="TA_library" deviceset="TERMINAL_2P" device="" value="SOURCE_JUMP"/>
+<part name="NMOS_SNUB_JUMP" library="TA_library" deviceset="TERMINAL_2P" device="" value="NMOS_SNUB_JUMP"/>
+<part name="DIODE_SNUB_JUMP" library="TA_library" deviceset="TERMINAL_2P" device="" value="DIODE_SNUB_JUMP"/>
+<part name="DC_OUTPUT" library="TA_library" deviceset="TERMINAL_2P" device="" value="DC_OUTPUT"/>
+<part name="INDUCTOR_JUMP" library="TA_library" deviceset="TERMINAL_2P" device="" value="INDUCTOR_JUMP"/>
+<part name="AC_INPUT" library="TA_library" deviceset="TERMINAL_2P" device="" value="AC_INPUT"/>
 <part name="R10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="1.1M"/>
 <part name="R11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="100k"/>
 <part name="R12" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="1.1M"/>
@@ -22535,7 +22638,7 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <part name="R15" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="0207/10" package3d_urn="urn:adsk.eagle:package:23491/2" value="10k"/>
 <part name="R16" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2" value="100k"/>
 <part name="D7" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="1N581*" device="" package3d_urn="urn:adsk.eagle:package:43421/1" technology="7-B"/>
-<part name="U$8" library="TA_library" deviceset="TERMINAL_2P" device="" value="ACS_INPUTS"/>
+<part name="ACS_INPUTS" library="TA_library" deviceset="TERMINAL_2P" device="" value="ACS_INPUTS"/>
 <part name="ACS712_ALT" library="TA_library" deviceset="ACS712" device="A"/>
 <part name="ACS712" library="TA_library" deviceset="ACS712" device="B"/>
 <part name="ESP" library="Rembrandt Electronics - JST XH Connectors v1-0" deviceset="JST-XH-10-PIN" device="-LONG-PAD"/>
@@ -22551,6 +22654,7 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <part name="P_5V" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
 <part name="P_IR" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
 <part name="GND4" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
+<part name="TEMP" library="JST XH Connectors v1-0" deviceset="JST-XH-03-PIN" device="-LONG-PAD"/>
 </parts>
 <sheets>
 <sheet>
@@ -22676,32 +22780,28 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <attribute name="NAME" x="1.27" y="28.575" size="1.778" layer="95"/>
 <attribute name="VALUE" x="1.27" y="17.78" size="1.778" layer="96"/>
 </instance>
-<instance part="U$1" gate="G$1" x="-25.4" y="-22.86" smashed="yes">
+<instance part="DRAIN_JUMP" gate="G$1" x="-25.4" y="-22.86" smashed="yes">
 <attribute name="VALUE" x="-35.56" y="-30.48" size="1.27" layer="96"/>
 <attribute name="NAME" x="-35.56" y="-27.94" size="1.27" layer="95"/>
 </instance>
-<instance part="U$2" gate="G$1" x="38.1" y="-33.02" smashed="yes">
+<instance part="SOURCE_JUMP" gate="G$1" x="38.1" y="-33.02" smashed="yes">
 <attribute name="VALUE" x="27.94" y="-40.64" size="1.27" layer="96"/>
 <attribute name="NAME" x="27.94" y="-38.1" size="1.27" layer="95"/>
 </instance>
-<instance part="U$3" gate="G$1" x="-68.58" y="20.32" smashed="yes">
-<attribute name="VALUE" x="-78.74" y="12.7" size="1.27" layer="96"/>
+<instance part="NMOS_SNUB_JUMP" gate="G$1" x="-68.58" y="20.32" smashed="yes">
 <attribute name="NAME" x="-78.74" y="15.24" size="1.27" layer="95"/>
 </instance>
-<instance part="U$4" gate="G$1" x="-68.58" y="35.56" smashed="yes">
-<attribute name="VALUE" x="-78.74" y="27.94" size="1.27" layer="96"/>
+<instance part="DIODE_SNUB_JUMP" gate="G$1" x="-68.58" y="35.56" smashed="yes">
 <attribute name="NAME" x="-78.74" y="30.48" size="1.27" layer="95"/>
 </instance>
-<instance part="U$5" gate="G$1" x="-68.58" y="50.8" smashed="yes">
-<attribute name="VALUE" x="-78.74" y="43.18" size="1.27" layer="96"/>
+<instance part="DC_OUTPUT" gate="G$1" x="-68.58" y="50.8" smashed="yes">
 <attribute name="NAME" x="-78.74" y="45.72" size="1.27" layer="95"/>
 </instance>
-<instance part="U$6" gate="G$1" x="119.38" y="-33.02" smashed="yes">
+<instance part="INDUCTOR_JUMP" gate="G$1" x="119.38" y="-33.02" smashed="yes">
 <attribute name="VALUE" x="109.22" y="-40.64" size="1.27" layer="96"/>
 <attribute name="NAME" x="109.22" y="-38.1" size="1.27" layer="95"/>
 </instance>
-<instance part="U$7" gate="G$1" x="-68.58" y="66.04" smashed="yes">
-<attribute name="VALUE" x="-78.74" y="58.42" size="1.27" layer="96"/>
+<instance part="AC_INPUT" gate="G$1" x="-68.58" y="66.04" smashed="yes">
 <attribute name="NAME" x="-78.74" y="60.96" size="1.27" layer="95"/>
 </instance>
 <instance part="R10" gate="G$1" x="302.26" y="-35.56" smashed="yes" rot="R90">
@@ -22736,7 +22836,7 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <attribute name="NAME" x="315.595" y="-60.706" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="320.929" y="-60.706" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="U$8" gate="G$1" x="157.48" y="-33.02" smashed="yes">
+<instance part="ACS_INPUTS" gate="G$1" x="157.48" y="-33.02" smashed="yes">
 <attribute name="VALUE" x="147.32" y="-40.64" size="1.27" layer="96"/>
 <attribute name="NAME" x="147.32" y="-38.1" size="1.27" layer="95"/>
 </instance>
@@ -22827,6 +22927,15 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <attribute name="NAME" x="-34.29" y="33.655" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-34.29" y="22.86" size="1.778" layer="96"/>
 </instance>
+<instance part="TEMP" gate="-1" x="48.26" y="38.1" smashed="yes">
+<attribute name="NAME" x="50.8" y="37.338" size="1.524" layer="95"/>
+</instance>
+<instance part="TEMP" gate="-2" x="48.26" y="35.56" smashed="yes">
+<attribute name="NAME" x="50.8" y="34.798" size="1.524" layer="95"/>
+</instance>
+<instance part="TEMP" gate="-3" x="48.26" y="33.02" smashed="yes">
+<attribute name="NAME" x="50.8" y="32.258" size="1.524" layer="95"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -22901,12 +23010,12 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <junction x="139.7" y="68.58"/>
 </segment>
 <segment>
-<pinref part="U$4" gate="G$1" pin="IN_1"/>
+<pinref part="DIODE_SNUB_JUMP" gate="G$1" pin="IN_1"/>
 <wire x1="-86.36" y1="35.56" x2="-88.9" y2="35.56" width="0.1524" layer="91"/>
 <label x="-88.9" y="35.56" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="U$5" gate="G$1" pin="IN_1"/>
+<pinref part="DC_OUTPUT" gate="G$1" pin="IN_1"/>
 <wire x1="-86.36" y1="50.8" x2="-88.9" y2="50.8" width="0.1524" layer="91"/>
 <label x="-88.9" y="50.8" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
@@ -22973,6 +23082,11 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <junction x="-38.1" y="30.48"/>
 <junction x="-38.1" y="40.64"/>
 </segment>
+<segment>
+<pinref part="TEMP" gate="-3" pin="S"/>
+<wire x1="45.72" y1="33.02" x2="43.18" y2="33.02" width="0.1524" layer="91"/>
+<label x="43.18" y="33.02" size="1.27" layer="95" rot="R180" xref="yes"/>
+</segment>
 </net>
 <net name="5V" class="0">
 <segment>
@@ -23000,6 +23114,11 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <pinref part="ESP" gate="-2" pin="S"/>
 <wire x1="45.72" y1="68.58" x2="43.18" y2="68.58" width="0.1524" layer="91"/>
 <label x="43.18" y="68.58" size="1.27" layer="95" rot="R180" xref="yes"/>
+</segment>
+<segment>
+<pinref part="TEMP" gate="-1" pin="S"/>
+<wire x1="45.72" y1="38.1" x2="43.18" y2="38.1" width="0.1524" layer="91"/>
+<label x="43.18" y="38.1" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="VB" class="0">
@@ -23052,7 +23171,7 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <wire x1="5.08" y1="-38.1" x2="5.08" y2="-48.26" width="0.1524" layer="91"/>
 <junction x="5.08" y="-48.26"/>
 <wire x1="5.08" y1="-60.96" x2="12.7" y2="-60.96" width="0.1524" layer="91"/>
-<pinref part="U$2" gate="G$1" pin="IN_1"/>
+<pinref part="SOURCE_JUMP" gate="G$1" pin="IN_1"/>
 <wire x1="20.32" y1="-33.02" x2="12.7" y2="-33.02" width="0.1524" layer="91"/>
 <wire x1="12.7" y1="-33.02" x2="12.7" y2="-60.96" width="0.1524" layer="91"/>
 <wire x1="12.7" y1="-60.96" x2="12.7" y2="-68.58" width="0.1524" layer="91"/>
@@ -23073,7 +23192,7 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <junction x="0" y="7.62"/>
 </segment>
 <segment>
-<pinref part="U$3" gate="G$1" pin="IN_2"/>
+<pinref part="NMOS_SNUB_JUMP" gate="G$1" pin="IN_2"/>
 <wire x1="-86.36" y1="22.86" x2="-88.9" y2="22.86" width="0.1524" layer="91"/>
 <label x="-88.9" y="22.86" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
@@ -23092,7 +23211,7 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <wire x1="-53.34" y1="-55.88" x2="-53.34" y2="-60.96" width="0.1524" layer="91"/>
 <wire x1="-53.34" y1="-60.96" x2="-48.26" y2="-60.96" width="0.1524" layer="91"/>
 <wire x1="-48.26" y1="-60.96" x2="-48.26" y2="-20.32" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="IN_2"/>
+<pinref part="DRAIN_JUMP" gate="G$1" pin="IN_2"/>
 <wire x1="-48.26" y1="-20.32" x2="-43.18" y2="-20.32" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -23130,13 +23249,13 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <label x="127" y="-48.26" size="1.778" layer="95" rot="R180" xref="yes"/>
 <wire x1="127" y1="-48.26" x2="127" y2="-60.96" width="0.1524" layer="91"/>
 <wire x1="127" y1="-60.96" x2="134.62" y2="-60.96" width="0.1524" layer="91"/>
-<pinref part="U$6" gate="G$1" pin="IN_1"/>
+<pinref part="INDUCTOR_JUMP" gate="G$1" pin="IN_1"/>
 <wire x1="101.6" y1="-33.02" x2="96.52" y2="-33.02" width="0.1524" layer="91"/>
 <wire x1="96.52" y1="-33.02" x2="96.52" y2="-53.34" width="0.1524" layer="91"/>
 <wire x1="96.52" y1="-53.34" x2="119.38" y2="-53.34" width="0.1524" layer="91"/>
 <wire x1="119.38" y1="-53.34" x2="119.38" y2="-60.96" width="0.1524" layer="91"/>
 <junction x="119.38" y="-60.96"/>
-<pinref part="U$8" gate="G$1" pin="IN_1"/>
+<pinref part="ACS_INPUTS" gate="G$1" pin="IN_1"/>
 <wire x1="139.7" y1="-33.02" x2="134.62" y2="-33.02" width="0.1524" layer="91"/>
 <wire x1="134.62" y1="-33.02" x2="134.62" y2="-60.96" width="0.1524" layer="91"/>
 </segment>
@@ -23191,7 +23310,7 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <wire x1="175.26" y1="-33.02" x2="175.26" y2="-60.96" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$5" gate="G$1" pin="IN_2"/>
+<pinref part="DC_OUTPUT" gate="G$1" pin="IN_2"/>
 <wire x1="-86.36" y1="53.34" x2="-88.9" y2="53.34" width="0.1524" layer="91"/>
 <label x="-88.9" y="53.34" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
@@ -23247,7 +23366,7 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <label x="-99.06" y="-53.34" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="U$7" gate="G$1" pin="IN_2"/>
+<pinref part="AC_INPUT" gate="G$1" pin="IN_2"/>
 <wire x1="-86.36" y1="68.58" x2="-88.9" y2="68.58" width="0.1524" layer="91"/>
 <label x="-88.9" y="68.58" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
@@ -23260,7 +23379,7 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <label x="-99.06" y="-83.82" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="U$7" gate="G$1" pin="IN_1"/>
+<pinref part="AC_INPUT" gate="G$1" pin="IN_1"/>
 <wire x1="-86.36" y1="66.04" x2="-88.9" y2="66.04" width="0.1524" layer="91"/>
 <label x="-88.9" y="66.04" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
@@ -23277,7 +23396,7 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <wire x1="-25.4" y1="-48.26" x2="-25.4" y2="-38.1" width="0.1524" layer="91"/>
 <junction x="-25.4" y="-48.26"/>
 <label x="-25.4" y="-38.1" size="1.27" layer="95" rot="R180" xref="yes"/>
-<pinref part="U$1" gate="G$1" pin="IN_1"/>
+<pinref part="DRAIN_JUMP" gate="G$1" pin="IN_1"/>
 <wire x1="-43.18" y1="-22.86" x2="-45.72" y2="-22.86" width="0.1524" layer="91"/>
 <wire x1="-45.72" y1="-22.86" x2="-45.72" y2="-60.96" width="0.1524" layer="91"/>
 </segment>
@@ -23292,35 +23411,22 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <junction x="0" y="25.4"/>
 </segment>
 <segment>
-<pinref part="U$3" gate="G$1" pin="IN_1"/>
+<pinref part="NMOS_SNUB_JUMP" gate="G$1" pin="IN_1"/>
 <wire x1="-86.36" y1="20.32" x2="-88.9" y2="20.32" width="0.1524" layer="91"/>
 <label x="-88.9" y="20.32" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="NMOS_SOURCE_2" class="0">
 <segment>
-<pinref part="L1" gate="G$1" pin="1"/>
-<wire x1="91.44" y1="-60.96" x2="99.06" y2="-60.96" width="0.1524" layer="91"/>
-<pinref part="R9" gate="G$1" pin="1"/>
-<wire x1="81.28" y1="-63.5" x2="81.28" y2="-60.96" width="0.1524" layer="91"/>
-<wire x1="60.96" y1="-60.96" x2="81.28" y2="-60.96" width="0.1524" layer="91"/>
 <pinref part="D3" gate="1" pin="C"/>
 <wire x1="66.04" y1="-71.12" x2="60.96" y2="-71.12" width="0.1524" layer="91"/>
 <wire x1="60.96" y1="-71.12" x2="60.96" y2="-60.96" width="0.1524" layer="91"/>
-<wire x1="81.28" y1="-60.96" x2="91.44" y2="-60.96" width="0.1524" layer="91"/>
-<wire x1="91.44" y1="-60.96" x2="91.44" y2="-30.48" width="0.1524" layer="91"/>
-<pinref part="U$6" gate="G$1" pin="IN_2"/>
-<wire x1="91.44" y1="-30.48" x2="101.6" y2="-30.48" width="0.1524" layer="91"/>
-<junction x="91.44" y="-60.96"/>
-<wire x1="81.28" y1="-60.96" x2="81.28" y2="-48.26" width="0.1524" layer="91"/>
-<label x="81.28" y="-48.26" size="1.27" layer="95" rot="R180" xref="yes"/>
-<pinref part="U$2" gate="G$1" pin="IN_2"/>
+<pinref part="SOURCE_JUMP" gate="G$1" pin="IN_2"/>
 <wire x1="20.32" y1="-30.48" x2="15.24" y2="-30.48" width="0.1524" layer="91"/>
 <wire x1="15.24" y1="-30.48" x2="15.24" y2="-48.26" width="0.1524" layer="91"/>
 <wire x1="15.24" y1="-48.26" x2="53.34" y2="-48.26" width="0.1524" layer="91"/>
 <wire x1="53.34" y1="-48.26" x2="53.34" y2="-60.96" width="0.1524" layer="91"/>
 <wire x1="53.34" y1="-60.96" x2="60.96" y2="-60.96" width="0.1524" layer="91"/>
-<junction x="60.96" y="-60.96"/>
 <pinref part="D8" gate="1" pin="A2"/>
 <wire x1="43.18" y1="-73.66" x2="48.26" y2="-73.66" width="0.1524" layer="91"/>
 <wire x1="48.26" y1="-73.66" x2="48.26" y2="-60.96" width="0.1524" layer="91"/>
@@ -23329,9 +23435,24 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <pinref part="L2" gate="G$1" pin="2"/>
 <wire x1="43.18" y1="-60.96" x2="48.26" y2="-60.96" width="0.1524" layer="91"/>
 <junction x="48.26" y="-60.96"/>
+<pinref part="INDUCTOR_JUMP" gate="G$1" pin="IN_2"/>
+<wire x1="91.44" y1="-30.48" x2="101.6" y2="-30.48" width="0.1524" layer="91"/>
+<pinref part="L1" gate="G$1" pin="1"/>
+<wire x1="91.44" y1="-60.96" x2="99.06" y2="-60.96" width="0.1524" layer="91"/>
+<wire x1="91.44" y1="-60.96" x2="91.44" y2="-30.48" width="0.1524" layer="91"/>
+<wire x1="60.96" y1="-60.96" x2="81.28" y2="-60.96" width="0.1524" layer="91"/>
+<junction x="60.96" y="-60.96"/>
+<junction x="91.44" y="-60.96"/>
+<pinref part="R9" gate="G$1" pin="1"/>
+<wire x1="81.28" y1="-60.96" x2="91.44" y2="-60.96" width="0.1524" layer="91"/>
+<wire x1="81.28" y1="-63.5" x2="81.28" y2="-60.96" width="0.1524" layer="91"/>
+<junction x="81.28" y="-60.96"/>
+<wire x1="81.28" y1="-60.96" x2="81.28" y2="-48.26" width="0.1524" layer="91"/>
+<wire x1="81.28" y1="-48.26" x2="78.74" y2="-48.26" width="0.1524" layer="91"/>
+<label x="78.74" y="-48.26" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="U$4" gate="G$1" pin="IN_2"/>
+<pinref part="DIODE_SNUB_JUMP" gate="G$1" pin="IN_2"/>
 <wire x1="-86.36" y1="38.1" x2="-88.9" y2="38.1" width="0.1524" layer="91"/>
 <label x="-88.9" y="38.1" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
@@ -23411,7 +23532,7 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <pinref part="F1" gate="1" pin="1"/>
 <wire x1="137.16" y1="-60.96" x2="142.24" y2="-60.96" width="0.1524" layer="91"/>
 <wire x1="137.16" y1="-30.48" x2="137.16" y2="-60.96" width="0.1524" layer="91"/>
-<pinref part="U$8" gate="G$1" pin="IN_2"/>
+<pinref part="ACS_INPUTS" gate="G$1" pin="IN_2"/>
 <wire x1="137.16" y1="-30.48" x2="139.7" y2="-30.48" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -23432,6 +23553,11 @@ Source: &lt;a href="http://www.vishay.com/docs/83673/sfh618.pdf"&gt; Data sheet 
 <pinref part="ESP" gate="-5" pin="S"/>
 <wire x1="45.72" y1="60.96" x2="43.18" y2="60.96" width="0.1524" layer="91"/>
 <label x="43.18" y="60.96" size="1.27" layer="95" rot="R180" xref="yes"/>
+</segment>
+<segment>
+<pinref part="TEMP" gate="-2" pin="S"/>
+<wire x1="45.72" y1="35.56" x2="43.18" y2="35.56" width="0.1524" layer="91"/>
+<label x="43.18" y="35.56" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="PWM_MOSFET" class="0">
