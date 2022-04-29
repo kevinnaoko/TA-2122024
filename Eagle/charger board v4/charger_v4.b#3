@@ -3,7 +3,7 @@
 <eagle version="9.6.1">
 <drawing>
 <settings>
-<setting alwaysvectorfont="yes"/>
+<setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="no" altdistance="5" altunitdist="mil" altunit="mil"/>
@@ -3881,9 +3881,9 @@ design rules under a new name.</description>
 <wire x1="154.2288" y1="15.8496" x2="160.9344" y2="9.144" width="0.6096" layer="16"/>
 <wire x1="164.592" y1="9.144" x2="165.1" y2="8.89" width="0.6096" layer="16"/>
 <wire x1="154.2288" y1="15.8496" x2="150.368" y2="17.78" width="0.6096" layer="16"/>
-<wire x1="176.1744" y1="109.728" x2="181.6608" y2="115.2144" width="0.6096" layer="16"/>
-<wire x1="176.1744" y1="94.488" x2="176.1744" y2="109.728" width="0.6096" layer="16"/>
-<wire x1="181.6608" y1="115.2144" x2="182.11" y2="115.57" width="0.6096" layer="16"/>
+<wire x1="176.1744" y1="94.488" x2="176.1744" y2="109.22" width="0.6096" layer="16"/>
+<wire x1="176.1744" y1="109.22" x2="176.1744" y2="109.601203125" width="0.6096" layer="16"/>
+<wire x1="176.1744" y1="109.601203125" x2="176.015084375" y2="109.475084375" width="0.6096" layer="16"/>
 <wire x1="176.1744" y1="94.488" x2="175.26" y2="90.17" width="0.6096" layer="16"/>
 <wire x1="36.83" y1="78.74" x2="36.576" y2="78.6892" width="0.6096" layer="16"/>
 <wire x1="20.32" y1="56.157378125" x2="20.32" y2="52.07" width="0.6096" layer="16"/>
@@ -3920,6 +3920,20 @@ design rules under a new name.</description>
 <vertex x="-13.97" y="-8.89"/>
 <vertex x="-16.51" y="-6.35"/>
 </polygon>
+<polygon width="0.1524" layer="16" isolate="2.54">
+<vertex x="-17.78" y="72.39"/>
+<vertex x="88.9" y="72.39"/>
+<vertex x="88.9" y="120.65"/>
+<vertex x="218.44" y="120.65"/>
+<vertex x="220.98" y="118.11"/>
+<vertex x="220.98" y="-8.89"/>
+<vertex x="217.17" y="-12.7"/>
+<vertex x="-21.59" y="-12.7"/>
+<vertex x="-21.59" y="68.58"/>
+</polygon>
+<wire x1="176.1744" y1="109.601203125" x2="176.1744" y2="112.6744" width="0.6096" layer="16"/>
+<wire x1="176.1744" y1="112.6744" x2="179.07" y2="115.57" width="0.6096" layer="16"/>
+<wire x1="179.07" y1="115.57" x2="182.11" y2="115.57" width="0.6096" layer="16"/>
 </signal>
 <signal name="5V">
 <contactref element="IC1" pad="9"/>
