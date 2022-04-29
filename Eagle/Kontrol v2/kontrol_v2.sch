@@ -17010,16 +17010,16 @@ high speed</description>
 <pad name="NC" x="6.1" y="6" drill="1.2"/>
 <pad name="COIL2" x="-6.1" y="-6" drill="0.8"/>
 </package>
-<package name="TERMINAL_4P">
-<pad name="P$1" x="0" y="-3.81" drill="1.8542" shape="square"/>
-<pad name="P$2" x="0" y="4.572" drill="1.8542" shape="square"/>
-<wire x1="-2.54" y1="-6.35" x2="9.652" y2="-6.35" width="0.127" layer="21"/>
-<wire x1="9.652" y1="-6.35" x2="9.652" y2="24.892" width="0.127" layer="21"/>
-<wire x1="9.652" y1="24.892" x2="-2.54" y2="24.892" width="0.127" layer="21"/>
-<wire x1="-2.54" y1="24.892" x2="-2.54" y2="-6.35" width="0.127" layer="21"/>
-<text x="7.62" y="5.08" size="1.27" layer="21" rot="R90">TERMINAL</text>
-<pad name="P$3" x="0" y="13.208" drill="1.8542" shape="square" rot="R180"/>
-<pad name="P$4" x="0" y="21.59" drill="1.8542" shape="square" rot="R180"/>
+<package name="TERMINAL_2P">
+<pad name="1" x="0" y="-3.81" drill="1.8542" shape="square"/>
+<pad name="2" x="0" y="4.572" drill="1.8542" shape="square"/>
+<wire x1="-2.54" y1="-8.89" x2="9.652" y2="-8.89" width="0.127" layer="21"/>
+<wire x1="9.652" y1="-8.89" x2="9.652" y2="9.652" width="0.127" layer="21"/>
+<wire x1="9.652" y1="9.652" x2="-2.54" y2="9.652" width="0.127" layer="21"/>
+<wire x1="-2.54" y1="9.652" x2="-2.54" y2="-8.89" width="0.127" layer="21"/>
+<text x="8.89" y="-3.81" size="1.27" layer="21" rot="R90">TERMINAL</text>
+<text x="-2.54" y="-11.43" size="1.27" layer="25">&gt;NAME</text>
+<text x="-2.54" y="-13.97" size="1.27" layer="27">&gt;VALUE</text>
 </package>
 </packages>
 <symbols>
@@ -17063,17 +17063,15 @@ high speed</description>
 <pin name="COIL2" x="-10.16" y="-5.08" visible="off" length="middle" direction="pas"/>
 <pin name="NC" x="10.16" y="5.08" visible="off" length="middle" direction="pas" rot="R180"/>
 </symbol>
-<symbol name="TERMINAL_4P">
-<wire x1="-7.62" y1="12.7" x2="5.08" y2="12.7" width="0.254" layer="94"/>
-<wire x1="5.08" y1="12.7" x2="5.08" y2="-12.7" width="0.254" layer="94"/>
-<wire x1="5.08" y1="-12.7" x2="-7.62" y2="-12.7" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="-12.7" x2="-7.62" y2="12.7" width="0.254" layer="94"/>
-<pin name="IN_1" x="-12.7" y="-7.62"/>
-<pin name="IN_2" x="-12.7" y="-2.54"/>
-<text x="-7.62" y="-15.24" size="1.27" layer="95">&gt;NAME</text>
-<text x="-7.62" y="-17.78" size="1.27" layer="96">&gt;VALUES</text>
-<pin name="IN_3" x="-12.7" y="2.54"/>
-<pin name="IN_4" x="-12.7" y="7.62"/>
+<symbol name="TERMINAL_2P">
+<wire x1="-10.16" y1="5.08" x2="2.54" y2="5.08" width="0.254" layer="94"/>
+<wire x1="2.54" y1="5.08" x2="2.54" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-2.54" x2="-10.16" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-2.54" x2="-10.16" y2="5.08" width="0.254" layer="94"/>
+<pin name="IN_1" x="-17.78" y="0"/>
+<pin name="IN_2" x="-17.78" y="2.54"/>
+<text x="-10.16" y="-7.62" size="1.27" layer="96">&gt;VALUE</text>
+<text x="-10.16" y="-5.08" size="1.27" layer="95">&gt;NAME</text>
 </symbol>
 </symbols>
 <devicesets>
@@ -17104,17 +17102,15 @@ high speed</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="TERMINAL_4P">
+<deviceset name="TERMINAL_2P">
 <gates>
-<gate name="G$1" symbol="TERMINAL_4P" x="0" y="0"/>
+<gate name="G$1" symbol="TERMINAL_2P" x="0" y="0"/>
 </gates>
 <devices>
-<device name="" package="TERMINAL_4P">
+<device name="" package="TERMINAL_2P">
 <connects>
-<connect gate="G$1" pin="IN_1" pad="P$1"/>
-<connect gate="G$1" pin="IN_2" pad="P$2"/>
-<connect gate="G$1" pin="IN_3" pad="P$3"/>
-<connect gate="G$1" pin="IN_4" pad="P$4"/>
+<connect gate="G$1" pin="IN_1" pad="1"/>
+<connect gate="G$1" pin="IN_2" pad="2"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -19971,61 +19967,65 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </library>
 <library name="Rembrandt Electronics - JST XH Connectors v1-0">
 <packages>
-<package name="JST-XH-08-PACKAGE-LONG-PAD">
+<package name="JST-XH-10-PACKAGE-LONG-PAD">
 <description>&lt;b&gt;JST XH Connector Long Pads (Package)&lt;/b&gt;&lt;p&gt;
 
 Wire to board connector.
 
 Pitch: 2,54 mm, (0.100")&lt;p&gt;
-Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
+Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 
 &lt;b&gt;Created by Rembrandt Electronics&lt;/b&gt;&lt;p&gt;
 &lt;b&gt;www.rembrandtelectronics.com&lt;/b&gt;&lt;p&gt;</description>
-<wire x1="11.2" y1="-2.3575" x2="11.2" y2="3.3925" width="0.254" layer="21"/>
-<wire x1="11.2" y1="3.3925" x2="-11.2" y2="3.3925" width="0.254" layer="21"/>
-<wire x1="-11.2" y1="3.3925" x2="-11.2" y2="-2.3575" width="0.254" layer="21"/>
-<wire x1="-11.2" y1="-2.3575" x2="11.2" y2="-2.3575" width="0.254" layer="21"/>
-<pad name="3" x="-3.81" y="0" drill="1.016" shape="long" rot="R90"/>
-<pad name="2" x="-6.35" y="0" drill="1.016" shape="long" rot="R90"/>
-<pad name="1" x="-8.89" y="0" drill="1.016" shape="long" rot="R90"/>
-<pad name="4" x="-1.27" y="0" drill="1.016" shape="long" rot="R90"/>
-<pad name="5" x="1.27" y="0" drill="1.016" shape="long" rot="R90"/>
-<text x="-11.755" y="-2.14" size="1.016" layer="25" ratio="10" rot="R90">&gt;NAME</text>
-<text x="-10.9025" y="3.8925" size="0.8128" layer="27" ratio="10">&gt;VALUE</text>
-<text x="-10.4675" y="-1.5875" size="1.016" layer="51" ratio="10">1</text>
-<wire x1="-8.9" y1="-2.3" x2="-8.9" y2="-1.8" width="0.254" layer="21"/>
-<wire x1="9" y1="-2.3" x2="9" y2="-1.8" width="0.254" layer="21"/>
-<pad name="6" x="3.81" y="0" drill="1.016" shape="long" rot="R90"/>
-<pad name="7" x="6.35" y="0" drill="1.016" shape="long" rot="R90"/>
-<pad name="8" x="8.89" y="0" drill="1.016" shape="long" rot="R90"/>
+<wire x1="13.7" y1="-2.3575" x2="13.7" y2="3.3925" width="0.254" layer="21"/>
+<wire x1="13.7" y1="3.3925" x2="-13.7" y2="3.3925" width="0.254" layer="21"/>
+<wire x1="-13.7" y1="3.3925" x2="-13.7" y2="-2.3575" width="0.254" layer="21"/>
+<wire x1="-13.7" y1="-2.3575" x2="13.7" y2="-2.3575" width="0.254" layer="21"/>
+<pad name="3" x="-6.35" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="2" x="-8.89" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="1" x="-11.43" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="4" x="-3.81" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="5" x="-1.27" y="0" drill="1.016" shape="long" rot="R90"/>
+<text x="-14.255" y="-2.14" size="1.016" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<text x="-13.3025" y="3.8925" size="0.8128" layer="27" ratio="10">&gt;VALUE</text>
+<text x="-12.9675" y="-1.5875" size="1.016" layer="51" ratio="10">1</text>
+<wire x1="-11.4" y1="-2.3" x2="-11.4" y2="-1.8" width="0.254" layer="21"/>
+<wire x1="11.5" y1="-2.3" x2="11.5" y2="-1.8" width="0.254" layer="21"/>
+<pad name="6" x="1.27" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="7" x="3.81" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="8" x="6.35" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="9" x="8.89" y="0" drill="1.016" shape="long" rot="R90"/>
+<pad name="10" x="11.43" y="0" drill="1.016" shape="long" rot="R90"/>
 </package>
-<package name="JST-XH-08-PACKAGE-ROUND-PAD">
+<package name="JST-XH-10-PACKAGE-ROUND-PAD">
 <description>&lt;b&gt;JST XH Connector Round Pads (Package)&lt;/b&gt;&lt;p&gt;
 
 Wire to board connector.
 
 Pitch: 2,54 mm, (0.100")&lt;p&gt;
-Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
+Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 
 &lt;b&gt;Created by Rembrandt Electronics&lt;/b&gt;&lt;p&gt;
 &lt;b&gt;www.rembrandtelectronics.com&lt;/b&gt;&lt;p&gt;</description>
-<wire x1="11.2" y1="-2.3575" x2="11.2" y2="3.3925" width="0.254" layer="21"/>
-<wire x1="11.2" y1="3.3925" x2="-11.2" y2="3.3925" width="0.254" layer="21"/>
-<wire x1="-11.2" y1="3.3925" x2="-11.2" y2="-2.3575" width="0.254" layer="21"/>
-<wire x1="-11.2" y1="-2.3575" x2="11.2" y2="-2.3575" width="0.254" layer="21"/>
-<pad name="3" x="-3.81" y="0" drill="1.016" rot="R90"/>
-<pad name="2" x="-6.35" y="0" drill="1.016" rot="R90"/>
-<pad name="1" x="-8.89" y="0" drill="1.016" rot="R90"/>
-<pad name="4" x="-1.27" y="0" drill="1.016" rot="R90"/>
-<pad name="5" x="1.27" y="0" drill="1.016" rot="R90"/>
-<text x="-11.755" y="-2.14" size="1.016" layer="25" ratio="10" rot="R90">&gt;NAME</text>
-<text x="-10.9025" y="3.8925" size="0.8128" layer="27" ratio="10">&gt;VALUE</text>
-<text x="-10.4675" y="-1.5875" size="1.016" layer="51" ratio="10">1</text>
-<wire x1="-8.9" y1="-2.3" x2="-8.9" y2="-1.8" width="0.254" layer="21"/>
-<wire x1="9" y1="-2.3" x2="9" y2="-1.8" width="0.254" layer="21"/>
-<pad name="6" x="3.81" y="0" drill="1.016" rot="R90"/>
-<pad name="7" x="6.35" y="0" drill="1.016" rot="R90"/>
-<pad name="8" x="8.89" y="0" drill="1.016" rot="R90"/>
+<wire x1="13.7" y1="-2.3575" x2="13.7" y2="3.3925" width="0.254" layer="21"/>
+<wire x1="13.7" y1="3.3925" x2="-13.7" y2="3.3925" width="0.254" layer="21"/>
+<wire x1="-13.7" y1="3.3925" x2="-13.7" y2="-2.3575" width="0.254" layer="21"/>
+<wire x1="-13.7" y1="-2.3575" x2="13.7" y2="-2.3575" width="0.254" layer="21"/>
+<pad name="3" x="-6.35" y="0" drill="1.016" rot="R90"/>
+<pad name="2" x="-8.89" y="0" drill="1.016" rot="R90"/>
+<pad name="1" x="-11.43" y="0" drill="1.016" rot="R90"/>
+<pad name="4" x="-3.81" y="0" drill="1.016" rot="R90"/>
+<pad name="5" x="-1.27" y="0" drill="1.016" rot="R90"/>
+<text x="-14.255" y="-2.14" size="1.016" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<text x="-13.3025" y="3.8925" size="0.8128" layer="27" ratio="10">&gt;VALUE</text>
+<text x="-12.9675" y="-1.5875" size="1.016" layer="51" ratio="10">1</text>
+<wire x1="-11.4" y1="-2.3" x2="-11.4" y2="-1.8" width="0.254" layer="21"/>
+<wire x1="11.5" y1="-2.3" x2="11.5" y2="-1.8" width="0.254" layer="21"/>
+<pad name="6" x="1.27" y="0" drill="1.016" rot="R90"/>
+<pad name="7" x="3.81" y="0" drill="1.016" rot="R90"/>
+<pad name="8" x="6.35" y="0" drill="1.016" rot="R90"/>
+<pad name="9" x="8.89" y="0" drill="1.016" rot="R90"/>
+<pad name="10" x="11.43" y="0" drill="1.016" rot="R90"/>
 </package>
 </packages>
 <symbols>
@@ -20042,13 +20042,13 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="JST-XH-08-PIN" prefix="X">
+<deviceset name="JST-XH-10-PIN" prefix="X">
 <description>&lt;b&gt;JST XH Connector 2 Pin&lt;/b&gt;&lt;p&gt;
 
 Wire to board connector.
 
 Pitch: 2,54 mm, (0.100")&lt;p&gt;
-Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
+Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 
 &lt;b&gt;Created by Rembrandt Electronics&lt;/b&gt;&lt;p&gt;
 &lt;b&gt;www.rembrandtelectronics.com&lt;/b&gt;&lt;p&gt;</description>
@@ -20061,11 +20061,14 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <gate name="-6" symbol="M" x="2.54" y="-12.7" addlevel="always" swaplevel="1"/>
 <gate name="-7" symbol="M" x="2.54" y="-15.24" addlevel="always" swaplevel="1"/>
 <gate name="-8" symbol="M" x="2.54" y="-17.78" addlevel="always" swaplevel="1"/>
+<gate name="-9" symbol="M" x="2.54" y="-20.32" addlevel="always" swaplevel="1"/>
+<gate name="-10" symbol="M" x="2.54" y="-22.86" addlevel="always" swaplevel="1"/>
 </gates>
 <devices>
-<device name="-LONG-PAD" package="JST-XH-08-PACKAGE-LONG-PAD">
+<device name="-LONG-PAD" package="JST-XH-10-PACKAGE-LONG-PAD">
 <connects>
 <connect gate="-1" pin="S" pad="1"/>
+<connect gate="-10" pin="S" pad="10"/>
 <connect gate="-2" pin="S" pad="2"/>
 <connect gate="-3" pin="S" pad="3"/>
 <connect gate="-4" pin="S" pad="4"/>
@@ -20073,14 +20076,16 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <connect gate="-6" pin="S" pad="6"/>
 <connect gate="-7" pin="S" pad="7"/>
 <connect gate="-8" pin="S" pad="8"/>
+<connect gate="-9" pin="S" pad="9"/>
 </connects>
 <technologies>
 <technology name=""/>
 </technologies>
 </device>
-<device name="-ROUND-PAD" package="JST-XH-08-PACKAGE-ROUND-PAD">
+<device name="-ROUND-PAD" package="JST-XH-10-PACKAGE-ROUND-PAD">
 <connects>
 <connect gate="-1" pin="S" pad="1"/>
+<connect gate="-10" pin="S" pad="10"/>
 <connect gate="-2" pin="S" pad="2"/>
 <connect gate="-3" pin="S" pad="3"/>
 <connect gate="-4" pin="S" pad="4"/>
@@ -20088,6 +20093,7 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <connect gate="-6" pin="S" pad="6"/>
 <connect gate="-7" pin="S" pad="7"/>
 <connect gate="-8" pin="S" pad="8"/>
+<connect gate="-9" pin="S" pad="9"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -20136,7 +20142,6 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <part name="JP4" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X1" device="" package3d_urn="urn:adsk.eagle:package:22485/2"/>
 <part name="U$2" library="ADS1115" deviceset="ADS1115" device=""/>
 <part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E2,5-6E" package3d_urn="urn:adsk.eagle:package:23430/1" value="4.7uF"/>
-<part name="JP8" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X1" device="" package3d_urn="urn:adsk.eagle:package:22485/2"/>
 <part name="NPN" library="transistor" library_urn="urn:adsk.eagle:library:402" deviceset="*-NPN-" device="TO92-CBE" package3d_urn="urn:adsk.eagle:package:29921/2" technology="BC547A" value="BS170"/>
 <part name="1K" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="1k"/>
 <part name="D7" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="BAS15" device="" package3d_urn="urn:adsk.eagle:package:43348/1" value="UF4007"/>
@@ -20145,13 +20150,14 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <part name="U$3" library="sim800v2" deviceset="SIM800V2" device=""/>
 <part name="D4" library="Sparkfun_LED" deviceset="LED" device="5MM" value="LED_G"/>
 <part name="330" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="6k"/>
-<part name="CHARGER" library="Rembrandt Electronics - JST XH Connectors v1-0" deviceset="JST-XH-08-PIN" device="-LONG-PAD"/>
-<part name="U$4" library="TA_library" deviceset="TERMINAL_4P" device=""/>
 <part name="GND" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X5" device="" package3d_urn="urn:adsk.eagle:package:22469/2" value="GND"/>
 <part name="5V" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X5" device="" package3d_urn="urn:adsk.eagle:package:22469/2" value="5V"/>
 <part name="LED_L" library="JST XH Connectors v1-0" deviceset="JST-XH-04-PIN" device="-LONG-PAD"/>
 <part name="LED_R" library="JST XH Connectors v1-0" deviceset="JST-XH-04-PIN" device="-LONG-PAD"/>
 <part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E3.5-10" package3d_urn="urn:adsk.eagle:package:23351/1" value="2mF"/>
+<part name="CHARGER" library="Rembrandt Electronics - JST XH Connectors v1-0" deviceset="JST-XH-10-PIN" device="-LONG-PAD"/>
+<part name="OUT" library="TA_library" deviceset="TERMINAL_2P" device=""/>
+<part name="IN" library="TA_library" deviceset="TERMINAL_2P" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -20241,9 +20247,6 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <attribute name="NAME" x="-108.077" y="122.4026" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-108.077" y="117.3226" size="1.778" layer="96"/>
 </instance>
-<instance part="JP8" gate="G$1" x="-40.64" y="66.04" smashed="yes" rot="R180">
-<attribute name="VALUE" x="-34.29" y="71.12" size="1.778" layer="96" rot="R180"/>
-</instance>
 <instance part="NPN" gate="G$1" x="-187.96" y="215.9" smashed="yes">
 <attribute name="NAME" x="-182.88" y="215.9" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-182.88" y="213.36" size="1.778" layer="96"/>
@@ -20266,34 +20269,6 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 </instance>
 <instance part="330" gate="G$1" x="-205.74" y="198.12" smashed="yes" rot="R90">
 <attribute name="NAME" x="-207.2386" y="194.31" size="1.778" layer="95" rot="R90"/>
-</instance>
-<instance part="CHARGER" gate="-1" x="-124.46" y="73.66" smashed="yes">
-<attribute name="NAME" x="-121.92" y="72.898" size="1.524" layer="95"/>
-<attribute name="VALUE" x="-125.222" y="75.057" size="1.778" layer="96"/>
-</instance>
-<instance part="CHARGER" gate="-2" x="-124.46" y="71.12" smashed="yes">
-<attribute name="NAME" x="-121.92" y="70.358" size="1.524" layer="95"/>
-</instance>
-<instance part="CHARGER" gate="-3" x="-124.46" y="68.58" smashed="yes">
-<attribute name="NAME" x="-121.92" y="67.818" size="1.524" layer="95"/>
-</instance>
-<instance part="CHARGER" gate="-4" x="-124.46" y="66.04" smashed="yes">
-<attribute name="NAME" x="-121.92" y="65.278" size="1.524" layer="95"/>
-</instance>
-<instance part="CHARGER" gate="-5" x="-124.46" y="63.5" smashed="yes">
-<attribute name="NAME" x="-121.92" y="62.738" size="1.524" layer="95"/>
-</instance>
-<instance part="CHARGER" gate="-6" x="-124.46" y="60.96" smashed="yes">
-<attribute name="NAME" x="-121.92" y="60.198" size="1.524" layer="95"/>
-</instance>
-<instance part="CHARGER" gate="-7" x="-124.46" y="58.42" smashed="yes">
-<attribute name="NAME" x="-121.92" y="57.658" size="1.524" layer="95"/>
-</instance>
-<instance part="CHARGER" gate="-8" x="-124.46" y="55.88" smashed="yes">
-<attribute name="NAME" x="-121.92" y="55.118" size="1.524" layer="95"/>
-</instance>
-<instance part="U$4" gate="G$1" x="-33.02" y="220.98" smashed="yes">
-<attribute name="NAME" x="-40.64" y="205.74" size="1.27" layer="95"/>
 </instance>
 <instance part="GND" gate="A" x="-27.94" y="182.88" smashed="yes">
 <attribute name="NAME" x="-34.29" y="191.135" size="1.778" layer="95"/>
@@ -20330,6 +20305,45 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <instance part="C5" gate="G$1" x="-172.72" y="96.52" smashed="yes">
 <attribute name="NAME" x="-171.577" y="97.0026" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-171.577" y="91.9226" size="1.778" layer="96"/>
+</instance>
+<instance part="CHARGER" gate="-1" x="-124.46" y="71.12" smashed="yes">
+<attribute name="NAME" x="-121.92" y="70.358" size="1.524" layer="95"/>
+<attribute name="VALUE" x="-125.222" y="72.517" size="1.778" layer="96"/>
+</instance>
+<instance part="CHARGER" gate="-2" x="-124.46" y="68.58" smashed="yes">
+<attribute name="NAME" x="-121.92" y="67.818" size="1.524" layer="95"/>
+</instance>
+<instance part="CHARGER" gate="-3" x="-124.46" y="66.04" smashed="yes">
+<attribute name="NAME" x="-121.92" y="65.278" size="1.524" layer="95"/>
+</instance>
+<instance part="CHARGER" gate="-4" x="-124.46" y="63.5" smashed="yes">
+<attribute name="NAME" x="-121.92" y="62.738" size="1.524" layer="95"/>
+</instance>
+<instance part="CHARGER" gate="-5" x="-124.46" y="60.96" smashed="yes">
+<attribute name="NAME" x="-121.92" y="60.198" size="1.524" layer="95"/>
+</instance>
+<instance part="CHARGER" gate="-6" x="-124.46" y="58.42" smashed="yes">
+<attribute name="NAME" x="-121.92" y="57.658" size="1.524" layer="95"/>
+</instance>
+<instance part="CHARGER" gate="-7" x="-124.46" y="55.88" smashed="yes">
+<attribute name="NAME" x="-121.92" y="55.118" size="1.524" layer="95"/>
+</instance>
+<instance part="CHARGER" gate="-8" x="-124.46" y="53.34" smashed="yes">
+<attribute name="NAME" x="-121.92" y="52.578" size="1.524" layer="95"/>
+</instance>
+<instance part="CHARGER" gate="-9" x="-124.46" y="50.8" smashed="yes">
+<attribute name="NAME" x="-121.92" y="50.038" size="1.524" layer="95"/>
+</instance>
+<instance part="CHARGER" gate="-10" x="-124.46" y="48.26" smashed="yes">
+<attribute name="NAME" x="-121.92" y="47.498" size="1.524" layer="95"/>
+</instance>
+<instance part="OUT" gate="G$1" x="-76.2" y="228.6" smashed="yes">
+<attribute name="VALUE" x="-86.36" y="220.98" size="1.27" layer="96"/>
+<attribute name="NAME" x="-86.36" y="223.52" size="1.27" layer="95"/>
+</instance>
+<instance part="IN" gate="G$1" x="-76.2" y="213.36" smashed="yes">
+<attribute name="VALUE" x="-86.36" y="205.74" size="1.27" layer="96"/>
+<attribute name="NAME" x="-86.36" y="208.28" size="1.27" layer="95"/>
 </instance>
 </instances>
 <busses>
@@ -20479,11 +20493,6 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <label x="-205.74" y="190.5" size="1.27" layer="95" rot="R270" xref="yes"/>
 </segment>
 <segment>
-<pinref part="CHARGER" gate="-8" pin="S"/>
-<wire x1="-127" y1="55.88" x2="-132.08" y2="55.88" width="0.1524" layer="91"/>
-<label x="-132.08" y="55.88" size="1.27" layer="95" rot="R180" xref="yes"/>
-</segment>
-<segment>
 <pinref part="GND" gate="A" pin="1"/>
 <wire x1="-30.48" y1="187.96" x2="-38.1" y2="187.96" width="0.1524" layer="91"/>
 <wire x1="-38.1" y1="187.96" x2="-38.1" y2="185.42" width="0.1524" layer="91"/>
@@ -20531,6 +20540,11 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <pinref part="C5" gate="G$1" pin="-"/>
 <wire x1="-172.72" y1="91.44" x2="-172.72" y2="88.9" width="0.1524" layer="91"/>
 <label x="-172.72" y="88.9" size="1.27" layer="95" xref="yes"/>
+</segment>
+<segment>
+<pinref part="CHARGER" gate="-9" pin="S"/>
+<wire x1="-127" y1="50.8" x2="-129.54" y2="50.8" width="0.1524" layer="91"/>
+<label x="-129.54" y="50.8" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="5V" class="0">
@@ -20583,11 +20597,6 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <label x="-165.1" y="71.12" size="1.27" layer="95" xref="yes"/>
 </segment>
 <segment>
-<pinref part="CHARGER" gate="-2" pin="S"/>
-<wire x1="-127" y1="71.12" x2="-132.08" y2="71.12" width="0.1524" layer="91"/>
-<label x="-132.08" y="71.12" size="1.27" layer="95" rot="R180" xref="yes"/>
-</segment>
-<segment>
 <pinref part="5V" gate="A" pin="1"/>
 <wire x1="-5.08" y1="187.96" x2="-10.16" y2="187.96" width="0.1524" layer="91"/>
 <wire x1="-10.16" y1="187.96" x2="-10.16" y2="185.42" width="0.1524" layer="91"/>
@@ -20612,6 +20621,11 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <pinref part="C5" gate="G$1" pin="+"/>
 <wire x1="-172.72" y1="99.06" x2="-172.72" y2="101.6" width="0.1524" layer="91"/>
 <label x="-172.72" y="101.6" size="1.27" layer="95" xref="yes"/>
+</segment>
+<segment>
+<pinref part="CHARGER" gate="-2" pin="S"/>
+<wire x1="-127" y1="68.58" x2="-129.54" y2="68.58" width="0.1524" layer="91"/>
+<label x="-129.54" y="68.58" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="GRN_KANAN" class="0">
@@ -20654,8 +20668,8 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 </segment>
 <segment>
 <pinref part="CHARGER" gate="-1" pin="S"/>
-<wire x1="-127" y1="73.66" x2="-132.08" y2="73.66" width="0.1524" layer="91"/>
-<label x="-132.08" y="73.66" size="1.27" layer="95" rot="R180" xref="yes"/>
+<wire x1="-127" y1="71.12" x2="-129.54" y2="71.12" width="0.1524" layer="91"/>
+<label x="-129.54" y="71.12" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="SCL" class="0">
@@ -20789,8 +20803,8 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 </segment>
 <segment>
 <pinref part="CHARGER" gate="-3" pin="S"/>
-<wire x1="-127" y1="68.58" x2="-132.08" y2="68.58" width="0.1524" layer="91"/>
-<label x="-132.08" y="68.58" size="1.27" layer="95" rot="R180" xref="yes"/>
+<wire x1="-127" y1="66.04" x2="-129.54" y2="66.04" width="0.1524" layer="91"/>
+<label x="-129.54" y="66.04" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="PWM_DISCHARGE" class="0">
@@ -20804,8 +20818,8 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 </segment>
 <segment>
 <pinref part="CHARGER" gate="-4" pin="S"/>
-<wire x1="-127" y1="66.04" x2="-132.08" y2="66.04" width="0.1524" layer="91"/>
-<label x="-132.08" y="66.04" size="1.27" layer="95" rot="R180" xref="yes"/>
+<wire x1="-129.54" y1="63.5" x2="-127" y2="63.5" width="0.1524" layer="91"/>
+<label x="-129.54" y="63.5" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="5V_ESP" class="0">
@@ -20906,13 +20920,6 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <label x="-160.02" y="172.72" size="1.27" layer="95" rot="R90" xref="yes"/>
 </segment>
 </net>
-<net name="N$44" class="0">
-<segment>
-<pinref part="JP8" gate="G$1" pin="1"/>
-<pinref part="U$2" gate="G$1" pin="A3"/>
-<wire x1="-38.1" y1="66.04" x2="-17.78" y2="66.04" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="N$19" class="0">
 <segment>
 <pinref part="1K" gate="G$1" pin="2"/>
@@ -20958,9 +20965,9 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <label x="-132.08" y="223.52" size="1.27" layer="95" xref="yes"/>
 </segment>
 <segment>
-<pinref part="U$4" gate="G$1" pin="IN_4"/>
-<wire x1="-45.72" y1="228.6" x2="-50.8" y2="228.6" width="0.1524" layer="91"/>
-<label x="-50.8" y="228.6" size="1.27" layer="95" rot="R180" xref="yes"/>
+<pinref part="OUT" gate="G$1" pin="IN_2"/>
+<wire x1="-93.98" y1="231.14" x2="-96.52" y2="231.14" width="0.1524" layer="91"/>
+<label x="-96.52" y="231.14" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="N$23" class="0">
@@ -20986,11 +20993,6 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 </net>
 <net name="TEMP_SENSE" class="0">
 <segment>
-<pinref part="CHARGER" gate="-5" pin="S"/>
-<wire x1="-127" y1="63.5" x2="-132.08" y2="63.5" width="0.1524" layer="91"/>
-<label x="-132.08" y="63.5" size="1.27" layer="95" rot="R180" xref="yes"/>
-</segment>
-<segment>
 <pinref part="TEMP" gate="-2" pin="S"/>
 <wire x1="-91.44" y1="172.72" x2="-93.98" y2="172.72" width="0.1524" layer="91"/>
 <label x="-93.98" y="172.72" size="1.27" layer="95" rot="R180" xref="yes"/>
@@ -21000,13 +21002,13 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <wire x1="-17.78" y1="68.58" x2="-22.86" y2="68.58" width="0.1524" layer="91"/>
 <label x="-22.86" y="68.58" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
+<segment>
+<pinref part="CHARGER" gate="-5" pin="S"/>
+<wire x1="-127" y1="60.96" x2="-129.54" y2="60.96" width="0.1524" layer="91"/>
+<label x="-129.54" y="60.96" size="1.27" layer="95" rot="R180" xref="yes"/>
+</segment>
 </net>
 <net name="CURRENT_SENSE" class="0">
-<segment>
-<pinref part="CHARGER" gate="-6" pin="S"/>
-<wire x1="-127" y1="60.96" x2="-132.08" y2="60.96" width="0.1524" layer="91"/>
-<label x="-132.08" y="60.96" size="1.27" layer="95" rot="R180" xref="yes"/>
-</segment>
 <segment>
 <pinref part="U$2" gate="G$1" pin="A0"/>
 <wire x1="-17.78" y1="73.66" x2="-22.86" y2="73.66" width="0.1524" layer="91"/>
@@ -21017,13 +21019,13 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <wire x1="-127" y1="101.6" x2="-129.54" y2="101.6" width="0.1524" layer="91"/>
 <label x="-129.54" y="101.6" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
+<segment>
+<pinref part="CHARGER" gate="-6" pin="S"/>
+<wire x1="-127" y1="58.42" x2="-129.54" y2="58.42" width="0.1524" layer="91"/>
+<label x="-129.54" y="58.42" size="1.27" layer="95" rot="R180" xref="yes"/>
+</segment>
 </net>
 <net name="VOLTAGE_SENSE" class="0">
-<segment>
-<pinref part="CHARGER" gate="-7" pin="S"/>
-<wire x1="-127" y1="58.42" x2="-132.08" y2="58.42" width="0.1524" layer="91"/>
-<label x="-132.08" y="58.42" size="1.27" layer="95" rot="R180" xref="yes"/>
-</segment>
 <segment>
 <pinref part="U$2" gate="G$1" pin="A1"/>
 <wire x1="-17.78" y1="71.12" x2="-22.86" y2="71.12" width="0.1524" layer="91"/>
@@ -21034,13 +21036,13 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <wire x1="-127" y1="99.06" x2="-129.54" y2="99.06" width="0.1524" layer="91"/>
 <label x="-129.54" y="99.06" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
+<segment>
+<pinref part="CHARGER" gate="-7" pin="S"/>
+<wire x1="-127" y1="55.88" x2="-129.54" y2="55.88" width="0.1524" layer="91"/>
+<label x="-129.54" y="55.88" size="1.27" layer="95" rot="R180" xref="yes"/>
+</segment>
 </net>
 <net name="AC+" class="0">
-<segment>
-<pinref part="U$4" gate="G$1" pin="IN_3"/>
-<wire x1="-45.72" y1="223.52" x2="-50.8" y2="223.52" width="0.1524" layer="91"/>
-<label x="-50.8" y="223.52" size="1.27" layer="95" rot="R180" xref="yes"/>
-</segment>
 <segment>
 <pinref part="HI_LINK1" gate="G$1" pin="AC+"/>
 <wire x1="-118.84" y1="153.08" x2="-121.92" y2="153.08" width="0.1524" layer="91"/>
@@ -21048,9 +21050,14 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <label x="-121.92" y="152.4" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="U$4" gate="G$1" pin="IN_2"/>
-<wire x1="-45.72" y1="218.44" x2="-50.8" y2="218.44" width="0.1524" layer="91"/>
-<label x="-50.8" y="218.44" size="1.27" layer="95" rot="R180" xref="yes"/>
+<pinref part="IN" gate="G$1" pin="IN_2"/>
+<wire x1="-93.98" y1="215.9" x2="-96.52" y2="215.9" width="0.1524" layer="91"/>
+<label x="-96.52" y="215.9" size="1.27" layer="95" rot="R180" xref="yes"/>
+</segment>
+<segment>
+<pinref part="OUT" gate="G$1" pin="IN_1"/>
+<wire x1="-93.98" y1="228.6" x2="-96.52" y2="228.6" width="0.1524" layer="91"/>
+<label x="-96.52" y="228.6" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="AC-" class="0">
@@ -21066,15 +21073,33 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <label x="-121.92" y="144.78" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="U$4" gate="G$1" pin="IN_1"/>
-<wire x1="-45.72" y1="213.36" x2="-50.8" y2="213.36" width="0.1524" layer="91"/>
-<label x="-50.8" y="213.36" size="1.27" layer="95" rot="R180" xref="yes"/>
+<pinref part="IN" gate="G$1" pin="IN_1"/>
+<wire x1="-93.98" y1="213.36" x2="-96.52" y2="213.36" width="0.1524" layer="91"/>
+<label x="-96.52" y="213.36" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="N$2" class="0">
 <segment>
 <pinref part="FAN" gate="-1" pin="S"/>
 <wire x1="-66.04" y1="175.26" x2="-68.58" y2="175.26" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="HV_SENSE" class="0">
+<segment>
+<pinref part="CHARGER" gate="-8" pin="S"/>
+<wire x1="-127" y1="53.34" x2="-129.54" y2="53.34" width="0.1524" layer="91"/>
+<label x="-129.54" y="53.34" size="1.27" layer="95" rot="R180" xref="yes"/>
+</segment>
+<segment>
+<pinref part="U$2" gate="G$1" pin="A3"/>
+<wire x1="-17.78" y1="66.04" x2="-22.86" y2="66.04" width="0.1524" layer="91"/>
+<label x="-22.86" y="66.04" size="1.27" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
+<net name="N$14" class="0">
+<segment>
+<pinref part="CHARGER" gate="-10" pin="S"/>
+<wire x1="-127" y1="48.26" x2="-129.54" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
