@@ -168,16 +168,10 @@
 <hole x="80.899" y="129.54" drill="3.4036"/>
 <text x="191.77" y="45.72" size="3.81" layer="21" rot="R90">+</text>
 <text x="191.77" y="38.1" size="3.81" layer="21" rot="R90">-</text>
-<dimension x1="-5.08" y1="0" x2="-5.08" y2="132.842" x3="-10.16" y3="66.421" textsize="1.778" layer="1"/>
-<dimension x1="0" y1="-12.7" x2="84.328" y2="-12.827" x3="42.154625" y3="-18.98725" textsize="1.778" layer="1"/>
-<dimension x1="0" y1="0" x2="3.81" y2="3.81" x3="3.81" y3="-0.000003125" textsize="1.778" layer="1" dtype="diameter"/>
 <text x="181.61" y="8.89" size="3.81" layer="21">+</text>
 <text x="173.99" y="8.89" size="3.81" layer="21">-</text>
 <text x="157.48" y="8.89" size="3.81" layer="21">+</text>
 <text x="149.86" y="8.89" size="3.81" layer="21">-</text>
-<dimension x1="-3.81" y1="2.54" x2="-3.81" y2="129.54" x3="207.01" y3="66.04" textsize="1.778" layer="1" dtype="diameter"/>
-<dimension x1="2.54" y1="-1.27" x2="81.28" y2="-1.27" x3="41.91" y3="146.05" textsize="1.778" layer="1" dtype="diameter"/>
-<dimension x1="191.77" y1="135.89" x2="198.12" y2="135.89" x3="194.945" y3="-17.78" textsize="1.778" layer="1" dtype="diameter"/>
 <hole x="191.77" y="2.54" drill="3.4036"/>
 <hole x="191.77" y="129.54" drill="3.4036"/>
 <hole x="57.15" y="114.3" drill="0.8"/>

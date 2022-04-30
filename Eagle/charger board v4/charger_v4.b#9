@@ -191,6 +191,7 @@ Naoko</text>
 <text x="12.7" y="71.12" size="1.778" layer="25">AC Cap Discharge</text>
 <text x="171.45" y="85.09" size="1.778" layer="21">IP+</text>
 <text x="162.56" y="85.09" size="1.778" layer="21">IP-</text>
+<text x="30.48" y="62.23" size="1.778" layer="25" rot="R180">Eren</text>
 </plain>
 <libraries>
 <library name="rcl" urn="urn:adsk.eagle:library:334">
