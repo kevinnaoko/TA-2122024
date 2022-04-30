@@ -184,13 +184,14 @@
 <hole x="57.15" y="106.68" drill="0.8"/>
 <hole x="64.77" y="114.3" drill="0.8"/>
 <hole x="64.77" y="106.68" drill="0.8"/>
-<text x="6.35" y="107.95" size="1.778" layer="25">CHARGER V4
+<text x="6.35" y="110.49" size="1.778" layer="25">CHARGER V4
 Dhanu
 Danu
 Naoko</text>
 <text x="12.7" y="71.12" size="1.778" layer="25">AC Cap Discharge</text>
 <text x="171.45" y="85.09" size="1.778" layer="21">IP+</text>
 <text x="162.56" y="85.09" size="1.778" layer="21">IP-</text>
+<text x="30.48" y="62.23" size="1.778" layer="25" rot="R180">Eren</text>
 </plain>
 <libraries>
 <library name="rcl" urn="urn:adsk.eagle:library:334">
