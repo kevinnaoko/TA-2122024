@@ -20135,20 +20135,20 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <part name="JP7" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="" package3d_urn="urn:adsk.eagle:package:22435/2"/>
 <part name="JP4" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X1" device="" package3d_urn="urn:adsk.eagle:package:22485/2"/>
 <part name="U$2" library="ADS1115" deviceset="ADS1115" device=""/>
-<part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E2,5-6E" package3d_urn="urn:adsk.eagle:package:23430/1"/>
+<part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E2,5-6E" package3d_urn="urn:adsk.eagle:package:23430/1" value="4.7uF"/>
 <part name="JP8" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X1" device="" package3d_urn="urn:adsk.eagle:package:22485/2"/>
-<part name="NPN" library="transistor" library_urn="urn:adsk.eagle:library:402" deviceset="*-NPN-" device="TO92-CBE" package3d_urn="urn:adsk.eagle:package:29921/2" technology="BC547A"/>
+<part name="NPN" library="transistor" library_urn="urn:adsk.eagle:library:402" deviceset="*-NPN-" device="TO92-CBE" package3d_urn="urn:adsk.eagle:package:29921/2" technology="BC547A" value="BS170"/>
 <part name="1K" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="1k"/>
 <part name="D7" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="BAS15" device="" package3d_urn="urn:adsk.eagle:package:43348/1" value="UF4007"/>
 <part name="K1" library="TA_library" deviceset="SRD-12VDC-SL-C" device=""/>
 <part name="JP3" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X16" device="" package3d_urn="urn:adsk.eagle:package:22432/2"/>
 <part name="U$3" library="sim800v2" deviceset="SIM800V2" device=""/>
-<part name="D4" library="Sparkfun_LED" deviceset="LED" device="5MM"/>
+<part name="D4" library="Sparkfun_LED" deviceset="LED" device="5MM" value="LED_G"/>
 <part name="330" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="0204/7" package3d_urn="urn:adsk.eagle:package:23498/2" value="6k"/>
 <part name="CHARGER" library="Rembrandt Electronics - JST XH Connectors v1-0" deviceset="JST-XH-08-PIN" device="-LONG-PAD"/>
 <part name="U$4" library="TA_library" deviceset="TERMINAL_4P" device=""/>
-<part name="GND" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X5" device="" package3d_urn="urn:adsk.eagle:package:22469/2"/>
-<part name="5V" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X5" device="" package3d_urn="urn:adsk.eagle:package:22469/2"/>
+<part name="GND" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X5" device="" package3d_urn="urn:adsk.eagle:package:22469/2" value="GND"/>
+<part name="5V" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X5" device="" package3d_urn="urn:adsk.eagle:package:22469/2" value="5V"/>
 <part name="LED_L" library="JST XH Connectors v1-0" deviceset="JST-XH-04-PIN" device="-LONG-PAD"/>
 <part name="LED_R" library="JST XH Connectors v1-0" deviceset="JST-XH-04-PIN" device="-LONG-PAD"/>
 <part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E3.5-10" package3d_urn="urn:adsk.eagle:package:23351/1" value="2mF"/>
@@ -20246,7 +20246,7 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 </instance>
 <instance part="NPN" gate="G$1" x="-187.96" y="215.9" smashed="yes">
 <attribute name="NAME" x="-182.88" y="215.9" size="1.778" layer="95"/>
-<attribute name="VALUE" x="-198.12" y="220.98" size="1.778" layer="96"/>
+<attribute name="VALUE" x="-182.88" y="213.36" size="1.778" layer="96"/>
 </instance>
 <instance part="1K" gate="G$1" x="-198.12" y="215.9" smashed="yes">
 <attribute name="NAME" x="-201.93" y="217.3986" size="1.778" layer="95"/>
@@ -20413,11 +20413,6 @@ Number of pins: &lt;b&gt;8&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <pinref part="TEMP" gate="-3" pin="S"/>
 <wire x1="-91.44" y1="170.18" x2="-93.98" y2="170.18" width="0.1524" layer="91"/>
 <label x="-93.98" y="170.18" size="1.27" layer="95" rot="R180" xref="yes"/>
-</segment>
-<segment>
-<pinref part="U$1" gate="G$1" pin="GND@38"/>
-<wire x1="-157.48" y1="134.62" x2="-157.48" y2="129.54" width="0.1524" layer="91"/>
-<pinref part="JP3" gate="A" pin="1"/>
 </segment>
 <segment>
 <pinref part="C3" gate="G$1" pin="-"/>

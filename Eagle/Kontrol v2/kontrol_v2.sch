@@ -20264,8 +20264,8 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <attribute name="VALUE" x="-200.66" y="133.35" size="1.778" layer="96" rot="R270"/>
 </instance>
 <instance part="U$3" gate="G$1" x="-177.8" y="63.5" smashed="yes"/>
-<instance part="D4" gate="D1" x="-205.74" y="208.28" smashed="yes" rot="R180">
-<attribute name="VALUE" x="-207.645" y="212.852" size="1.778" layer="96" font="vector" rot="R270" align="top-left"/>
+<instance part="D4" gate="D1" x="-205.74" y="210.82" smashed="yes">
+<attribute name="VALUE" x="-203.835" y="206.248" size="1.778" layer="96" font="vector" rot="R90" align="top-left"/>
 </instance>
 <instance part="R2" gate="G$1" x="-205.74" y="198.12" smashed="yes" rot="R90">
 <attribute name="NAME" x="-207.2386" y="194.31" size="1.778" layer="95" rot="R90"/>
@@ -20942,12 +20942,11 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <net name="RELAY" class="0">
 <segment>
 <pinref part="1K" gate="G$1" pin="1"/>
-<wire x1="-203.2" y1="215.9" x2="-205.74" y2="215.9" width="0.1524" layer="91"/>
 <label x="-208.28" y="215.9" size="1.27" layer="95" rot="R180" xref="yes"/>
-<pinref part="D4" gate="D1" pin="C"/>
+<wire x1="-203.2" y1="215.9" x2="-205.74" y2="215.9" width="0.1524" layer="91"/>
+<pinref part="D4" gate="D1" pin="A"/>
 <wire x1="-205.74" y1="215.9" x2="-208.28" y2="215.9" width="0.1524" layer="91"/>
-<wire x1="-205.74" y1="213.36" x2="-205.74" y2="215.9" width="0.1524" layer="91"/>
-<junction x="-205.74" y="215.9"/>
+<wire x1="-205.74" y1="215.9" x2="-205.74" y2="213.36" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="JP6" gate="A" pin="7"/>
@@ -20982,13 +20981,6 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <pinref part="U$1" gate="G$1" pin="IO2"/>
 <pinref part="JP3" gate="A" pin="15"/>
 <wire x1="-193.04" y1="134.62" x2="-193.04" y2="129.54" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$1" class="0">
-<segment>
-<pinref part="D4" gate="D1" pin="A"/>
-<pinref part="R2" gate="G$1" pin="2"/>
-<wire x1="-205.74" y1="205.74" x2="-205.74" y2="203.2" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="TEMP_SENSE" class="0">
@@ -21100,6 +21092,13 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <segment>
 <pinref part="CHARGER" gate="-10" pin="S"/>
 <wire x1="-127" y1="48.26" x2="-129.54" y2="48.26" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$1" class="0">
+<segment>
+<pinref part="D4" gate="D1" pin="C"/>
+<pinref part="R2" gate="G$1" pin="2"/>
+<wire x1="-205.74" y1="205.74" x2="-205.74" y2="203.2" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
