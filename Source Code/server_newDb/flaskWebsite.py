@@ -38,10 +38,10 @@ def display(deviceSelect):
 
         lenIndex = [ [0] for i in range(3)]
         
-        cur.execute("SELECT * FROM " + querySelect[0] + " WHERE productId = ?", deviceSelection)
+        cur.execute("SELECT * FROM " + querySelect[0] + " WHERE productId = ?", (deviceSelection,))
         lenIndex[0] = len(cur.fetchall())  
 
-        cur.execute("SELECT * FROM " + querySelect[1] + " WHERE productId = ?", deviceSelection)
+        cur.execute("SELECT * FROM " + querySelect[1] + " WHERE productId = ?", (deviceSelection,))
         lenIndex[1] = len(cur.fetchall()) 
         
         s1data = [ dict() for i in range(lenIndex[0]+1)]
@@ -52,7 +52,7 @@ def display(deviceSelect):
         loopCount = 0
         # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt']
         #    0        1           2       3      4      5      6       7
-        for row in cur.execute("SELECT * FROM " + querySelect[0] + " WHERE productId = ? ORDER BY id DESC", deviceSelection):  
+        for row in cur.execute("SELECT * FROM " + querySelect[0] + " WHERE productId = ? ORDER BY id DESC", (deviceSelection,)):  
             s1data[loopCount]['pid'] = row[1]
             s1data[loopCount]['stat'] = row[2]
             s1data[loopCount]['sn'] = row[3]
@@ -67,7 +67,7 @@ def display(deviceSelect):
         loopCount = 0
         # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt']
         #    0        1           2       3      4      5      6       7
-        for row in cur.execute("SELECT * FROM " + querySelect[1] + " WHERE productId = ? ORDER BY id DESC", deviceSelection): 
+        for row in cur.execute("SELECT * FROM " + querySelect[1] + " WHERE productId = ? ORDER BY id DESC", (deviceSelection,)): 
             # print("HALO")
             # print(row) 
             
@@ -85,7 +85,7 @@ def display(deviceSelect):
         # get charger_device data
         # ['id', 'productId', 'chargeMode', 'MCC', 'MNC', 'LAC', 'CellID']
         #    0        1           2           3      4      5       6      
-        cur.execute('SELECT * FROM ' + querySelect[2] + " WHERE productId = ? ORDER BY id DESC LIMIT 1", deviceSelection)
+        cur.execute('SELECT * FROM ' + querySelect[2] + " WHERE productId = ? ORDER BY id DESC LIMIT 1", (deviceSelection,))
         row = cur.fetchone() 
         print('latestinfo')
         latestInfo['pid'] = row[1]
@@ -204,9 +204,37 @@ def home():
                 cur.execute("DELETE FROM charger_device WHERE productId=?" , (deviceSelect,))
                 con.commit()
                 cur.close()
-                print('TABLE DROPPED')  
+                print('index dropped')  
                 
                 flash('Charger ' + deviceSelect + ' deleted', 'success')
+                return redirect(url_for('home'))
+            
+            if request.form['submit_button'] == 'changeEnableSubmit':
+                print("change status")
+                print("================================================================") 
+                deviceSelect = request.form["changeEnableIndex"] 
+                
+                con = sqlite3.connect(dbName)
+                cur = con.cursor()  
+                # ['id', 'productId', 'productEnable']
+                #   0         1              2
+                cur.execute("SELECT * FROM charger_enable WHERE productId=?" , (deviceSelect,)) 
+                row = cur.fetchone()    
+                
+                if row[2] == 1:
+                    setEn = 0
+                    strFlash = ' disabled'
+                else:
+                    setEn = 1
+                    strFlash = ' enabled'
+                    
+                query = "Update charger_enable set productEnable = ? where productId = ?"
+                cur.execute(query,[setEn,deviceSelect])
+                con.commit() 
+                cur.close()
+                print('info changed')  
+                
+                flash('Charger ' + deviceSelect + strFlash, 'success')
                 return redirect(url_for('home'))
             
             
@@ -245,11 +273,26 @@ def home():
         productCount = len(uniqueIDs)
         print(productCount)
         latestData = [ dict() for i in range(len(uniqueIDs))  ]
-
-        index = 0
-        for i in range(len(uniqueIDs)):
+ 
+        for i in range(len(uniqueIDs)): 
             
-            latestData[index]['pid'] = uniqueIDs[i] 
+            # cek apakah sudah ada data di charger_enable
+            # kalau belum, insert data lalu inisialisasi dengan value 1 (ON)
+            # kalau sudah, ambil info device_enable
+            # ['id', 'productId', 'productEnable']
+            #   0         1              2
+            cur.execute('SELECT * FROM charger_enable WHERE productId = ?', [str(uniqueIDs[i]),]) 
+            lastRow = cur.fetchone()
+            
+            if (lastRow == None):
+                query = "INSERT INTO charger_enable (productId, productEnable) values (?,?)" 
+                cur.execute(query, [uniqueIDs[i],1])  
+                con.commit()
+                latestData[i]['enable'] = 1
+            else:
+                latestData[i]['enable'] = lastRow[2] 
+            
+            latestData[i]['pid'] = uniqueIDs[i] 
             # ambil latest row dari charger_s1 produk ke i
             # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt']
             #    0        1           2       3      4      5      6       7
@@ -257,14 +300,14 @@ def home():
             lastRow = cur.fetchone()
             
             if (lastRow == None): 
-                latestData[index]['s1_stat'] = '-'
-                latestData[index]['s1_soc'] = '-'
-                latestData[index]['s1_latest'] = '-'
+                latestData[i]['s1_stat'] = '-'
+                latestData[i]['s1_soc'] = '-'
+                latestData[i]['s1_latest'] = '-'
             
             else:
-                latestData[index]['s1_stat'] = lastRow[2]
-                latestData[index]['s1_soc'] = lastRow[5]
-                latestData[index]['s1_latest'] = lastRow[4]
+                latestData[i]['s1_stat'] = lastRow[2]
+                latestData[i]['s1_soc'] = lastRow[5]
+                latestData[i]['s1_latest'] = lastRow[4]
             
             # ambil latest row dari charger_s2 produk ke i
             # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt']
@@ -273,14 +316,14 @@ def home():
             lastRow = cur.fetchone()
             
             if (lastRow == None): 
-                latestData[index]['s2_stat'] = '-'
-                latestData[index]['s2_soc'] = '-'
-                latestData[index]['s2_latest'] = '-'
+                latestData[i]['s2_stat'] = '-'
+                latestData[i]['s2_soc'] = '-'
+                latestData[i]['s2_latest'] = '-'
             
             else:
-                latestData[index]['s2_stat'] = lastRow[2]
-                latestData[index]['s2_soc'] = lastRow[5]
-                latestData[index]['s2_latest'] = lastRow[4]
+                latestData[i]['s2_stat'] = lastRow[2]
+                latestData[i]['s2_soc'] = lastRow[5]
+                latestData[i]['s2_latest'] = lastRow[4]
             
             # ambil latest row dari charger_device produk ke i
             # ['id', 'productId', 'chargeMode', 'MCC', 'MNC', 'LAC', 'CellID']
@@ -289,32 +332,29 @@ def home():
             lastRow = cur.fetchone()
             
             if (lastRow == None): 
-                latestData[index]['chgMode'] = '-'
+                latestData[i]['chgMode'] = '-'
             
             else:
-                latestData[index]['chgMode'] = lastRow[2]
+                latestData[i]['chgMode'] = lastRow[2]
                 
             # proses tanggal
             try:
-                dateS1 = datetime.strptime(latestData[index]['s1_latest'], '%y/%m/%d,%H:%M:%S')
-                dateS2 = datetime.strptime(latestData[index]['s2_latest'], '%y/%m/%d,%H:%M:%S')
+                dateS1 = datetime.strptime(latestData[i]['s1_latest'], '%y/%m/%d,%H:%M:%S')
+                dateS2 = datetime.strptime(latestData[i]['s2_latest'], '%y/%m/%d,%H:%M:%S')
                 if (dateS1>dateS2): 
-                    latestData[index]['latestSlot'] = 'S1'
+                    latestData[i]['latestSlot'] = 'S1'
                     timestampStr = dateS1.strftime("%d-%B-%Y (%H:%M:%S)") 
                     
                 else: 
-                    latestData[index]['latestSlot'] = 'S2'
+                    latestData[i]['latestSlot'] = 'S2'
                     timestampStr = dateS2.strftime("%d-%B-%Y (%H:%M:%S)") 
                     
-                latestData[index]['latestTime'] = timestampStr 
+                latestData[i]['latestTime'] = timestampStr 
                 
             except:
-                latestData[index]['latestSlot'] = '-'
-                latestData[index]['latestTime'] = '-' 
-            
-                
-                
-            index+=1
+                latestData[i]['latestSlot'] = '-'
+                latestData[i]['latestTime'] = '-' 
+             
         
         for x in latestData:
             print(x)
@@ -485,6 +525,245 @@ def manageUsers():
     else:
         return redirect(url_for('login'))
 
+@app.route("/batteries", methods=["POST", "GET"])
+def batteries():
+    if "username" in session: 
+        # request handle
+        if request.method == "POST":  
+            pass
+            
+        else:
+            pass
+        
+        con = sqlite3.connect(dbName)
+        cur = con.cursor()
+        
+        # sauce https://pagehalffull.wordpress.com/2012/11/14/python-script-to-count-tables-columns-and-rows-in-sqlite-database/ 
+        
+        # Get unique pids:       
+        battSNs1 = []
+        battSNs2 = [] 
+        
+        for row in cur.execute("SELECT DISTINCT SN FROM charger_s1" ):
+            # print (row)
+            battSNs1.append(row[0])
+            
+        for row in cur.execute("SELECT DISTINCT SN FROM charger_s2 " ):
+            # print (row)
+            battSNs2.append(row[0]) 
+        
+        combineSNs = battSNs1 + battSNs2 
+        list_set = set(combineSNs) 
+        uniqueSNs = (list(list_set))
+        
+        uniqueSNs = [x for x in uniqueSNs if x != '']
+        
+        print('usn')
+        print(uniqueSNs)
+        
+        battCount = len(uniqueSNs)
+        print(battCount)
+        
+        latestData = [ dict() for i in range(len(uniqueSNs))  ]
+ 
+        for i in range(len(uniqueSNs)): 
+             
+            
+            latestData[i]['battSN'] = uniqueSNs[i] 
+            # ambil latest row dari charger_s1 produk ke i
+            # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt']
+            #    0        1           2       3      4      5      6       7
+            cur.execute('SELECT * FROM charger_s1 WHERE SN = ? ORDER BY id DESC LIMIT 1', (str(uniqueSNs[i]),))
+            lastRow = cur.fetchone()
+            
+            if (lastRow == None): 
+                latestData[i]['s1_sn'] = '-'
+                latestData[i]['s1_sn_latest'] = '-'
+                latestData[i]['s1_sn_stat'] = '-'
+            
+            else:
+                latestData[i]['s1_sn'] = lastRow[3]
+                latestData[i]['s1_sn_latest'] = lastRow[4]
+                latestData[i]['s1_sn_stat'] = lastRow[2] 
+            
+            # ambil latest row dari charger_s2 produk ke i
+            # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt']
+            #    0        1           2       3      4      5      6       7
+            cur.execute('SELECT * FROM charger_s2 WHERE SN = ? ORDER BY id DESC LIMIT 1', (str(uniqueSNs[i]),)) 
+            lastRow = cur.fetchone()
+            
+            if (lastRow == None): 
+                latestData[i]['s2_sn'] = '-'
+                latestData[i]['s2_sn_latest'] = '-'
+                latestData[i]['s2_sn_stat'] = '-'
+            
+            else:
+                latestData[i]['s2_sn'] = lastRow[3]
+                latestData[i]['s2_sn_latest'] = lastRow[4]
+                latestData[i]['s2_sn_stat'] = lastRow[2]  
+                
+            # proses slot mana yang lebih latest
+            try:
+                dateS1 = datetime.strptime(latestData[i]['s1_sn_latest'], '%y/%m/%d,%H:%M:%S')
+                dateS2 = datetime.strptime(latestData[i]['s1_sn_latest'], '%y/%m/%d,%H:%M:%S')
+                
+                if (dateS1>dateS2): 
+                    latestData[i]['battSN_latestSlot'] = 'S1'
+                    latestData[i]['battSN_status'] = latestData[i]['s1_sn_stat']
+                    timestampStr = dateS1.strftime("%d-%B-%Y (%H:%M:%S)") 
+                    
+                else: 
+                    latestData[i]['battSN_latestSlot'] = 'S2'
+                    latestData[i]['battSN_status'] = latestData[i]['s2_sn_stat']
+                    timestampStr = dateS2.strftime("%d-%B-%Y (%H:%M:%S)") 
+                    
+                latestData[i]['battSN_latestTime'] = timestampStr 
+            
+            
+            #asumsi slot1 yang paling latest 
+            except:
+                latestData[i]['battSN_latestSlot'] = 'S1'
+                latestData[i]['battSN_latestTime'] = 'N/A' 
+             
+        
+        for x in latestData:
+            print(x)
+         
+        return render_template('displayBatteries.html', latest_data=latestData, product_count=battCount)
+    
+    else:
+        return redirect(url_for('login'))
+
+
+
+@app.route('/connectedBatteries/<battSN>')
+def batteryList(battSN):  
+    if "username" in session: 
+        con = sqlite3.connect(dbName)
+        cur = con.cursor()
+        # reading all table names
+        table_list = [a for a in cur.execute("SELECT name FROM sqlite_master WHERE type = 'table'")] 
+        
+        batteryName = "Battery #" + str(battSN) 
+        
+
+        lenIndex = [ [0] for i in range(2)]
+        
+        cur.execute("SELECT * FROM charger_s1 WHERE SN = ?", (battSN,))
+        lenIndex[0] = len(cur.fetchall())   
+
+        cur.execute("SELECT * FROM charger_s2 WHERE SN = ?", (battSN,))
+        lenIndex[1] = len(cur.fetchall()) 
+        
+        s1data = [ dict() for i in range(lenIndex[0]+1)]
+        s2data = [ dict() for i in range(lenIndex[1]+1)] 
+        battData = [ dict() for i in range(lenIndex[0]+lenIndex[1])] 
+         
+        
+        # get SN data in slot 1 (if available)
+        loopCount = 0
+        # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt']
+        #    0        1           2       3      4      5      6       7 
+        for row in cur.execute("SELECT * FROM charger_s1 WHERE SN = ?", (battSN,)):    
+            s1data[loopCount]['stat'] = row[2]
+            s1data[loopCount]['time'] = row[4] 
+            s1data[loopCount]['soc'] = row[5] 
+            s1data[loopCount]['soh'] = row[6] 
+            s1data[loopCount]['volt'] = row[7] 
+            
+            loopCount += 1
+        
+        # get SN data in slot 2 (if available)
+        loopCount = 0 
+        # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt']
+        #    0        1           2       3      4      5      6       7
+        for row in cur.execute("SELECT * FROM charger_s2 WHERE SN = ?", (battSN,)):      
+            s2data[loopCount]['stat'] = row[2] 
+            s2data[loopCount]['time'] = row[4] 
+            s2data[loopCount]['soc'] = row[5] 
+            s2data[loopCount]['soh'] = row[6] 
+            s2data[loopCount]['volt'] = row[7] 
+            
+            # print(s2data[loopCount])
+            loopCount += 1
+        
+         
+        validChargingCycle = 0
+        invalidChargingCycle = 0
+        # process data valid per 1 charging cycle di slot 1
+        for i in range(lenIndex[0]):
+            exit = 0
+            space = 1
+            # syarat kondisi 1 charging cycle
+            # setelah stat nya 1, setelahnya harus langsung 2 atau 1  
+            if s1data[i]['stat'] == 1: 
+                # kalau 1, berarti lagi ngubah mode pengisian daya, jadi ditraverse sampai ketemu 2
+                if (s1data[i+1]['stat'] == 1 or s1data[i+1]['stat'] == 2):
+                    while(1):
+                        if s1data[i+space]['stat'] == 1:
+                            space += 1
+                        elif s1data[i+space]['stat'] == 2:
+                            break
+                        elif s1data[i+space]['stat'] == 0:
+                            exit = 1
+                else:
+                    invalidChargingCycle+=1
+                    continue
+                
+                if (exit == 1): 
+                    continue
+                else:
+                    battData[validChargingCycle]['init_soc']  = s1data[i]['soc']
+                    battData[validChargingCycle]['init_soh']  = s1data[i]['soh']
+                    battData[validChargingCycle]['init_volt'] = s1data[i]['volt']
+                    battData[validChargingCycle]['init_time'] = s1data[i]['time']
+                    battData[validChargingCycle]['fin_soh']   = s1data[i+space]['soc']
+                    battData[validChargingCycle]['fin_soc']   = s1data[i+space]['soh']
+                    battData[validChargingCycle]['fin_volt']  = s1data[i+space]['volt']
+                    battData[validChargingCycle]['fin_time']  = s1data[i+space]['time']
+                    validChargingCycle += 1
+                    
+        # process data valid per 1 charging cycle di slot 2
+        for i in range(lenIndex[1]):
+            exit = 0
+            space = 1
+            # syarat kondisi 1 charging cycle
+            # setelah stat nya 1, setelahnya harus langsung 2 atau 1 
+            if s2data[i]['stat'] == 1: 
+                # kalau 1, berarti lagi ngubah mode pengisian daya, jadi ditraverse sampai ketemu 2
+                if (s2data[i+1]['stat'] == 1 or s2data[i+1]['stat'] == 2):
+                    while(1):
+                        if s2data[i+space]['stat'] == 1:
+                            space += 1
+                        elif s2data[i+space]['stat'] == 2:
+                            break
+                        elif s2data[i+space]['stat'] == 0:
+                            exit = 1
+                else:
+                    invalidChargingCycle+=1
+                    continue
+                
+                if (exit == 1): 
+                    continue
+                else:
+                    battData[validChargingCycle]['init_soc']  = s2data[i]['soc']
+                    battData[validChargingCycle]['init_soh']  = s2data[i]['soh']
+                    battData[validChargingCycle]['init_volt'] = s2data[i]['volt']
+                    battData[validChargingCycle]['init_time'] = s2data[i]['time']
+                    battData[validChargingCycle]['fin_soh']   = s2data[i+space]['soc']
+                    battData[validChargingCycle]['fin_soc']   = s2data[i+space]['soh']
+                    battData[validChargingCycle]['fin_volt']  = s2data[i+space]['volt']
+                    battData[validChargingCycle]['fin_time']  = s2data[i+space]['time']
+                    validChargingCycle += 1
+                 
+        cur.close()
+        con.close()  
+ 
+        return render_template('displayOneBattery.html', lenValid=validChargingCycle, lenInvalid=invalidChargingCycle, batt_data=battData, batt_sn=battSN)
+    
+    
+    else:
+        return redirect(url_for('login'))
 
 @app.route("/")
 def start():
@@ -580,7 +859,6 @@ def login():
             # con.commit()
             
             # cur.close()
-            
             
             
             flash('Cant register here', 'danger')

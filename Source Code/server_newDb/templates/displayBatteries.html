@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% block title %} Home {% endblock %}
+
+{% block scripts %}
+
+
+{% endblock %}
+
+{% block styles %}
+<style>
+    body{
+        background-color: #f7f7f7;
+    }
+    .header {  
+        padding-top: 25px;
+        font-size: 26px;
+        height:80px; 
+    }
+
+    .alert {
+        position:fixed; 
+        top:  10%;
+        left: 25%;  
+        width: 50%;
+        z-index:9999; 
+        border-radius:0px
+    }
+
+    /* .dataTable > thead > tr > th[class*="sort"]:before,
+    .dataTable > thead > tr > th[class*="sort"]:after {
+        content: "" !important;
+    } */
+
+    .device {
+        text-align: center; 
+    }  
+
+    .dataTables_length {
+        float: left;
+    }
+
+    .dataTables_info {
+        float: left;
+    }
+
+    .addBtn{
+        height:60px; 
+    }  
+
+    .container-fluid{
+        padding: 0 100px;
+    }
+
+    .modal-body{
+        text-align: left; 
+        padding-bottom: 0;
+        margin: 0;
+    }
+
+    .btn.disabled {
+        pointer-events: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  
+    <!-- alert handler -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            {% if messages %} 
+                <div class="alert alert-{{category}}" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {{message}}
+                </div>
+            {% endif %} 
+        {% endfor %}
+    {% endwith %}
+
+
+    <div class="header"> Battery History </div> 
+
+    <!-- tabel list product -->
+    <div class="device">
+        <div class="table-responsive"> 
+            <table id ="generalInfo" class="table table-bordered">
+                <!-- row headers -->
+                <thead class="table-light">
+                    <tr>
+                        <th class="align-middle" scope="col">#</th>
+                        <th class="align-middle" scope="col">Serial Number</th>
+                        <th class="align-middle" scope="col">Status</th>
+                        <th class="align-middle" scope="col">Latest Updated</th> 
+                        <th class="align-middle" scope="col" >Actions</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in range (0, product_count) %}
+                    <tr>
+                        <!-- number -->
+                        <th class="align-middle" scope="row">  
+                            {{ x+1 }}
+                        </th>
+
+                        <!-- SN  -->
+                        <td class="align-middle"> 
+                            {{ latest_data[x]['battSN'] }}
+                        </td>
+
+                        <!-- status -->
+                        <td class="align-middle">
+                            {% if latest_data[x]['battSN_status'] == 0 %} 
+                                Idle
+                            {% elif latest_data[x]['s1_stat'] == 1 %}
+                                Charging
+                            {% elif latest_data[x]['s1_stat'] == 2 %}
+                                Charged 
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td> 
+
+                        <!-- latest updated -->
+                        <td class="align-middle">
+                            {{ latest_data[x]['battSN_latestTime'] }} ({{ latest_data[x]['battSN_latestSlot'] }}) 
+                        </td>
+
+                        <!-- button actions -->
+                        <td class="align-middle" style="width:200px">    
+                            <div class="btn-group"> 
+                                {% set selection = latest_data[x]['pid'] %} 
+                                {% set displayArgs = "charger" + latest_data[x]['pid']|string %} 
+                                <!-- button more details -->
+                                {% if latest_data[x]['s1_stat'] == '-' and latest_data[x]['s2_stat'] == '-' %}  
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Disabled. No charging data has been received">
+                                        <button type="button" class="btn btn-secondary" disabled>
+                                            <i class='bx bx-menu-alt-right' ></i>
+                                        </button>
+                                    </span>
+                                {% else %} 
+                                    <button type="button" class="btn btn-outline-info" onclick="window.location.href='{{ url_for( 'batteryList' , battSN=latest_data[x]['battSN'] ) }}';">
+                                        <i class='bx bx-menu-alt-right' ></i>
+                                    </button>
+                                {% endif %} 
+                                <a> &nbsp </a>
+
+                                
+                            </div>
+                        </td> 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div>
+        <p></p>
+    </div>
+
+    
+</div>
+
+{% endblock %}
+
+{% block scriptBottom %} 
+
+<!-- <script src="js/jquery.min.js"></script> -->
+<script>
+    $(document).ready(function () {
+        $('#generalInfo').DataTable({   
+            // "dom": '<"top"i>rt<"bottom"flp><"clear">',
+            "order": [[ 0, "asc" ]],
+            lengthMenu: [5, 10, 20, 50, 100, 200],
+            bLengthChange: true
+            
+        });
+        
+        window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove();
+            });
+        }, 3000);
+ 
+    });
+ 
+</script>
+ 
+{% endblock %}
+ 

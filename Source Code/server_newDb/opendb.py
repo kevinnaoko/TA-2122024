@@ -20,9 +20,9 @@ con = sqlite3.connect(dbfile)
 cur = con.cursor()
 
 # reading all table names
-# table_list = [a for a in cur.execute("SELECT name FROM sqlite_master WHERE type = 'table'")]
-# # here is you table list
-# print(table_list)
+table_list = [a for a in cur.execute("SELECT name FROM sqlite_master WHERE type = 'table'")]
+# here is you table list
+print(table_list)
 
 print("Slot 1")
 printTable("SELECT * FROM " + "charger_s1") 
@@ -32,7 +32,9 @@ printTable("SELECT * FROM " + "charger_s2")
 
 print("Device")
 printTable("SELECT * FROM " + "charger_device") 
- 
+
+print("Enable")
+printTable("SELECT * FROM " + "charger_enable") 
 
 # Be sure to close the connection
 con.close()
