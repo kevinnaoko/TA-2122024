@@ -1,0 +1,84 @@
+
+body{
+    background-color: #f7f7f7;
+}
+.header {  
+    padding-top: 25px;
+    font-size: 26px;
+    height:80px; 
+} 
+
+.alert {
+    position:fixed; 
+    top:  10%;
+    left: 25%;  
+    width: 50%;
+    z-index:9999; 
+    border-radius:0px
+} 
+
+.device {
+    text-align: center; 
+}  
+
+.dataTables_length {
+    float: left;
+}
+
+.dataTables_info {
+    float: left;
+}
+
+.addBtn{
+    height:60px; 
+}  
+
+.container-fluid{ 
+    padding: 0 100px;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 16px; 
+}
+
+.modal-body{
+    text-align: left; 
+    padding-bottom: 0;
+    margin: 0;
+}
+
+.btn.disabled {
+    pointer-events: auto;
+}
+ 
+.image-logo{
+    width:120px
+}
+
+/* @media (max-width: 720px) {
+    .container-fluid{
+        margin-left: 200px;
+        background-color: black;
+    }
+}
+
+@media (max-width: 320px) {
+    .container-fluid{
+        background-color: black;
+        margin-left: 10px;
+    }
+} */
+
+
+/* On screens that are 992px or less, set the background color to blue */
+@media screen and (max-width: 992px) {
+    .container-fluid { 
+        padding: 0 20px;
+        /* background-color: olive; */
+    }
+}
+
+/* On screens that are 600px or less, set the background color to olive */
+/* @media screen and (max-width: 600px) {
+    body {
+        background-color: olive;
+    }
+} */

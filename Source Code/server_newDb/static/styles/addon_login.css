@@ -1,0 +1,79 @@
+/* .autoAlign{
+    margin-top: auto;
+    margin-bottom: auto;
+} */
+
+@media screen and (max-width: 10000px) {
+    .container-fluid { 
+        padding : 100px 0;
+        width: 300px;
+        text-align: center; 
+    }
+    
+    .image-logo{
+        width: 50%;
+    }
+    .row-buttons{ 
+        width:10% ;
+        text-align:middle;
+    }
+    .btn{
+        width:100%
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .container-fluid { 
+        padding : 20vh 0; 
+        text-align: center; 
+        width: 95%;
+        /* background-color: olive; */
+    }    
+
+    .image-logo{
+        width: 55%;
+        padding-bottom: 5em;
+    }
+
+    .form-control{
+        min-height: calc(1.5em + (2rem + 2px));
+        padding: .5rem 1rem;
+        font-size: 1.25rem;
+        border-radius: .3rem;
+        width: 60%; 
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        font-size:30px;
+    }
+    .header{
+        font-size:72px; 
+    }
+    .row-custom{
+        padding-top:100px ;
+        text-align:middle;
+    }
+    .row-button{ 
+        width:62% ;
+        text-align:middle;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .btn{
+        width:100%;
+        height:200%;
+        font-size:30px;
+        border-radius: 1rem;
+    }
+}  
+
+.modal-body{
+    text-align: left; 
+    padding-bottom: 0;
+    margin: 0;
+} 
+
+.row{
+    text-align: center;
+}

@@ -662,27 +662,29 @@ def batteryList(battSN):
         
         # get SN data in slot 1 (if available)
         loopCount = 0
-        # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt']
-        #    0        1           2       3      4      5      6       7 
+        # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt', 'ChargeMode']
+        #    0        1           2       3      4      5      6       7         8
         for row in cur.execute("SELECT * FROM charger_s1 WHERE SN = ?", (battSN,)):    
             s1data[loopCount]['stat'] = row[2]
             s1data[loopCount]['time'] = row[4] 
             s1data[loopCount]['soc'] = row[5] 
             s1data[loopCount]['soh'] = row[6] 
             s1data[loopCount]['volt'] = row[7] 
+            s1data[loopCount]['chargeMode'] = row[8] 
             
             loopCount += 1
         
         # get SN data in slot 2 (if available)
         loopCount = 0 
-        # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt']
-        #    0        1           2       3      4      5      6       7
+        # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt', 'ChargeMode']
+        #    0        1           2       3      4      5      6       7         8
         for row in cur.execute("SELECT * FROM charger_s2 WHERE SN = ?", (battSN,)):      
             s2data[loopCount]['stat'] = row[2] 
             s2data[loopCount]['time'] = row[4] 
             s2data[loopCount]['soc'] = row[5] 
             s2data[loopCount]['soh'] = row[6] 
             s2data[loopCount]['volt'] = row[7] 
+            s2data[loopCount]['chargeMode'] = row[8] 
             
             # print(s2data[loopCount])
             loopCount += 1
@@ -691,70 +693,83 @@ def batteryList(battSN):
         validChargingCycle = 0
         invalidChargingCycle = 0
         # process data valid per 1 charging cycle di slot 1
-        for i in range(lenIndex[0]):
+        for i in range(lenIndex[0]): 
             exit = 0
             space = 1
             # syarat kondisi 1 charging cycle
             # setelah stat nya 1, setelahnya harus langsung 2 atau 1  
             if s1data[i]['stat'] == 1: 
                 # kalau 1, berarti lagi ngubah mode pengisian daya, jadi ditraverse sampai ketemu 2
-                if (s1data[i+1]['stat'] == 1 or s1data[i+1]['stat'] == 2):
-                    while(1):
-                        if s1data[i+space]['stat'] == 1:
-                            space += 1
-                        elif s1data[i+space]['stat'] == 2:
-                            break
-                        elif s1data[i+space]['stat'] == 0:
-                            exit = 1
+                if s1data[i+1]['stat'] == 1:
+                    chargeCondition = 'Partial'
+                elif s1data[i+1]['stat'] == 2: 
+                    chargeCondition = 'Full' 
                 else:
                     invalidChargingCycle+=1
                     continue
                 
-                if (exit == 1): 
-                    continue
-                else:
-                    battData[validChargingCycle]['init_soc']  = s1data[i]['soc']
-                    battData[validChargingCycle]['init_soh']  = s1data[i]['soh']
-                    battData[validChargingCycle]['init_volt'] = s1data[i]['volt']
-                    battData[validChargingCycle]['init_time'] = s1data[i]['time']
-                    battData[validChargingCycle]['fin_soh']   = s1data[i+space]['soc']
-                    battData[validChargingCycle]['fin_soc']   = s1data[i+space]['soh']
-                    battData[validChargingCycle]['fin_volt']  = s1data[i+space]['volt']
-                    battData[validChargingCycle]['fin_time']  = s1data[i+space]['time']
-                    validChargingCycle += 1
+                battData[validChargingCycle]['condition'] = chargeCondition
+                battData[validChargingCycle]['init_soc']  = s1data[i]['soc']
+                battData[validChargingCycle]['init_soh']  = s1data[i]['soh']
+                battData[validChargingCycle]['init_volt'] = s1data[i]['volt']
+                battData[validChargingCycle]['init_time'] = s1data[i]['time']
+                battData[validChargingCycle]['chg_mode']  = s1data[i]['chargeMode']
+                battData[validChargingCycle]['fin_soc']   = s1data[i+space]['soc']
+                battData[validChargingCycle]['fin_soh']   = s1data[i+space]['soh']
+                battData[validChargingCycle]['fin_volt']  = s1data[i+space]['volt']
+                battData[validChargingCycle]['fin_time']  = s1data[i+space]['time']
+                validChargingCycle += 1
                     
         # process data valid per 1 charging cycle di slot 2
-        for i in range(lenIndex[1]):
+        for i in range(lenIndex[1]): 
             exit = 0
             space = 1
             # syarat kondisi 1 charging cycle
             # setelah stat nya 1, setelahnya harus langsung 2 atau 1 
-            if s2data[i]['stat'] == 1: 
-                # kalau 1, berarti lagi ngubah mode pengisian daya, jadi ditraverse sampai ketemu 2
-                if (s2data[i+1]['stat'] == 1 or s2data[i+1]['stat'] == 2):
-                    while(1):
-                        if s2data[i+space]['stat'] == 1:
-                            space += 1
-                        elif s2data[i+space]['stat'] == 2:
-                            break
-                        elif s2data[i+space]['stat'] == 0:
-                            exit = 1
+            if s2data[i]['stat'] == 1:  
+                # partial/fullcharge 
+                if s2data[i+1]['stat'] == 1:
+                    chargeCondition = 'Partial'
+                elif s2data[i+1]['stat'] == 2: 
+                    chargeCondition = 'Full' 
                 else:
                     invalidChargingCycle+=1
                     continue
+                  
+                battData[validChargingCycle]['condition'] = chargeCondition
+                battData[validChargingCycle]['init_soc']  = s2data[i]['soc']
+                battData[validChargingCycle]['init_soh']  = s2data[i]['soh']
+                battData[validChargingCycle]['init_volt'] = s2data[i]['volt']
+                battData[validChargingCycle]['init_time'] = s2data[i]['time']
+                battData[validChargingCycle]['chg_mode']  = s2data[i]['chargeMode']
+                battData[validChargingCycle]['fin_soc']   = s2data[i+space]['soc']
+                battData[validChargingCycle]['fin_soh']   = s2data[i+space]['soh']
+                battData[validChargingCycle]['fin_volt']  = s2data[i+space]['volt']
+                battData[validChargingCycle]['fin_time']  = s2data[i+space]['time']
+                validChargingCycle += 1
+        
+        # print(battData[0])
+        # proses tanggal, durasi, delta SOC
+        for i in range(validChargingCycle):
+            battData[i]['delta_soc'] = battData[i]['fin_soc'] - battData[i]['init_soc']
+            # try:
+            dateStart = datetime.strptime(battData[i]['init_time'], '%y/%m/%d,%H:%M:%S')
+            dateFinish = datetime.strptime(battData[i]['fin_time'], '%y/%m/%d,%H:%M:%S')
+            
+            duration = (dateFinish - dateStart).total_seconds()
+            if (duration < 3600):
+                durationString = "{:.0f} mins".format((duration % 3600) / 60)  
+            else:
+                durationString = "{} hrs {:.0f} mins".format(math.floor(duration / 3600), (duration % 3600) / 60)  
+            battData[i]['delta_time'] = durationString
+            
+            battData[i]['init_time'] = dateStart.strftime("%d-%B-%Y (%H:%M:%S)") 
+            battData[i]['fin_time'] = dateFinish.strftime("%d-%B-%Y (%H:%M:%S)") 
                 
-                if (exit == 1): 
-                    continue
-                else:
-                    battData[validChargingCycle]['init_soc']  = s2data[i]['soc']
-                    battData[validChargingCycle]['init_soh']  = s2data[i]['soh']
-                    battData[validChargingCycle]['init_volt'] = s2data[i]['volt']
-                    battData[validChargingCycle]['init_time'] = s2data[i]['time']
-                    battData[validChargingCycle]['fin_soh']   = s2data[i+space]['soc']
-                    battData[validChargingCycle]['fin_soc']   = s2data[i+space]['soh']
-                    battData[validChargingCycle]['fin_volt']  = s2data[i+space]['volt']
-                    battData[validChargingCycle]['fin_time']  = s2data[i+space]['time']
-                    validChargingCycle += 1
+            # except:
+            #     battData[i]['init_time'] = '-'
+            #     battData[i]['fin_time'] = '-' 
+            #     battData[i]['delta_time'] = '-' 
                  
         cur.close()
         con.close()  
@@ -901,5 +916,5 @@ def testPublish():
     return render_template('testTable.html')  
 
 if __name__ == "__main__":
-    # app.run(host='192.168.1.102', port=5000, debug=True)
-    app.run(debug=True)
+    app.run(host='192.168.43.95', port=5000, debug=True)
+    # app.run(debug=True)

@@ -31,76 +31,8 @@
 {% endblock %}
 
 {% block styles %} 
-<style>
-    body {
-        margin: 0;
-        background-color: #f7f7f7;
-    }
- 
-
-    .container-fluid {      
-
-        font-family: 'Quicksand', sans-serif;
-        font-size: 16px;
- 
-
-    }
-
-    .container-fluid div {
-        padding: 10px;
-    }
-
-    .dataTables_length {
-        float: right;
-    }
-
-    .dataTables_info {
-        float: left;
-    }
-
-    .table-sm {
-        text-align: center; 
-    }
-
-    .table-sm {
-        text-align: center; 
-    }
-  
-    .card{
-        height:250px; 
-        padding:0px; 
-    } 
-
-    .card-img-top{
-        padding-top: 2em;
-        padding-bottom: 1em;
-        max-width: 25%; 
-        height: auto;
-        align-self: center;   
-    }
-    .col-sm-8 { 
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        font-weight: bold;
-        font-size: 20px;
-    }
-    .col-sm-1{
-        align-content: center;
-        text-align: center;
-    } 
-    .card{
-        background-color: #f7f7f7;
-    } 
-    .card-title{
-        font-weight: bold;
-    }
-    .card-text{
-        font-size: 14px;
-        text-align: center;
-    } 
-    .container-fluid{
-        padding: 0 100px;
-    }
-</style>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">  
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/addon_displayOneDevice.css') }}">  
 {% endblock %}
 
 {% block content %}
@@ -128,7 +60,7 @@
                     {% set txt_slot_1 = "No Data" %}
                 {% endif %} 
                 
-                <img class="card-img-top" src="{{ url_for('static', filename=src_slot_1) }}" alt="Card image cap">
+                <img class="card-img-top" src="{{ url_for('static', filename=src_slot_1) }}" alt="err">
                 <div class="card-body">
                     <h5 class="card-title" style="text-align:center">Slot One</h5>  
                     <p class="card-text"> {{ txt_slot_1 }} </p> 
@@ -153,7 +85,7 @@
                 {% endif %}
                 
                 <!-- <div class="card" style="height: 100px; background-color: {{color}} ">  -->
-                    <img class="card-img-top" src="{{ url_for('static', filename=src_slot_2) }}" alt="Card image cap">
+                    <img class="card-img-top" src="{{ url_for('static', filename=src_slot_2) }}" alt="err">
                 <!-- </div> -->
                 <div class="card-body">
                     <h5 class="card-title" style="text-align:center">Slot Two</h5>  
@@ -171,7 +103,7 @@
                     {% set src_dev = "fastcharge.png" %}
                     {% set txt_dev = "Fast Charge" %}
                 {% endif %}
-                <img class="card-img-top" src="{{ url_for('static', filename=src_dev) }}" alt="Card image cap">
+                <img class="card-img-top" src="{{ url_for('static', filename=src_dev) }}" alt="err">
                 <div class="card-body">
                     <h5 class="card-title" style="text-align:center">Chg Mode</h5>  
                     <p class="card-text"> {{ txt_dev }} </p> 
@@ -214,7 +146,11 @@
                         <tr>
                             <th scope="row"> {{ len[0] - loop.index + 1 }}</th>
                             <td>{{ s1_data[x]['stat'] }}</td>
-                            <td>{{ s1_data[x]['sn'] }}</td>
+                            <td>
+                                <a href="{{ url_for( 'batteryList' , battSN=s1_data[x]['sn'] ) }}" style="text-decoration: none; color: inherit;">
+                                    {{ s1_data[x]['sn'] }}
+                                </a>
+                            </td>
                             <td>{{ s1_data[x]['time'] }}</td>
                             <td>{{ s1_data[x]['soc'] }}</td>
                             <td>{{ s1_data[x]['soh'] }}</td>
@@ -245,7 +181,11 @@
                         <tr>
                             <th scope="row"> {{ len[1] - loop.index + 1 }}</th>
                             <td>{{ s2_data[x]['stat'] }}</td>
-                            <td>{{ s2_data[x]['sn'] }}</td>
+                            <td>
+                                <a href="{{ url_for( 'batteryList' , battSN=s2_data[x]['sn'] ) }}" style="text-decoration: none; color: inherit;">
+                                    {{ s2_data[x]['sn'] }}
+                                </a>
+                            </td>
                             <td>{{ s2_data[x]['time'] }}</td>
                             <td>{{ s2_data[x]['soc'] }}</td>
                             <td>{{ s2_data[x]['soh'] }}</td>

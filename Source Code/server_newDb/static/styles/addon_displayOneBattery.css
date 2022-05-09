@@ -1,0 +1,21 @@
+body {
+    margin: 0; 
+}
+  
+.container-fluid div {
+    padding: 10px;
+} 
+
+.table-bordered {
+    text-align: center;
+}
+
+th {
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+}
+
+th:first-child {
+    border-left: 1px solid #dddddd;
+} 

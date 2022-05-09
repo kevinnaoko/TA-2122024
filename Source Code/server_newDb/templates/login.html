@@ -6,86 +6,8 @@
 {% endblock %}
 
 {% block styles %}
-<style>
-    body{
-        background-color: #f7f7f7;
-    }
-    .header {  
-        padding-top: 25px;
-        font-size: 26px;
-        height:80px; 
-    }
-
-    .autoAlign{
-        margin-top: auto;
-        margin-bottom: auto;
-    }
-
-    .alert {
-        position:fixed; 
-        top:  10%;
-        left: 25%;  
-        width: 50%;
-        z-index:9999; 
-        border-radius:0px
-    }
-
-    /* .dataTable > thead > tr > th[class*="sort"]:before,
-    .dataTable > thead > tr > th[class*="sort"]:after {
-        content: "" !important;
-    } */
-
-    .device {
-        text-align: center; 
-    }  
-
-    .dataTables_length {
-        float: left;
-    }
-
-    .dataTables_info {
-        float: left;
-    }
-
-    .addBtn{
-        height:60px; 
-    }  
-
-    /* On screens that are 992px or less, set the background color to blue */
-    /* @media screen and (max-width: 992px) {
-        body {
-            background-color: blue;
-        }
-    } */
-
-    /* On screens that are 600px or less, set the background color to olive */
-    /* @media screen and (max-width: 600px) {
-        body {
-            background-color: olive;
-        }
-    } */
-    
-
-    .container-fluid {
-        padding : 100px 0;
-        width: 300px;
-        text-align: center; 
-    }
-
-    .modal-body{
-        text-align: left; 
-        padding-bottom: 0;
-        margin: 0;
-    }
-
-    .btn.disabled {
-        pointer-events: auto;
-    }
-
-    .image-logo{
-        width:120px
-    }
-</style>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">  
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/addon_login.css') }}">  
 {% endblock %}
 
 {% block content %}
@@ -104,28 +26,28 @@
     {% endwith %}
 
 
-    <img class="image-logo" src="{{ url_for('static', filename='oyikalogo.png') }}" alt="Card image cap">
+    <img class="image-logo" src="{{ url_for('static', filename='oyikalogo.png') }}" alt="err">
     <div class="header">Dashboard Login</div> 
-
-    <form action="#" method="post">
-        <div class="form-group"> 
-            <input type="text" class="form-control" id="inputUsername" name="username" placeholder="Username">
-            <p></p>
-            <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Password">
-        </div>
-        <div class="form-group"> 
-        </div>
-        
-        <div class="row">
-            <div class="col-sm autoAlign"  style="padding-top:10px">
-                <button type="submit" class="btn btn-link" name="submit_btn" value="register" style="width:100%">Register</button>
+    
+    <div class="row row-custom">  
+        <form action="#" method="post">
+            <div class="row" style="text-align: middle;"> 
+                <div class="form-group" > 
+                    <input type="text" class="form-control" id="inputUsername" name="username" placeholder="Username">
+                    <p></p>
+                    <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Password">
+                </div> 
             </div>
-            <div class="col-sm"  style="padding-top:10px" >
-                <button type="submit" class="btn btn-primary" name="submit_btn" value="login" style="width:100%">Login</button>   
-            </div>
-        </div> 
-    </form>  
- 
+            <div class="row row-button"> 
+                <div class="col-sm autoAlign"  style="padding-top:10px">
+                    <button type="submit" class="btn btn-link" name="submit_btn" value="register">Register</button>
+                </div>
+                <div class="col-sm"  style="padding-top:10px" >
+                    <button type="submit" class="btn btn-primary" name="submit_btn" value="login">Login</button>   
+                </div>
+            </div> 
+        </form>  
+    </div> 
 
     
 </div>

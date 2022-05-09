@@ -7,60 +7,7 @@
 {% endblock %}
 
 {% block styles %}
-<style>
-    body{
-        background-color: #f7f7f7;
-    }
-    .header {  
-        padding-top: 25px;
-        font-size: 26px;
-        height:80px; 
-    }
-
-    .alert {
-        position:fixed; 
-        top:  10%;
-        left: 25%;  
-        width: 50%;
-        z-index:9999; 
-        border-radius:0px
-    }
-
-    /* .dataTable > thead > tr > th[class*="sort"]:before,
-    .dataTable > thead > tr > th[class*="sort"]:after {
-        content: "" !important;
-    } */
-
-    .device {
-        text-align: center; 
-    }  
-
-    .dataTables_length {
-        float: left;
-    }
-
-    .dataTables_info {
-        float: left;
-    }
-
-    .addBtn{
-        height:60px; 
-    }  
-
-    .container-fluid{
-        padding: 0 100px;
-    }
-
-    .modal-body{
-        text-align: left; 
-        padding-bottom: 0;
-        margin: 0;
-    }
-
-    .btn.disabled {
-        pointer-events: auto;
-    }
-</style>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}"> 
 {% endblock %}
 
 {% block content %}
