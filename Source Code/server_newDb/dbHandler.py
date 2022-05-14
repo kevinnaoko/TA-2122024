@@ -34,12 +34,13 @@ def slotHandler(jsonData, suffix):
     battSoC = jsonRows['SoC']
     battSoH = jsonRows['SoH']
     battVolt = jsonRows['Volt']
+    chgMode = jsonRows['Charging Mode']
 
     # Sisipkan data ke db
     dbObj = dbManager() 
     tableName = "charger_" + suffix
-    sqliteQuery = "INSERT INTO " + tableName + " (productId, Status, SN, Time, SoC, SoH, Volt) values (?,?,?,?,?,?,?)" 
-    dbObj.insertRecord(sqliteQuery, [productID, chgStatus, battSN, time, battSoC, battSoH, battVolt])
+    sqliteQuery = "INSERT INTO " + tableName + " (productId, Status, SN, Time, SoC, SoH, Volt, chargeMode) values (?,?,?,?,?,?,?,?)" 
+    dbObj.insertRecord(sqliteQuery, [productID, chgStatus, battSN, time, battSoC, battSoH, battVolt, chgMode])
     del dbObj
 
     print ("Inserted " + suffix + " into " + tableName)

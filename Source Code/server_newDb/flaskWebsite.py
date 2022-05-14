@@ -1,5 +1,5 @@
 from enum import unique
-import paho.mqtt.client as mqtt
+import paho.mqtt.publish as publish
 import hashlib
 from re import I, search
 from flask import Flask, redirect, url_for, render_template, request, flash, session
@@ -15,19 +15,64 @@ import requests
 dbName = "IoT.db"
 dbUser = "user.db"
 
+mqttHost = "34.101.49.52"
+mqttPort = 1883
+
 #flask settings
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
    
-@app.route('/devices/<deviceSelect>')
+@app.route('/devices/<deviceSelect>', methods=["POST", "GET"])
 def display(deviceSelect):  
     if "username" in session: 
+        if request.method == "POST":
+            if request.form['submit_button'] == 'changeEnableSubmit':
+                print("change status")
+                print("================================================================") 
+                deviceSelect = request.form["changeEnableIndex"] 
+                
+                con = sqlite3.connect(dbName)
+                cur = con.cursor()  
+                # ['id', 'productId', 'productEnable']
+                #   0         1              2
+                cur.execute("SELECT * FROM charger_enable WHERE productId=?" , (deviceSelect,)) 
+                row = cur.fetchone()    
+                
+                if row[2] == 1:
+                    setEn = 0
+                    strFlash = ' disabled'
+                else:
+                    setEn = 1
+                    strFlash = ' enabled'
+                    
+                query = "Update charger_enable set productEnable = ? where productId = ?"
+                cur.execute(query,[setEn,deviceSelect])
+                con.commit() 
+                cur.close()
+                print('info changed')  
+                
+                # publish command
+                try:
+                    commandTopic = "sys/charger" + str(deviceSelect) + "/commands" 
+                    publish.single(commandTopic, setEn, hostname = mqttHost, port = mqttPort) 
+                    flash('Charger ' + deviceSelect + strFlash, 'success')
+                
+                except: 
+                    flash('MQTT server unreachable. Can\'t change device status', 'warning')
+                     
+                params = "charger" + str(deviceSelect)
+                return redirect(url_for('display', deviceSelect=params))
+            
+            
+        else:
+            pass
+        
         con = sqlite3.connect(dbName)
         cur = con.cursor()
         # reading all table names
         table_list = [a for a in cur.execute("SELECT name FROM sqlite_master WHERE type = 'table'")] 
         
-        deviceName = (deviceSelect[0:7] + " " + deviceSelect[7:]).capitalize() 
+        deviceName = (deviceSelect[0:7] + " " + deviceSelect[7:]).capitalize()  
         deviceSelection = deviceSelect[7:]
         print("TEST:",end='')
         print(deviceSelection)
@@ -96,6 +141,16 @@ def display(deviceSelect):
         latestInfo['cid'] = row[6]
         
         print(latestInfo)
+        
+        # get charger status
+        # cek apakah sudah ada data di charger_enable
+        # kalau belum, insert data lalu inisialisasi dengan value 1 (ON)
+        # kalau sudah, ambil info device_enable
+        # ['id', 'productId', 'productEnable']
+        #   0         1              2
+        cur.execute('SELECT * FROM charger_enable WHERE productId = ?', [str(deviceSelection),]) 
+        row = cur.fetchone() 
+        deviceEn = row[2]  
 
         cur.close()
         con.close()  
@@ -140,7 +195,7 @@ def display(deviceSelect):
         print(lon)
 
         # print(s2data[0])
-        return render_template('displayOneDevice.html', len=lenIndex, s1_data=s1data, s2_data=s2data, device_info=latestInfo, device_name=deviceName, lat=lat, lon=lon)
+        return render_template('displayOneDevice.html', len=lenIndex, s1_data=s1data, s2_data=s2data, device_info=latestInfo, device_id=deviceSelection, lat=lat, lon=lon, device_en = deviceEn)
     
     
     else:
@@ -234,7 +289,16 @@ def home():
                 cur.close()
                 print('info changed')  
                 
-                flash('Charger ' + deviceSelect + strFlash, 'success')
+                # publish command
+                try:
+                    commandTopic = "sys/charger" + str(deviceSelect) + "/commands" 
+                    publish.single(commandTopic, setEn, hostname=mqttHost, port = mqttPort)
+                    
+                    flash('Charger ' + deviceSelect + strFlash, 'success')
+                
+                except: 
+                    flash('MQTT server unreachable. Failed to change device status', 'warning')
+                
                 return redirect(url_for('home'))
             
             
@@ -914,6 +978,9 @@ def testPublish():
     print("Publishing message to topic", topic)
     client.publish(topic,"testPaho")
     return render_template('testTable.html')  
+
+# other functions
+
 
 if __name__ == "__main__":
     app.run(host='192.168.0.114', port=5000, debug=True)

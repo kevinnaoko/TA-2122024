@@ -38,8 +38,37 @@
 {% block content %}
 
 <div class="container-fluid">
+    <!-- alert handler -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            {% if messages %} 
+                <div class="alert alert-{{category}}" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {{message}}
+                </div>
+            {% endif %} 
+        {% endfor %}
+    {% endwith %}
+
     <div class="row" style="margin-top: 15px; margin-bottom:0; padding-bottom:0; margin-left:0"> 
-        <h4 style="margin:0; padding:0">{{device_name}}</h4> 
+        <div class="col-sm" style="margin-top: 0px; margin-bottom:0; padding-bottom:0; margin-left:0">
+            <h4 style="margin:0; padding:0">Charger {{device_id}}</h4>
+        </div>
+        <div class="col-sm" style="margin-top: 0px; margin-bottom:0; padding-bottom:0; margin-left:0; text-align: right;">
+            {% if device_en == 1 %}
+                {% set classBtn = 'btn-success' %}
+            {% else %} 
+                {% set classBtn = 'btn-outline-success' %}
+                {% set subtitle = "Product disabled. Click to enable" %}
+            {% endif %}  
+            <form action="#" method="post">  
+                <i style="margin-right:20px; color:#9d9d9d">{{ subtitle }}</i>
+                <input type="hidden" name="changeEnableIndex" value="{{device_id}}"></input> 
+                <button type="submit" class="btn {{classBtn}}" name="submit_button" value="changeEnableSubmit"> 
+                    <i class='bx bx-power-off'></i> 
+                </button> 
+            </form>
+        </div> 
     </div>
  
     <div class="row" style="margin-bottom:0; padding-bottom:0">
@@ -152,8 +181,13 @@
                                 </a>
                             </td>
                             <td>{{ s1_data[x]['time'] }}</td>
-                            <td>{{ s1_data[x]['soc'] }}</td>
-                            <td>{{ s1_data[x]['soh'] }}</td>
+                            {% if s1_data[x]['soc'] == -1 %} 
+                                <td>err</td>
+                                <td>err</td>
+                            {% else %} 
+                                <td>{{ s1_data[x]['soc'] }}</td>
+                                <td>{{ s1_data[x]['soh'] }}</td>
+                            {% endif %}
                             <td>{{ s1_data[x]['volt'] }}</td>
                         </tr>
                         {% endfor %}
@@ -227,8 +261,16 @@
         $("div.toolbar1").html('<b>Slot 1</b>');
 
         $("div.toolbar2").html('<b>Slot 2</b>');
-        }); 
-        
 
+        window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove();
+            });
+        }, 3000);
+
+        }); 
+
+        
 </script>
 {% endblock %}
+ 

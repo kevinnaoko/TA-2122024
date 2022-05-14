@@ -6,6 +6,8 @@
  *    Kevin Naoko
  *    Eren
  */ 
+#include <EEPROM.h>
+#define EEPROM_SIZE 1
 
 #define DEMO 0               // 1 = true, 0 = false
 #define TINY_GSM_MODEM_SIM800 // Modem is SIM800L 
@@ -49,6 +51,7 @@ PubSubClient client(espClient);
 #define MAX_RETRIEVE 30
 
 // State Definition
+#define STARTUP 9
 #define IDLE 0
 #define RETRIEVE_SERIAL 1
 #define TRIGGER 2
@@ -133,6 +136,8 @@ char serialNumberL[16] = "";
 byte cmd_sendSlotL = 0;
 
 // Others
+byte isEnabledCmd = 0;
+int previousChargingMode = 0;
 int locDetails[5];
 int chargingMode = 0;
 byte isGetLocation = 0;
@@ -143,7 +148,7 @@ char topics[3][20] = {
     "sys/s2",
     "sys/device", 
 };
-char commandTopic[25] = "sys/charger3/commands";
+//char commandTopic[25] = "sys/charger3/commands";
 int readAdcCurrent;
 float current;  
 int readAdcVoltage;
@@ -158,12 +163,12 @@ int triggerFlag = 0;
 long t = millis();
 long t1 = millis();
 long t_overcurrentFlag = millis();
+byte initialUpload = 0;
 
 int adc_ads1[5];
 
 // char topics[3][20]; 
-// char commandTopic[25];
-// sprintf(commandTopic, "sys/charger%d/commands", PRODUCT_ID); 
+char commandTopic[25];
 
 Adafruit_ADS1015 ads1015;    // ADS1115 untuk temperatur
 //Adafruit_ADS1015 ads1015VI;    // ADS1115 untuk tegangan dan arus
@@ -172,7 +177,20 @@ Adafruit_ADS1015 ads1015;    // ADS1115 untuk temperatur
 SemaphoreHandle_t xMutex;
  
 void setup()
-{
+{ 
+    // Initialize serial communication
+    Serial.begin(9600); 
+    Sim800l.begin(9600, SERIAL_8N1, rxGSM, txGSM); 
+    
+    // Set commandTopic
+    sprintf(commandTopic, "sys/charger%d/commands", PRODUCT_ID); 
+
+    // load enable/disable status dari EEPROM 
+    EEPROM.begin(EEPROM_SIZE);
+    isEnabledCmd = EEPROM.read(0);
+    Serial.print("isDisabled: ");
+    Serial.println(isEnabledCmd);
+    
     // Right Side Pin Configuration
     pinMode(batteryButtonR, INPUT_PULLUP);
     //pinMode(chargerSW1R, OUTPUT);
@@ -193,10 +211,6 @@ void setup()
     pinMode(triggerButton, INPUT_PULLUP);
     pinMode(chargingModePin, INPUT_PULLUP);
     pinMode(relayCharger, OUTPUT);
-
-    // Initialize serial communication
-    Serial.begin(9600); 
-    Sim800l.begin(9600, SERIAL_8N1, rxGSM, txGSM); 
 
     // Connect to WiFi
     WiFi.disconnect();
@@ -280,6 +294,10 @@ void Sampling(void *parameter)
 //           Serial.println(adc_ads1[3]); 
            t = millis(); 
         }
+
+        // button ubah mode daya
+        byte btnSwitchPowerMode = digitalRead(chargingModePin);
+        chargingMode = btnSwitchPowerMode;
 
         triggerDetected = !(digitalRead(triggerButton));
         if( triggerDetected && stateL == IDLE && stateR == IDLE){
@@ -395,6 +413,20 @@ void MQTTLoop(void *parameter)
 //
 //         }
 
+        if (initialUpload == 0 && client.connected()){  
+            strcpy(stringHolder, blank);
+            buildStringBatteryInfo(0, stringHolder);
+            Serial.println(stringHolder);
+            client.publish(topics[0], stringHolder);
+            
+            strcpy(stringHolder, blank);
+            buildStringBatteryInfo(1, stringHolder);
+            Serial.println(stringHolder);
+            client.publish(topics[1], stringHolder); 
+            
+            initialUpload = 1;
+        }
+
         // Sampling lokasi apabila informasi belum didapatkan 
         if (!(isGetLocation))
         {   
@@ -441,6 +473,25 @@ void MQTTLoop(void *parameter)
     
                 cmd_sendSlotR = 0;
             }
+
+            // command publish bila switch mode daya diflip
+            if (previousChargingMode != chargingMode){
+                strcpy(stringHolder, blank);
+                buildStringBatteryInfo(0, stringHolder);
+                Serial.println(stringHolder);
+                client.publish(topics[0], stringHolder);
+                
+                strcpy(stringHolder, blank);
+                buildStringBatteryInfo(1, stringHolder);
+                Serial.println(stringHolder);
+                client.publish(topics[1], stringHolder);
+                
+                strcpy(stringHolder, blank);
+                buildStringDeviceInfo(stringHolder);
+                Serial.println(stringHolder);
+                client.publish(topics[2], stringHolder);
+            }
+            previousChargingMode = chargingMode;
         }
 
         // bila koneksi ke broker belum ada, command publish ditahan dulu
@@ -473,7 +524,9 @@ void LeftCode(void *parameter)
 //            Serial.println(stateL);
 //            t = millis();
 //        }
-        if(overheatFlag || overcurrentFlag){
+
+        
+        if(overheatFlag || overcurrentFlag || !isEnabledCmd){
           stateFaultL();
         }
         else if(triggerFlag){
@@ -517,7 +570,7 @@ void RightCode(void *parameter)
 //            t1 = millis();
 //        }
 
-        if(overheatFlag || overcurrentFlag){
+        if(overheatFlag || overcurrentFlag || !isEnabledCmd){
           stateFaultR();
         }
         else if(triggerFlag){
@@ -1279,16 +1332,22 @@ void callback(char *topic, byte *payload, unsigned int length)
     String MQTT_DATA = "";
     
     for (int i=0;i<length;i++) {
-        Serial.print((char)payload[i]);
+//        Serial.print((char)payload[i]);
         MQTT_DATA += (char)payload[i];
     }
+    Serial.print(MQTT_DATA);
+    
+    isEnabledCmd = MQTT_DATA.toInt();
+    EEPROM.write(0, isEnabledCmd);
+    EEPROM.commit();
+    
     Serial.println();
 }
 
 void buildStringBatteryInfo(int battSelect, char *holder)
 {
     char dbIndex[8][20] = {
-        "\"Product ID\": ", "\"Status\": ", "\"Serial Number\": ", "\"Time\": ", "\"SoC\": ", "\"SoH\": ", " \"Volt\": "};
+        "\"Product ID\": ", "\"Status\": ", "\"Serial Number\": ", "\"Time\": ", "\"SoC\": ", "\"SoH\": ", " \"Volt\": ", "\"Charging Mode\": "};
 
     char sep[3] = ", ";
     char buildSN[18];
@@ -1311,27 +1370,39 @@ void buildStringBatteryInfo(int battSelect, char *holder)
     strcat(holder, dbIndex[1]);
     if (battSelect == 0)
     {
-        if(stateL == CHARGING){
-            sprintf(stringHolder, "%d", 1);
-        }
-        else if(stateL == FINISH_CHARGING){
-            sprintf(stringHolder, "%d", 2);
+        if (initialUpload == 0){
+            sprintf(stringHolder, "%d", -1);
         }
         else{
-            sprintf(stringHolder, "%d", 0);
+            if(stateL == CHARGING){
+                sprintf(stringHolder, "%d", 1);
+            }
+            else if(stateL == FINISH_CHARGING){
+                sprintf(stringHolder, "%d", 2);
+            }
+            else{
+                sprintf(stringHolder, "%d", 0);
+            }
         }
+            
     }
     else
     {
-        if(stateR == CHARGING){
-            sprintf(stringHolder, "%d", 1);
-        }
-        else if(stateR == FINISH_CHARGING){
-            sprintf(stringHolder, "%d", 2);
+        if (initialUpload == 0){
+            sprintf(stringHolder, "%d", -1);
         }
         else{
-            sprintf(stringHolder, "%d", 0);
+            if(stateR == CHARGING){
+                sprintf(stringHolder, "%d", 1);
+            }
+            else if(stateR == FINISH_CHARGING){
+                sprintf(stringHolder, "%d", 2);
+            }
+            else{
+                sprintf(stringHolder, "%d", 0);
+            }
         }
+            
     }
 
     strcat(holder, stringHolder);
@@ -1365,11 +1436,11 @@ void buildStringBatteryInfo(int battSelect, char *holder)
     strcat(holder, dbIndex[4]);
     if (battSelect == 0)
     {
-        sprintf(stringHolder, "%f", SoCL);
+        sprintf(stringHolder, "%.2f", SoCL*100);
     }
     else
     {
-        sprintf(stringHolder, "%f", SoCR);
+        sprintf(stringHolder, "%.2f", SoCR*100);
     }
     strcat(holder, stringHolder);
     strcpy(stringHolder, blank);
@@ -1379,11 +1450,11 @@ void buildStringBatteryInfo(int battSelect, char *holder)
      strcat(holder, dbIndex[5]);
      if (battSelect == 0)
      {
-         sprintf(stringHolder, "%d", SoHL);
+         sprintf(stringHolder, "%.2f", float(SoHL)/10);
      }
      else
      {
-         sprintf(stringHolder, "%d", SoHR);
+         sprintf(stringHolder, "%.2f", float(SoHR)/10);
      }
      strcat(holder, stringHolder);
      strcpy(stringHolder, blank); 
@@ -1393,14 +1464,21 @@ void buildStringBatteryInfo(int battSelect, char *holder)
      strcat(holder, dbIndex[6]);
      if (battSelect == 0)
      {
-         sprintf(stringHolder, "%d", voltL);
+         sprintf(stringHolder, "%.2f", voltage/1000);
      }
      else
      {
-         sprintf(stringHolder, "%d", voltR);
+         sprintf(stringHolder, "%.2f", voltage/1000);
      }
      strcat(holder, stringHolder);
      strcpy(stringHolder, blank);
+     strcat(holder, sep);
+
+    // Charging Mode
+    strcat(holder, dbIndex[7]);
+    sprintf(stringHolder, "%d", chargingMode);
+    strcat(holder, stringHolder);
+    strcpy(stringHolder, blank);
 
     // closebracket
     strncat(holder, &cb, 1);
