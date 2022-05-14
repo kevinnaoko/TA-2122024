@@ -8,7 +8,7 @@ int NPNPIN = 19 ;
 //int maxPwm = 255;
 
 int peweem = 0;
-int limitPwm = 2040;
+int limitPwm = 2000;
 int maxPwm = 2048;
 int isRedFlag = 0;
 
