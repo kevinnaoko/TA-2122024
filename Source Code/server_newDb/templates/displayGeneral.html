@@ -81,10 +81,14 @@
                         <td class="align-middle"> 
                             {% if latest_data[x]['s1_stat'] == 0 %} 
                                 Idle
+                            {% elif latest_data[x]['s1_stat'] == 1 %}
+                                Charging
+                            {% elif latest_data[x]['s1_stat'] == 2 %}
+                                Charged
                             {% elif latest_data[x]['s1_stat'] == '-' %}
                                 N/A 
                             {% else %}
-                                Charging
+                                Error
                             {% endif %}
                         </td>
 
@@ -95,11 +99,15 @@
                         <td class="align-middle">
                             {% if latest_data[x]['s2_stat'] == 0 %} 
                                 Idle
+                            {% elif latest_data[x]['s2_stat'] == 1 %}
+                                Charging
+                            {% elif latest_data[x]['s2_stat'] == 2 %}
+                                Charged
                             {% elif latest_data[x]['s2_stat'] == '-' %}
                                 N/A 
                             {% else %}
-                                Charging
-                            {% endif %}
+                                Error
+                            {% endif %} 
                         </td>
 
                         <!-- slot 2 soc -->

@@ -25,48 +25,53 @@ class dbManager():
 
 # Functions
 def slotHandler(jsonData, suffix):
-    jsonRows = json.loads(jsonData)
-    
-    productID = jsonRows['Product ID']
-    chgStatus = jsonRows['Status']
-    battSN = jsonRows['Serial Number']
-    time = jsonRows['Time']
-    battSoC = jsonRows['SoC']
-    battSoH = jsonRows['SoH']
-    battVolt = jsonRows['Volt']
-    chgMode = jsonRows['Charging Mode']
+    try:
+        jsonRows = json.loads(jsonData)
+        
+        productID = jsonRows['Product ID']
+        chgStatus = jsonRows['Status']
+        battSN = jsonRows['Serial Number']
+        time = jsonRows['Time']
+        battSoC = jsonRows['SoC']
+        battSoH = jsonRows['SoH']
+        battVolt = jsonRows['Volt']
+        chgMode = jsonRows['Charging Mode']
 
-    # Sisipkan data ke db
-    dbObj = dbManager() 
-    tableName = "charger_" + suffix
-    sqliteQuery = "INSERT INTO " + tableName + " (productId, Status, SN, Time, SoC, SoH, Volt, chargeMode) values (?,?,?,?,?,?,?,?)" 
-    dbObj.insertRecord(sqliteQuery, [productID, chgStatus, battSN, time, battSoC, battSoH, battVolt, chgMode])
-    del dbObj
+        # Sisipkan data ke db
+        dbObj = dbManager() 
+        tableName = "charger_" + suffix
+        sqliteQuery = "INSERT INTO " + tableName + " (productId, Status, SN, Time, SoC, SoH, Volt, chargeMode) values (?,?,?,?,?,?,?,?)" 
+        dbObj.insertRecord(sqliteQuery, [productID, chgStatus, battSN, time, battSoC, battSoH, battVolt, chgMode])
+        del dbObj
 
-    print ("Inserted " + suffix + " into " + tableName)
-    print ("")
+        print ("Inserted " + suffix + " into " + tableName)
+        print ("")
+    except:
+        print ('insertion failed, invalid json format')
 
 def deviceHandler(jsonData):
-    jsonRows = json.loads(jsonData)
-    
-    productID = jsonRows['Product ID']
-    chgMode = jsonRows['Charging Mode']
-    locMCC = jsonRows['MCC']
-    locMNC = jsonRows['MNC']
-    locLAC = jsonRows['LAC']
-    locCellID = jsonRows['Cell ID']
+    try:
+        jsonRows = json.loads(jsonData)
+        
+        productID = jsonRows['Product ID']
+        chgMode = jsonRows['Charging Mode']
+        locMCC = jsonRows['MCC']
+        locMNC = jsonRows['MNC']
+        locLAC = jsonRows['LAC']
+        locCellID = jsonRows['Cell ID']
 
-    # Sisipkan data ke db
-    dbObj = dbManager() 
-    tableName = "charger_device"
-    sqliteQuery = "INSERT INTO " + tableName + " (productId, chargeMode, MCC, MNC, LAC, CellID) values (?,?,?,?,?,?)" 
-    dbObj.insertRecord(sqliteQuery, [productID, chgMode, locMCC, locMNC, locLAC, locCellID])
-    del dbObj
+        # Sisipkan data ke db
+        dbObj = dbManager() 
+        tableName = "charger_device"
+        sqliteQuery = "INSERT INTO " + tableName + " (productId, chargeMode, MCC, MNC, LAC, CellID) values (?,?,?,?,?,?)" 
+        dbObj.insertRecord(sqliteQuery, [productID, chgMode, locMCC, locMNC, locLAC, locCellID])
+        del dbObj
 
-    print ("Inserted device info into " + tableName)
-    print ("")
+        print ("Inserted device info into " + tableName)
+        print ("")
 
-    test = 1
+    except:
+        print ('insertion failed, invalid json format')
 
 def dataHandler(Topic, jsonData):
     #split topic (sys/s1)

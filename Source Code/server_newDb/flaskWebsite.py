@@ -98,6 +98,8 @@ def display(deviceSelect):
         # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt']
         #    0        1           2       3      4      5      6       7
         for row in cur.execute("SELECT * FROM " + querySelect[0] + " WHERE productId = ? ORDER BY id DESC", (deviceSelection,)):  
+            if row[2] == -1:
+                continue
             s1data[loopCount]['pid'] = row[1]
             s1data[loopCount]['stat'] = row[2]
             s1data[loopCount]['sn'] = row[3]
@@ -115,7 +117,8 @@ def display(deviceSelect):
         for row in cur.execute("SELECT * FROM " + querySelect[1] + " WHERE productId = ? ORDER BY id DESC", (deviceSelection,)): 
             # print("HALO")
             # print(row) 
-            
+            if row[2] == -1:
+                continue
             s2data[loopCount]['pid'] = row[1]
             s2data[loopCount]['stat'] = row[2]
             s2data[loopCount]['sn'] = row[3]
@@ -205,48 +208,8 @@ def display(deviceSelect):
 def home():
     if "username" in session: 
         # request handle
-        if request.method == "POST":
-            # button addIndex (sudah tidak perlu)
-            # if request.form['submit_button'] == 'addIndexSubmit':
-            #     print("ADD")
-            #     user = request.form["addIndex"]
-            #     print(user)
-                
-            #     con = sqlite3.connect(dbName)
-            #     cur = con.cursor()
-                
-            #     # Get List of Tables:      
-            #     tableListQuery = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY Name"
-            #     cur.execute(tableListQuery)
-            #     tables = map(lambda t: t[0], cur.fetchall())
-
-            #     # ['charger1_device', 'charger1_s1', 'charger1_s2', ... , 'sqlite_sequence']
-            #     # jumlah tabel selalu 3 * n product + 1
-            #     tableNames = list(tables)     
-            #     currentProductCount = math.floor(len(tableNames)/3)                   
-                 
-                
-            #     productId = "'charger" + user + "_s1'" 
-            #     productAddId = int(user)
-            #     # check if table exists 
-            #     listOfTables = cur.execute( "SELECT name FROM sqlite_master WHERE type='table' AND name = ?", productId).fetchall() 
-            #     print(listOfTables)
-            #     if listOfTables == []:
-            #         print('Table not found!')
-            #         stringS1 = 'charger' + str(productAddId) + '_s1'
-            #         stringS2 = 'charger' + str(productAddId) + '_s2'
-            #         stringDevice = 'charger' + str(productAddId) + '_device'
-            #         createDB(stringS1, stringS2, stringDevice)  
-            #         flash('Entry ' + str(productAddId) + ' added', 'success')
-                    
-            #     else:
-            #         print('Table found!') 
-            #         flash('Entry ' + str(productAddId) + ' exists, cannot add', 'danger')
-                
-            
-            #     return redirect(url_for('home'))
-            
-            # button deleteIndex (sudah tidak perlu), kykny msh perlu
+        if request.method == "POST":  
+            # button deleteIndex
             if request.form['submit_button'] == 'deleteIndexSubmit':
                 print("DEL")
                 print("================================================================") 
@@ -728,7 +691,7 @@ def batteryList(battSN):
         loopCount = 0
         # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt', 'ChargeMode']
         #    0        1           2       3      4      5      6       7         8
-        for row in cur.execute("SELECT * FROM charger_s1 WHERE SN = ?", (battSN,)):    
+        for row in cur.execute("SELECT * FROM charger_s1 WHERE SN = ?", (battSN,)):
             s1data[loopCount]['stat'] = row[2]
             s1data[loopCount]['time'] = row[4] 
             s1data[loopCount]['soc'] = row[5] 
@@ -756,9 +719,12 @@ def batteryList(battSN):
          
         validChargingCycle = 0
         invalidChargingCycle = 0
+        
+        for i in s1data:
+            print(i)
+            
         # process data valid per 1 charging cycle di slot 1
-        for i in range(lenIndex[0]): 
-            exit = 0
+        for i in range(lenIndex[0]-1):  
             space = 1
             # syarat kondisi 1 charging cycle
             # setelah stat nya 1, setelahnya harus langsung 2 atau 1  
@@ -768,7 +734,9 @@ def batteryList(battSN):
                     chargeCondition = 'Partial'
                 elif s1data[i+1]['stat'] == 2: 
                     chargeCondition = 'Full' 
-                else:
+                elif s1data[i+1]['stat'] == 0:
+                    chargeCondition = 'Partial'
+                elif s1data[i+1]['stat'] == -1:
                     invalidChargingCycle+=1
                     continue
                 
@@ -785,18 +753,20 @@ def batteryList(battSN):
                 validChargingCycle += 1
                     
         # process data valid per 1 charging cycle di slot 2
-        for i in range(lenIndex[1]): 
+        for i in range(lenIndex[1]-1): 
             exit = 0
             space = 1
             # syarat kondisi 1 charging cycle
-            # setelah stat nya 1, setelahnya harus langsung 2 atau 1 
+            # setelah stat nya 1, setelahnya harus langsung 2 atau 1  
             if s2data[i]['stat'] == 1:  
-                # partial/fullcharge 
+                
                 if s2data[i+1]['stat'] == 1:
                     chargeCondition = 'Partial'
                 elif s2data[i+1]['stat'] == 2: 
                     chargeCondition = 'Full' 
-                else:
+                elif s2data[i+1]['stat'] == 0:
+                    chargeCondition = 'Partial'
+                elif s2data[i+1]['stat'] == -1:
                     invalidChargingCycle+=1
                     continue
                   
@@ -837,6 +807,8 @@ def batteryList(battSN):
                  
         cur.close()
         con.close()  
+        
+        print("inv:{}".format(invalidChargingCycle))
  
         return render_template('displayOneBattery.html', lenValid=validChargingCycle, lenInvalid=invalidChargingCycle, batt_data=battData, batt_sn=battSN)
     
@@ -983,5 +955,5 @@ def testPublish():
 
 
 if __name__ == "__main__":
-    app.run(host='192.168.0.114', port=5000, debug=True)
-    # app.run(debug=True)
+    # app.run(host='192.168.0.114', port=5000, debug=True)
+    app.run(debug=True)

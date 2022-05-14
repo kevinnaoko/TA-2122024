@@ -425,6 +425,17 @@ void MQTTLoop(void *parameter)
             client.publish(topics[1], stringHolder); 
             
             initialUpload = 1;
+
+            
+            strcpy(stringHolder, blank);
+            buildStringBatteryInfo(0, stringHolder);
+            Serial.println(stringHolder);
+            client.publish(topics[0], stringHolder);
+            
+            strcpy(stringHolder, blank);
+            buildStringBatteryInfo(1, stringHolder);
+            Serial.println(stringHolder);
+            client.publish(topics[1], stringHolder); 
         }
 
         // Sampling lokasi apabila informasi belum didapatkan 
@@ -1071,7 +1082,9 @@ void stateChargingL()
                 digitalWrite(relayCharger, RELAY_OFF);
             }
             stateL = FINISH_CHARGING;
-            cmd_sendSlotL = 1;  
+            if (!overheatFlag & !overcurrentFlag & isEnabledCmd){
+                cmd_sendSlotL = 1;  cccc
+            }  
         }
 
         else {
@@ -1080,7 +1093,9 @@ void stateChargingL()
                     digitalWrite(relayCharger, RELAY_OFF);
                 }
                 stateL = FINISH_CHARGING;
-                cmd_sendSlotL = 1;  
+                if (!overheatFlag & !overcurrentFlag & isEnabledCmd){
+                    cmd_sendSlotL = 1;  
+                }
             }
             else{
                 stateL = CHARGING;
@@ -1091,7 +1106,9 @@ void stateChargingL()
     {
         stateL = IDLE;
         digitalWrite(relayCharger, RELAY_OFF);
-        cmd_sendSlotL = 1;
+        if (!overheatFlag & !overcurrentFlag & isEnabledCmd){
+            cmd_sendSlotL = 1;  
+        }
     }
 }
 
@@ -1255,7 +1272,9 @@ void stateChargingR()
                 digitalWrite(relayCharger, RELAY_OFF);
             }
             stateR = FINISH_CHARGING;
-            cmd_sendSlotR = 1;  
+            if (!overheatFlag & !overcurrentFlag & isEnabledCmd){
+                cmd_sendSlotR = 1;  
+            }
         }
 
         else {
@@ -1264,7 +1283,9 @@ void stateChargingR()
                     digitalWrite(relayCharger, RELAY_OFF);
                 }
                 stateR = FINISH_CHARGING;
-                cmd_sendSlotR = 1;  
+                if (!overheatFlag & !overcurrentFlag & isEnabledCmd){
+                    cmd_sendSlotR = 1;  
+                }  
             }
             else{
                 stateR = CHARGING;
@@ -1278,7 +1299,9 @@ void stateChargingR()
     {
         stateR = IDLE;
         digitalWrite(relayCharger, RELAY_OFF);
-        cmd_sendSlotR = 1;
+        if (!overheatFlag & !overcurrentFlag & isEnabledCmd){
+            cmd_sendSlotR = 1;  
+        }
     }
 }
 
