@@ -1,5 +1,6 @@
 from enum import unique
 import paho.mqtt.publish as publish
+import paho.mqtt.subscribe as subscribe
 import hashlib
 from re import I, search
 from flask import Flask, redirect, url_for, render_template, request, flash, session
@@ -10,9 +11,13 @@ from requests.structures import CaseInsensitiveDict
 import json
 from datetime import datetime
 from dbTableInit import createDB 
-import requests
-   
-dbName = "IoT.db"
+import requests 
+from multiprocessing import Process, Manager, Value
+import time
+from ctypes import c_char_p
+
+dbName = "IoT - Copy.db"
+# dbName = "IoT.db"
 dbUser = "user.db"
 
 mqttHost = "34.101.49.52"
@@ -44,24 +49,67 @@ def display(deviceSelect):
                 else:
                     setEn = 1
                     strFlash = ' enabled'
-                    
-                query = "Update charger_enable set productEnable = ? where productId = ?"
-                cur.execute(query,[setEn,deviceSelect])
-                con.commit() 
-                cur.close()
-                print('info changed')  
                 
                 # publish command
                 try:
                     commandTopic = "sys/charger" + str(deviceSelect) + "/commands" 
                     publish.single(commandTopic, setEn, hostname = mqttHost, port = mqttPort) 
-                    flash('Charger ' + deviceSelect + strFlash, 'success')
-                
+                    
                 except: 
                     flash('MQTT server unreachable. Can\'t change device status', 'warning')
+                    params = "charger" + str(deviceSelect)
+                    return redirect(url_for('display', deviceSelect=params))
                      
+            #     # subscribe command
+            # # try:
+            #     currentTime = time.time()
+            #     print("currenttime:{}".format(currentTime))
+            #     while (time.time() - currentTime < 5): 
+            #         commandTopicCallback = "sys/charger" + str(deviceSelect) + "/commandsCallback"  
+            #         manager = Manager()
+            #         string = manager.Value(c_char_p, "hehe")
+            #         p = Process(target=customSubscribe, name="Foo", args=(commandTopicCallback, mqttHost, mqttPort, string))
+            #         p.start()
+                    
+            #         # Wait 10 seconds for foo
+            #         time.sleep(10)
+
+            #         # Terminate foo
+            #         p.terminate()
+
+            #         # Cleanup
+            #         p.join()    
+                    
+                    
+            #         print ("OUTPUT PROCESS : {}".format(string.value))
+                    
+            #         outputMsg = ""
+            #         # msg = subscribe(topics, hostname, 5)
+            #         # print("%s %s" % (outputMsg.topic, outputMsg.payload))
+            #         if outputMsg == "received": 
+            #             flash('Charger ' + deviceSelect + strFlash, 'success') 
+                        
+            #         else:
+            #             flash('Invalid client response. Can\'t change device status', 'warning')
+            #             params = "charger" + str(deviceSelect)
+            #             return redirect(url_for('display', deviceSelect=params))
+                    
+                # except: 
+                #     flash('Client unreachable. Can\'t change device status', 'warning')
+                #     params = "charger" + str(deviceSelect)
+                #     return redirect(url_for('display', deviceSelect=params))
+                
+                query = "Update charger_enable set productEnable = ? where productId = ?"
+                cur.execute(query,[setEn,deviceSelect])
+                con.commit() 
+                cur.close()
+                print('info changed')       
+                
                 params = "charger" + str(deviceSelect)
+                
+                flash('Charger ' + deviceSelect + strFlash, 'success') 
                 return redirect(url_for('display', deviceSelect=params))
+                
             
             
         else:
@@ -227,6 +275,7 @@ def home():
                 flash('Charger ' + deviceSelect + ' deleted', 'success')
                 return redirect(url_for('home'))
             
+            # button change on/off
             if request.form['submit_button'] == 'changeEnableSubmit':
                 print("change status")
                 print("================================================================") 
@@ -323,7 +372,7 @@ def home():
             # ambil latest row dari charger_s1 produk ke i
             # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt']
             #    0        1           2       3      4      5      6       7
-            cur.execute('SELECT * FROM charger_s1 WHERE productId = ' + str(uniqueIDs[i]) + ' ORDER BY id DESC LIMIT 1')
+            cur.execute('SELECT * FROM charger_s1 WHERE productId = ? ORDER BY id DESC LIMIT 1', [str(uniqueIDs[i]),])
             lastRow = cur.fetchone()
             
             if (lastRow == None): 
@@ -339,7 +388,7 @@ def home():
             # ambil latest row dari charger_s2 produk ke i
             # ['id', 'productId', 'Status', 'SN', 'Time', 'SoC', 'SoH', 'Volt']
             #    0        1           2       3      4      5      6       7
-            cur.execute('SELECT * FROM charger_s2 WHERE productId = ' + str(uniqueIDs[i]) + ' ORDER BY id DESC LIMIT 1')
+            cur.execute('SELECT * FROM charger_s2 WHERE productId = ? ORDER BY id DESC LIMIT 1',[str(uniqueIDs[i]),])
             lastRow = cur.fetchone()
             
             if (lastRow == None): 
@@ -355,7 +404,7 @@ def home():
             # ambil latest row dari charger_device produk ke i
             # ['id', 'productId', 'chargeMode', 'MCC', 'MNC', 'LAC', 'CellID']
             #    0        1           2           3      4      5       6    
-            cur.execute('SELECT * FROM charger_device WHERE productId = ' + str(uniqueIDs[i]) + ' ORDER BY id DESC LIMIT 1')
+            cur.execute('SELECT * FROM charger_device WHERE productId = ? ORDER BY id DESC LIMIT 1', [str(uniqueIDs[i]),])
             lastRow = cur.fetchone()
             
             if (lastRow == None): 
@@ -786,24 +835,24 @@ def batteryList(battSN):
         # proses tanggal, durasi, delta SOC
         for i in range(validChargingCycle):
             battData[i]['delta_soc'] = battData[i]['fin_soc'] - battData[i]['init_soc']
-            # try:
-            dateStart = datetime.strptime(battData[i]['init_time'], '%y/%m/%d,%H:%M:%S')
-            dateFinish = datetime.strptime(battData[i]['fin_time'], '%y/%m/%d,%H:%M:%S')
-            
-            duration = (dateFinish - dateStart).total_seconds()
-            if (duration < 3600):
-                durationString = "{:.0f} mins".format((duration % 3600) / 60)  
-            else:
-                durationString = "{} hrs {:.0f} mins".format(math.floor(duration / 3600), (duration % 3600) / 60)  
-            battData[i]['delta_time'] = durationString
-            
-            battData[i]['init_time'] = dateStart.strftime("%d-%B-%Y (%H:%M:%S)") 
-            battData[i]['fin_time'] = dateFinish.strftime("%d-%B-%Y (%H:%M:%S)") 
+            try:
+                dateStart = datetime.strptime(battData[i]['init_time'], '%y/%m/%d,%H:%M:%S')
+                dateFinish = datetime.strptime(battData[i]['fin_time'], '%y/%m/%d,%H:%M:%S')
                 
-            # except:
-            #     battData[i]['init_time'] = '-'
-            #     battData[i]['fin_time'] = '-' 
-            #     battData[i]['delta_time'] = '-' 
+                duration = (dateFinish - dateStart).total_seconds()
+                if (duration < 3600):
+                    durationString = "{:.0f} mins".format((duration % 3600) / 60)  
+                else:
+                    durationString = "{} hrs {:.0f} mins".format(math.floor(duration / 3600), (duration % 3600) / 60)  
+                battData[i]['delta_time'] = durationString
+                
+                battData[i]['init_time'] = dateStart.strftime("%d-%B-%Y (%H:%M:%S)") 
+                battData[i]['fin_time'] = dateFinish.strftime("%d-%B-%Y (%H:%M:%S)") 
+                
+            except:
+                battData[i]['init_time'] = '-'
+                battData[i]['fin_time'] = '-' 
+                battData[i]['delta_time'] = '-' 
                  
         cur.close()
         con.close()  
@@ -852,7 +901,7 @@ def login():
                 )
                 
                 if (key == row[3]):
-                    flash('Login successful', 'success')
+                    # flash('Login successful', 'success')
                     print("PASSWORD MATCH")
                     session['username'] = uname
                     # session['fullname'] = fname
@@ -951,8 +1000,11 @@ def testPublish():
     client.publish(topic,"testPaho")
     return render_template('testTable.html')  
 
-# other functions
-
+# other functions 
+def customSubscribe(topic, host, port, ret_value):
+    msg = subscribe.simple(topic, hostname = host, port = port)
+    print("MESSAGE PAYLOAD = {}".format(msg.payload))
+    ret_value.value = msg.payload  
 
 if __name__ == "__main__":
     # app.run(host='192.168.0.114', port=5000, debug=True)

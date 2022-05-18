@@ -53,11 +53,24 @@
                         <td>{{ batt_data[x]['init_soh'] }}</td>
                         <td>{{ batt_data[x]['init_volt'] }}</td>
                         <td>{{ batt_data[x]['fin_time'] }}</td>
-                        <td>{{ batt_data[x]['fin_soc'] }}</td>
+                        <td>
+                            {% if batt_data[x]['condition'] == "Full" %}
+                                100
+                            {% else %}
+                                {{ batt_data[x]['fin_soc'] }}
+                            {% endif %} 
+                        </td>
                         <td>{{ batt_data[x]['fin_soh'] }}</td>
                         <td>{{ batt_data[x]['fin_volt'] }}</td> 
                         <td>{{ batt_data[x]['delta_time'] }}</td> 
-                        <td>{{ batt_data[x]['delta_soc'] }}</td> 
+                        <td>
+                            {% if batt_data[x]['condition'] == "Full" %}
+                                {% set dispDeltaSoc = 100 - batt_data[x]['init_soc'] %}
+                            {% else %}
+                                {% set dispDeltaSoc = "-" %}
+                            {% endif %}
+                            {{ dispDeltaSoc }}
+                        </td> 
                         <td> 
                             {% if batt_data[x]['chg_mode'] == 0 %} 
                                 Slow

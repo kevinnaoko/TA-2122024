@@ -94,10 +94,14 @@ PubSubClient client(espClient);
 #define brokerIP "34.101.49.52"
 
 // wifi param
-#define wifi_ssid "ASUS"
-#define wifi_password "12345678"
+//#define wifi_ssid "ASUS"
+//#define wifi_password "12345678"
+#define wifi_ssid "HUAWEI-UKva"
+#define wifi_password "74A3Fkw7"
 //#define wifi_ssid "ThinQ"
 //#define wifi_password "kentnaoko"
+//#define wifi_ssid "G7"
+//#define wifi_password "1234567890"
 
 // sim800 + gprs param
 #define MODEM_TX 27
@@ -169,6 +173,7 @@ int adc_ads1[5];
 
 // char topics[3][20]; 
 char commandTopic[25];
+char commandTopicCallback[50];
 
 Adafruit_ADS1015 ads1015;    // ADS1115 untuk temperatur
 //Adafruit_ADS1015 ads1015VI;    // ADS1115 untuk tegangan dan arus
@@ -184,6 +189,7 @@ void setup()
     
     // Set commandTopic
     sprintf(commandTopic, "sys/charger%d/commands", PRODUCT_ID); 
+    sprintf(commandTopicCallback, "sys/charger%d/commandsCallback", PRODUCT_ID); 
 
     // load enable/disable status dari EEPROM 
     EEPROM.begin(EEPROM_SIZE);
@@ -1083,7 +1089,7 @@ void stateChargingL()
             }
             stateL = FINISH_CHARGING;
             if (!overheatFlag & !overcurrentFlag & isEnabledCmd){
-                cmd_sendSlotL = 1;  cccc
+                cmd_sendSlotL = 1; 
             }  
         }
 
@@ -1363,7 +1369,8 @@ void callback(char *topic, byte *payload, unsigned int length)
     isEnabledCmd = MQTT_DATA.toInt();
     EEPROM.write(0, isEnabledCmd);
     EEPROM.commit();
-    
+
+    client.publish(commandTopicCallback, "received");
     Serial.println();
 }
 
