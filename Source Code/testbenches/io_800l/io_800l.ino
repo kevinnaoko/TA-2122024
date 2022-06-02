@@ -1,19 +1,24 @@
-#include <SoftwareSerial.h>
+//#include <SoftwareSerial.h>
+#define Sim800l Serial1 
 
-SoftwareSerial mySerial(26,27); // RX, TX 
 
+#define txGSM 26    //25
+#define rxGSM 27    //26
+
+//SoftwareSerial mySerial(26,27); // RX, TX 
 void setup()  
 {
   // Open serial communication
   Serial.begin(9600);
 
   // set the data rate for the SoftwareSerial port
-  mySerial.begin(9600);
+  
+  Sim800l.begin(9600, SERIAL_8N1, rxGSM, txGSM); 
 
   delay(1000);
   Serial.println("Testing SIM800L module");
   Serial.println();
-  Serial.print("Sizeof(mySerial) = "); Serial.println(sizeof(mySerial));
+  Serial.print("Sizeof(mySerial) = "); Serial.println(sizeof(Sim800l));
   Serial.println();
 
 }
@@ -21,9 +26,9 @@ void setup()
 void loop() // run over and over
 {
 
-  if( mySerial.available() )
+  if( Sim800l.available() )
   {
-    char c = mySerial.read();
+    char c = Sim800l.read();
     Serial.print(c);
   }
 
@@ -33,7 +38,7 @@ void loop() // run over and over
 
     Serial.println("Serial available");
     Serial.println(Arsp);
-    mySerial.println(Arsp);
+    Sim800l.println(Arsp);
     Serial.println("Serial available end");
   }
 

@@ -67,9 +67,10 @@
                             {% if batt_data[x]['condition'] == "Full" %}
                                 {% set dispDeltaSoc = 100 - batt_data[x]['init_soc'] %}
                             {% else %}
-                                {% set dispDeltaSoc = "-" %}
+                                {% set dispDeltaSoc = batt_data[x]['delta_soc'] %}
                             {% endif %}
-                            {{ dispDeltaSoc }}
+                            
+                            {{'%0.2f'| format(dispDeltaSoc|float)}}
                         </td> 
                         <td> 
                             {% if batt_data[x]['chg_mode'] == 0 %} 

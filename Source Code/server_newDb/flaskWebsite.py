@@ -16,8 +16,8 @@ from multiprocessing import Process, Manager, Value
 import time
 from ctypes import c_char_p
 
-dbName = "IoT - Copy.db"
-# dbName = "IoT.db"
+# dbName = "IoT - Copy.db"
+dbName = "IoT.db"
 dbUser = "user.db"
 
 mqttHost = "34.101.49.52"
@@ -713,7 +713,7 @@ def batteries():
 
 
 @app.route('/connectedBatteries/<battSN>')
-def batteryList(battSN):  
+def singleBattery(battSN):  
     if "username" in session: 
         con = sqlite3.connect(dbName)
         cur = con.cursor()

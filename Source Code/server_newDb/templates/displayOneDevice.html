@@ -176,7 +176,7 @@
                             <th scope="row"> {{ len[0] - loop.index + 1 }}</th>
                             <td>{{ s1_data[x]['stat'] }}</td>
                             <td>
-                                <a href="{{ url_for( 'batteryList' , battSN=s1_data[x]['sn'] ) }}" style="text-decoration: none; color: inherit;">
+                                <a href="{{ url_for( 'singleBattery' , battSN=s1_data[x]['sn'] ) }}" style="text-decoration: none; color: inherit;">
                                     {{ s1_data[x]['sn'] }}
                                 </a>
                             </td>
@@ -216,7 +216,7 @@
                             <th scope="row"> {{ len[1] - loop.index + 1 }}</th>
                             <td>{{ s2_data[x]['stat'] }}</td>
                             <td>
-                                <a href="{{ url_for( 'batteryList' , battSN=s2_data[x]['sn'] ) }}" style="text-decoration: none; color: inherit;">
+                                <a href="{{ url_for( 'singleBattery' , battSN=s2_data[x]['sn'] ) }}" style="text-decoration: none; color: inherit;">
                                     {{ s2_data[x]['sn'] }}
                                 </a>
                             </td>
