@@ -9,6 +9,7 @@
 #define EEPROM_SIZE 1
 
 #define DEMO 0                // 1 = true, 0 = false
+// #define NOT_DEMO
 #define TINY_GSM_MODEM_SIM800 // Modem is SIM800L 
 
 // Pilih salah satu 
@@ -1000,12 +1001,19 @@ int readBattData(char LorR){
         readIdx++;
     }
 
+    // print msg
     while(msgIdx < readIdx+1){
-      Serial.print(msgBattInfoL[msgIdx]);
-      Serial.print(" , ");
-      Serial.println(msgBattInfoL[msgIdx], HEX);
-  
-      msgIdx++;
+        if(LorR == 'L'){
+            Serial.print(msgL[msgIdx]);
+            Serial.print(" , ");
+            Serial.println(msgL[msgIdx], HEX); 
+        }
+        else if(LorR == 'R'){
+            Serial.print(msgR[msgIdx]);
+            Serial.print(" , ");
+            Serial.println(msgR[msgIdx], HEX);
+        }
+        msgIdx++;
     }    
 
     for(int i = 1; i < readIdx-3; i++){
