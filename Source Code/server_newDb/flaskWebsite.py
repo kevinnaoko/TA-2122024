@@ -27,14 +27,15 @@ mqttPort = 1883
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
    
-@app.route('/devices/<deviceSelect>', methods=["POST", "GET"])
-def display(deviceSelect):  
-    if "username" in session: 
+@app.route('/devices/<deviceSelect>/<debugMode>', methods=["POST", "GET"])
+def display(deviceSelect,debugMode):  
+    if "username" in session:
         if request.method == "POST":
             if request.form['submit_button'] == 'changeEnableSubmit':
                 print("change status")
                 print("================================================================") 
                 deviceSelect = request.form["changeEnableIndex"] 
+                prevDebugMode = int(request.form["prevDebugMode"]) 
                 
                 con = sqlite3.connect(dbName)
                 cur = con.cursor()  
@@ -59,6 +60,7 @@ def display(deviceSelect):
                     flash('MQTT server unreachable. Can\'t change device status', 'warning')
                     params = "charger" + str(deviceSelect)
                     return redirect(url_for('display', deviceSelect=params))
+            
                      
             #     # subscribe command
             # # try:
@@ -108,12 +110,35 @@ def display(deviceSelect):
                 params = "charger" + str(deviceSelect)
                 
                 flash('Charger ' + deviceSelect + strFlash, 'success') 
-                return redirect(url_for('display', deviceSelect=params))
+                
+                
+                return redirect(url_for('display', deviceSelect=params, debugMode=prevDebugMode))
+                
+            if request.form['submit_button'] == 'changeDebugMode':
+                print("change debugMode")
+                print("================================================================") 
+                
+                deviceSelect = request.form["currentIndex"]  
+                params = "charger" + str(deviceSelect)
+                
+                prevDebugMode = int(request.form["prevDebugMode"]) 
+                print("prev:{}".format(prevDebugMode))
+                if prevDebugMode == 1:
+                    paramDebug = 0
+                else:
+                    paramDebug = 1
+                    
+                
+                print("now:{}".format(paramDebug))
+                    
+                return redirect(url_for('display', deviceSelect=params, debugMode=paramDebug))
                 
             
             
         else:
             pass
+        
+        print("maindebugmode:{}".format(debugMode))
         
         con = sqlite3.connect(dbName)
         cur = con.cursor()
@@ -243,10 +268,10 @@ def display(deviceSelect):
         lon = pythonObj['location']['lng']
         
         print(lat)
-        print(lon)
+        print(lon) 
 
         # print(s2data[0])
-        return render_template('displayOneDevice.html', len=lenIndex, s1_data=s1data, s2_data=s2data, device_info=latestInfo, device_id=deviceSelection, lat=lat, lon=lon, device_en = deviceEn)
+        return render_template('displayOneDevice.html', debug_en=int(debugMode), len=lenIndex, s1_data=s1data, s2_data=s2data, device_info=latestInfo, device_id=deviceSelection, lat=lat, lon=lon, device_en = deviceEn)
     
     
     else:
@@ -620,13 +645,16 @@ def batteries():
         battSNs1 = []
         battSNs2 = [] 
         
-        for row in cur.execute("SELECT DISTINCT SN FROM charger_s1" ):
+        for row in cur.execute('SELECT DISTINCT SN FROM charger_s1 WHERE SN != "" ' ):
             # print (row)
             battSNs1.append(row[0])
-            
-        for row in cur.execute("SELECT DISTINCT SN FROM charger_s2 " ):
+
+        print(battSNs1)
+        for row in cur.execute('SELECT DISTINCT SN FROM charger_s2 WHERE SN != "" ' ):
             # print (row)
             battSNs2.append(row[0]) 
+        
+        print(battSNs2)
         
         combineSNs = battSNs1 + battSNs2 
         list_set = set(combineSNs) 

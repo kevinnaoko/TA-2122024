@@ -45,3 +45,31 @@ body {
     font-size: 14px;
     text-align: center;
 }  
+
+.debug-col-width {
+    -ms-flex: 0 0 5px;
+    flex: 0 0 5px;
+    padding-bottom:0px;  
+    padding-top:0px;  
+    text-align: right;
+} 
+
+div.toolbar1,
+div.dataTables_length,
+div.toolbar2{
+    margin-top: 7px;
+    margin-bottom: 7px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.col-md-6{
+    text-align: left;
+}
+
+div.dataTables_wrapper { 
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}

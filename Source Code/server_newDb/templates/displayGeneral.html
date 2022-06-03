@@ -173,7 +173,7 @@
                                         </button>
                                     </span>
                                 {% else %} 
-                                    <button type="button" class="btn btn-outline-info rounded" onclick="window.location.href='{{ url_for( 'display' , deviceSelect=displayArgs ) }}';">
+                                    <button type="button" class="btn btn-outline-info rounded" onclick="window.location.href='{{ url_for( '.display', deviceSelect=displayArgs, debugMode=0 ) }}';">
                                         <i class='bx bx-menu-alt-right' ></i>
                                     </button>
                                 {% endif %} 

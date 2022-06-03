@@ -86,7 +86,7 @@
                                         </button>
                                     </span>
                                 {% else %} 
-                                    <button type="button" class="btn btn-outline-info" onclick="window.location.href='{{ url_for( 'batteryList' , battSN=latest_data[x]['battSN'] ) }}';">
+                                    <button type="button" class="btn btn-outline-info" onclick="window.location.href='{{ url_for( 'singleBattery' , battSN=latest_data[x]['battSN'] ) }}';">
                                         <i class='bx bx-menu-alt-right' ></i>
                                     </button>
                                 {% endif %} 

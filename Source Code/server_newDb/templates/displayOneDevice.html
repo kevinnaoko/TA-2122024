@@ -54,7 +54,8 @@
         <div class="col-sm" style="margin-top: 0px; margin-bottom:0; padding-bottom:0; margin-left:0">
             <h4 style="margin:0; padding:0">Charger {{device_id}}</h4>
         </div>
-        <div class="col-sm" style="margin-top: 0px; margin-bottom:0; padding-bottom:0; margin-left:0; text-align: right;">
+
+        <div class="col-sm-5" style="margin-top: 0px; margin-bottom:0; padding-bottom:0; margin-left:0; text-align: right;">
             {% if device_en == 1 %}
                 {% set classBtn = 'btn-success' %}
             {% else %} 
@@ -64,8 +65,26 @@
             <form action="#" method="post">  
                 <i style="margin-right:20px; color:#9d9d9d">{{ subtitle }}</i>
                 <input type="hidden" name="changeEnableIndex" value="{{device_id}}"></input> 
+                <input type="hidden" name="prevDebugMode" value="{{debug_en}}"></input> 
                 <button type="submit" class="btn {{classBtn}}" name="submit_button" value="changeEnableSubmit"> 
                     <i class='bx bx-power-off'></i> 
+                </button> 
+            </form> 
+        </div>
+        
+        
+        <div class="col-sm-1 debug-col-width">    
+            {% if debug_en == 1 %}
+                {% set classBtnDebug = 'btn-info' %}
+            {% else %} 
+                {% set classBtnDebug = 'btn-outline-info' %} 
+            {% endif %}  
+            <form action="#" method="post">   
+                <!-- <i style="margin-right:20px; color:#9d9d9d">{{ debug_en }}</i> -->
+                <input type="hidden" name="currentIndex" value="{{device_id}}"></input> 
+                <input type="hidden" name="prevDebugMode" value="{{debug_en}}"></input> 
+                <button type="submit" class="btn {{classBtnDebug}}" name="submit_button" value="changeDebugMode"> 
+                    <i class='bx bx-wrench'></i>
                 </button> 
             </form>
         </div> 
@@ -175,20 +194,68 @@
                         <tr>
                             <th scope="row"> {{ len[0] - loop.index + 1 }}</th>
                             <td>{{ s1_data[x]['stat'] }}</td>
-                            <td>
-                                <a href="{{ url_for( 'singleBattery' , battSN=s1_data[x]['sn'] ) }}" style="text-decoration: none; color: inherit;">
-                                    {{ s1_data[x]['sn'] }}
-                                </a>
+                            <td> <!-- serial number -->
+                                {% if debug_en == 1 %} 
+                                    <a href="{{ url_for( 'singleBattery' , battSN=s1_data[x]['sn'] ) }}" style="text-decoration: none; color: inherit;">
+                                        {{ s1_data[x]['sn'] }}
+                                    </a>
+                                {% else %} 
+                                    {% if s1_data[x]['stat'] == 0 %} 
+                                        -
+                                    {% else %}
+                                        <a href="{{ url_for( 'singleBattery' , battSN=s1_data[x]['sn'] ) }}" style="text-decoration: none; color: inherit;">
+                                            {{ s1_data[x]['sn'] }}
+                                        </a>
+                                    {% endif %}
+                                {% endif %}  
                             </td>
-                            <td>{{ s1_data[x]['time'] }}</td>
-                            {% if s1_data[x]['soc'] == -1 %} 
-                                <td>err</td>
-                                <td>err</td>
+                            <td><!-- time -->
+                                {% if debug_en == 1 %} 
+                                    {{ s1_data[x]['time'] }}
+                                {% else %} 
+                                    {% if s1_data[x]['stat'] == 0 %} 
+                                        -
+                                    {% else %}
+                                        {{ s1_data[x]['time'] }}
+                                    {% endif %}
+                                {% endif %}   
+                            </td>
+                            
+                            <!-- soc & soh -->
+                            {% if debug_en == 1 %} 
+                                {% if s1_data[x]['soc'] == -1 %} 
+                                    <td>err</td>
+                                    <td>err</td>
+                                {% else %} 
+                                    <td>{{ s1_data[x]['soc'] }}</td>
+                                    <td>{{ s1_data[x]['soh'] }}</td>
+                                {% endif %}
                             {% else %} 
-                                <td>{{ s1_data[x]['soc'] }}</td>
-                                <td>{{ s1_data[x]['soh'] }}</td>
-                            {% endif %}
-                            <td>{{ s1_data[x]['volt'] }}</td>
+                                {% if s1_data[x]['stat'] == 0 %}  
+                                    <td>-</td>
+                                    <td>-</td>
+                                {% else %}
+                                    {% if s1_data[x]['soc'] == -1 %} 
+                                        <td>err</td>
+                                        <td>err</td>
+                                    {% else %} 
+                                        <td>{{ s1_data[x]['soc'] }}</td>
+                                        <td>{{ s1_data[x]['soh'] }}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}    
+                                
+                            <td><!-- time -->
+                                {% if debug_en == 1 %} 
+                                    {{ s1_data[x]['volt'] }}
+                                {% else %} 
+                                    {% if s1_data[x]['stat'] == 0 %} 
+                                        -
+                                    {% else %}
+                                        {{ s1_data[x]['volt'] }}
+                                    {% endif %}
+                                {% endif %}   
+                            </td> 
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -215,18 +282,70 @@
                         <tr>
                             <th scope="row"> {{ len[1] - loop.index + 1 }}</th>
                             <td>{{ s2_data[x]['stat'] }}</td>
-                            <td>
-                                <a href="{{ url_for( 'singleBattery' , battSN=s2_data[x]['sn'] ) }}" style="text-decoration: none; color: inherit;">
-                                    {{ s2_data[x]['sn'] }}
-                                </a>
+                            <td> <!-- serial number -->
+                                {% if debug_en == 1 %} 
+                                    <a href="{{ url_for( 'singleBattery' , battSN=s2_data[x]['sn'] ) }}" style="text-decoration: none; color: inherit;">
+                                        {{ s2_data[x]['sn'] }}
+                                    </a>
+                                {% else %} 
+                                    {% if s2_data[x]['stat'] == 0 %} 
+                                        -
+                                    {% else %}
+                                        <a href="{{ url_for( 'singleBattery' , battSN=s2_data[x]['sn'] ) }}" style="text-decoration: none; color: inherit;">
+                                            {{ s2_data[x]['sn'] }}
+                                        </a>
+                                    {% endif %}
+                                {% endif %}  
                             </td>
-                            <td>{{ s2_data[x]['time'] }}</td>
-                            <td>{{ s2_data[x]['soc'] }}</td>
-                            <td>{{ s2_data[x]['soh'] }}</td>
-                            <td>{{ s2_data[x]['volt'] }}</td>
+                            <td><!-- time -->
+                                {% if debug_en == 1 %} 
+                                    {{ s2_data[x]['time'] }}
+                                {% else %} 
+                                    {% if s2_data[x]['stat'] == 0 %} 
+                                        -
+                                    {% else %}
+                                        {{ s2_data[x]['time'] }}
+                                    {% endif %}
+                                {% endif %}   
+                            </td>
+                            
+                            <!-- soc & soh -->
+                            {% if debug_en == 1 %} 
+                                {% if s2_data[x]['soc'] == -1 %} 
+                                    <td>err</td>
+                                    <td>err</td>
+                                {% else %} 
+                                    <td>{{ s2_data[x]['soc'] }}</td>
+                                    <td>{{ s2_data[x]['soh'] }}</td>
+                                {% endif %}
+                            {% else %} 
+                                {% if s2_data[x]['stat'] == 0 %}  
+                                    <td>-</td>
+                                    <td>-</td>
+                                {% else %}
+                                    {% if s2_data[x]['soc'] == -1 %} 
+                                        <td>err</td>
+                                        <td>err</td>
+                                    {% else %} 
+                                        <td>{{ s2_data[x]['soc'] }}</td>
+                                        <td>{{ s2_data[x]['soh'] }}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}    
+                                
+                            <td><!-- time -->
+                                {% if debug_en == 1 %} 
+                                    {{ s2_data[x]['volt'] }}
+                                {% else %} 
+                                    {% if s2_data[x]['stat'] == 0 %} 
+                                        -
+                                    {% else %}
+                                        {{ s2_data[x]['volt'] }}
+                                    {% endif %}
+                                {% endif %}   
+                            </td> 
                         </tr>
-                        {% endfor %}
-
+                        {% endfor %} 
                     </tbody>
                 </table>
             </div>
@@ -240,23 +359,25 @@
 {% block scriptBottom %} 
 <script>
     $(document).ready(function () {
+        $.fn.DataTable.ext.pager.numbers_length = 5;
         $('#slot1').DataTable({  
             "order": [[ 0, "desc" ]],
             lengthMenu: [5, 10, 20, 50, 100, 200],
-            dom: '<"row"<"col-sm-6"<"toolbar1">><"col-sm-6"l>>rtp',
+            dom:"<'row'<'col-md-8'<'toolbar1'>><'col-md-4'l>>  trp",
+            // dom: '<"row"<"col-sm-6"<"toolbar1">><"col-sm-6"l>>rtp',
             pageLength : 5, 
             });
 
         $('#slot2').DataTable({   
             "order": [[ 0, "desc" ]],
-            lengthMenu: [5, 10, 20, 50, 100, 200],
-            dom: '<"row"<"col-sm-6"<"toolbar2">><"col-sm-6"l>>rtp',
+            lengthMenu: [5, 10, 20, 50, 100, 200], 
+            // dom: '<"row"<"col-sm-6"<"toolbar2">><"col-sm-6"l>>rtp',
+            // "sDom": '<"toolbar2">frtip',
+            dom:"<'row'<'col-md-8'<'toolbar2'>><'col-md-4'l>>  trp",
+                // "<'row'<'col-sm-12'tr>>" +
+                // "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
             pageLength : 5, 
-            });
-
-        $('#example').DataTable( {
-            "dom": '<"toolbar">frtip'
-        });
+            }); 
     
         $("div.toolbar1").html('<b>Slot 1</b>');
 
