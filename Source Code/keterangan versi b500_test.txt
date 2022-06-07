@@ -1,0 +1,2 @@
+b500_v2   = sama seperti b500_test_newcontrol_update1juni_pilihnet_statefailure
+b500_v2.1 = b500_v2 ditambah kode sync on/off di bagian inisialisasi iot 

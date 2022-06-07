@@ -1,5 +1,6 @@
 import json
 import sqlite3 
+import paho.mqtt.publish as publish
 
 # SQLite DB Name
 dbName = "IoT.db"
@@ -72,6 +73,20 @@ def deviceHandler(jsonData):
 
     except:
         print ('insertion failed, invalid json format')
+        
+def getStatus(productId):
+    print("getting charger {} status".format(productId))
+    
+    con = sqlite3.connect(dbName)
+    cur = con.cursor()
+    
+    
+    cur.execute("SELECT * FROM charger_enable WHERE productId = ?", [productId,])
+    productIndex = cur.fetchone()    
+    # row contents : id, productId, productEnable
+    # index        :  0      1           2             
+    print(productIndex)
+    publish.single("sys/enableStatusCallback/3", productIndex[2], hostname="34.101.49.52")
 
 def dataHandler(Topic, jsonData):
     #split topic (sys/s1)
@@ -83,4 +98,10 @@ def dataHandler(Topic, jsonData):
         slotHandler(jsonData, concatTopic[1]) 
     elif concatTopic[1] == "device": 
         deviceHandler(jsonData)	
+    elif concatTopic[1] == "enableStatus":
+        getStatus(concatTopic[2])
+        
+
+        
+    
     

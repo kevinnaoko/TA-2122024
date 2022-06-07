@@ -17,7 +17,12 @@
 
 <div class="container-fluid">
     <div class="row" style="margin-top: 15px; margin-bottom:0; padding-bottom:0; margin-left:0"> 
-        <h4 style="margin:0; padding:0">Battery #{{ batt_sn }}</h4> 
+        <div class="col-sm battsn-col-width">
+            <h4 style="margin:0; padding:0">Battery #{{ batt_sn }}</h4> 
+        </div>
+        <div class="col-sm">
+            <i style="margin-right:20px; color:#9d9d9d">Invalid charging cycles = {{ lenInvalid }}</i> 
+        </div>
     </div> 
 
     <div class="row" style="margin:0; padding:0">
@@ -97,13 +102,13 @@
         $('#batt').DataTable({  
             "order": [[ 0, "desc" ]],
             lengthMenu: [5, 10, 20, 50, 100, 200],
-            dom: '<"row"<"col-sm-6"<"toolbar1">><"col-sm-6"l>>rtp',
+            dom: 'lfrtip',
             pageLength : 5, 
             "aaSorting": []
             }); 
    
 
-        $("div.toolbar1").html(' <h6>Invalid charging cycles = {{ lenInvalid }}</h6> ');
+        $("div.toolbar1").html(' <h6></h6> ');
      
         }); 
         

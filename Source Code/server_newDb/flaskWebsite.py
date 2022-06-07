@@ -503,6 +503,7 @@ def manageUsers():
                 
                 # row contents : id, fullname, username, pass(hash), salt
                 # index        :  0      1         2          3        4
+                
                 cur.execute("SELECT * FROM userinfo WHERE username = ?", [uname,]) 
                 row = cur.fetchone()
                 
@@ -638,6 +639,7 @@ def batteries():
         
         con = sqlite3.connect(dbName)
         cur = con.cursor()
+        
         
         # sauce https://pagehalffull.wordpress.com/2012/11/14/python-script-to-count-tables-columns-and-rows-in-sqlite-database/ 
         
@@ -994,8 +996,12 @@ def login():
         
     else: 
         pass
-        
-    return render_template('login.html')
+    
+    if "username" in session:
+        return redirect(url_for('home'))
+    
+    else:
+        return render_template('login.html')
 
 @app.route('/logout')
 def logout():

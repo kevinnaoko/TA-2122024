@@ -1,7 +1,7 @@
-int PWM_FREQUENCY = 20000; 
+int PWM_FREQUENCY = 23000; 
 int PWM_CHANNEL = 0; 
 int PWM_RESOUTION = 12; 
-int GPIOPIN = 5 ; 
+int GPIOPIN = 15 ; 
 int NPNPIN = 17 ; 
 //int peweem = 240;
 //int limitPwm = 235;

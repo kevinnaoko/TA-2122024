@@ -1,7 +1,7 @@
 #sauce https://iotbytes.wordpress.com/store-mqtt-data-from-sensors-into-sql-database/
 
 import paho.mqtt.client as mqtt
-from dbHandler import dataHandler
+from dbHandler import dataHandler #slotHandler, deviceHandler, getStatus
 
 # MQTT Parameters
 broker = "34.101.49.52"
@@ -19,12 +19,29 @@ def on_connect(mosq, obj, rc, properties=None):
 
 # Save to DB table
 def on_message(mosq, obj, msg):
-	# This is the Master Call for saving MQTT Data into DB 
-	print ("MQTT Data Received...")
-	print ("MQTT Topic: " + msg.topic  )
-	print ("Data: ",end='')
-	print (msg.payload)
-	dataHandler(msg.topic, msg.payload)
+    # This is the Master Call for saving MQTT Data into DB 
+    print ("MQTT Data Received...")
+    print ("MQTT Topic: " + msg.topic  )
+    print ("Data: ",end='')
+    print (msg.payload)
+
+    # Topic, jsonData
+    dataHandler(msg.topic, msg.payload)
+
+    # concatTopic = msg.topic.split("/")
+
+    # if concatTopic[1] == "s1" or concatTopic[1] == "s2":
+    #     slotHandler(msg.payload, concatTopic[1]) 
+    # elif concatTopic[1] == "device": 
+    #     deviceHandler(msg.payload)	
+    # elif concatTopic[1] == "enableStatus":
+    #     payload = getStatus(concatTopic[2])
+    #     callbackTopic = "sys/enableStatusCallback/" + concatTopic[2]
+    #     mqttc.publish(callbackTopic, payload, hostname="34.101.49.52")
+    # else:
+    #     print('unregistered topic')
+        
+ 
 
 def on_subscribe(mosq, obj, mid, granted_qos):
     pass

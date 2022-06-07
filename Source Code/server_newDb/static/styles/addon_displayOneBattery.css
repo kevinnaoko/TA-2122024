@@ -19,3 +19,11 @@ th {
 th:first-child {
     border-left: 1px solid #dddddd;
 } 
+
+.battsn-col-width {
+    -ms-flex: 0 0 350px;
+    flex: 0 0 350px;
+    padding-bottom:0px;  
+    padding-top:0px;  
+    text-align: left;
+} 
