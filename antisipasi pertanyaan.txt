@@ -1,0 +1,23 @@
+Mengapa non isolated? 
+efisiensi dan bobot. berdasarkan riset b200 (atau b300 lupa) pakai trafo 40% efisiensi.
+udah ditambahkan juga pengaman seperti fuse dan relay agar daya hanya mengalir bila baterai dicolok
+
+sampling rate sensing cukup untuk kontrol?
+melihat dari L di dt induktor dan ripple maksimum yang diinginkan, cukup
+
+mengapa pakai flask? 
+fuck beats me
+
+mengapa pakai sqlite?
+untuk developoment lebih praktis karena tidak memerlukan web server lagi seperti apache untuk menjalankan databasenya. Namun untuk production, penggantian ke SQL cukup mudah karena query nya smaa, hanya perlu mengubah cara melakukan koneksi ke databasenya
+
+siapin lampiran buat semua alternatif pemilihan komponen dan arsitektur
+
+HV loop besar, spike dan ringing gimana?
+idealnya memang dekat, namun untuk mempermudah troubleshooting dan debugging, jaraknya dijauhkan terlebih dahulu
+
+
+
+dhanu 19+7+7 = 33
+danu 8+5+5+8 = 26
+naoko 13+6+4 = 23
